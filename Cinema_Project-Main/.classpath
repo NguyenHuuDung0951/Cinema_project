@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="java-ui-dashboard-007-main/ui-dashboard-007/src"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/dist/lib/AbsoluteLayout.jar"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/dist/lib/miglayout-4.0.jar"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/dist/lib/TimingFramework-0.55.jar"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/dist/ui-dashboard-007.jar"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/miglayout-4.0.jar"/>
+	<classpathentry kind="lib" path="java-ui-dashboard-007-main/ui-dashboard-007/TimingFramework-0.55.jar"/>
+	<classpathentry kind="output" path="java-ui-dashboard-007-main/ui-dashboard-007/build/classes"/>
+</classpath>
