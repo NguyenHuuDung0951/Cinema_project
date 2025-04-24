@@ -1,9 +1,11 @@
 package application;
 
 import component.Form; 
-import component.LichChieu_Form;
+import component.PhimForm;
+import gui.PhimForm1;
+import gui.LichChieu_Form;
 import component.SanPham;
-import component.UuDai_Form; 
+import gui.UuDai_Form; 
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
@@ -17,6 +19,7 @@ public class Main extends javax.swing.JFrame {
     private UuDai_Form uudai;
     public Main() { 
         initComponents();
+        setExtendedState(MAXIMIZED_BOTH);
               try {
 			ConnectDB.getInstance().connect();
 		} catch (SQLException e) {
@@ -30,7 +33,7 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                  if (index == 2) {  
-                  LichChieu_Form phim = new LichChieu_Form();
+                     PhimForm1 phim = new PhimForm1();
                   showForm(phim);
                 }else if(index==5){
                  
@@ -41,10 +44,10 @@ public class Main extends javax.swing.JFrame {
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
                 }  
-                 else if(index == 4){
-                     SanPham sanpham = new SanPham();
-                     showForm(sanpham);
-                 }
+//                 else if(index == 4){
+//                     SanPham sanpham = new SanPham();
+//                     showForm(sanpham);
+//                 }
                  else if (index == 7) { 
                     System.out.println("Logout");
                 } else {
