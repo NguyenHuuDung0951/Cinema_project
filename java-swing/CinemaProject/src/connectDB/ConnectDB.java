@@ -15,7 +15,7 @@ public class ConnectDB {
     }
 
     public void connect() throws SQLException {
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=QLRAP";
+        String url = "jdbc:sqlserver://localhost:14330;databaseName=QLRAP";
         String user = "sa";
         String password = "sapassword";
         if (con == null || con.isClosed()) {

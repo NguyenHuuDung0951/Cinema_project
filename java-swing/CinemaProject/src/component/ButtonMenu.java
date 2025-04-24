@@ -100,4 +100,8 @@ public class ButtonMenu extends JButton{
         super.paint(grphcs);
     }
 
+    void setAsSubMenu(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/application/Main.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/component/PhimForm.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/component/UuDai.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/dao/Voucher_DAO.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/connectDB/ConnectDB.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/component/Phim.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/component/ButtonMenu.java</file>
-            <file>file:/C:/Users/LENOVO/Downloads/Cinema_Project-Main/java-ui-dashboard-007-main/CinemaProject/src/component/Menu.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/component/SanPham_DoAn.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/component/SanPham_DoUong.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/application/loading.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/component/LichChieu_Form.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/component/Header.java</file>
+            <file>file:/D:/JAVAHUONGSK/Cinema_project/java-swing/CinemaProject/src/component/Menu.java</file>
         </group>
     </open-files>
 </project-private>

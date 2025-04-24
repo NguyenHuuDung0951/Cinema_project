@@ -2,7 +2,9 @@ package application;
 
 import component.Form; 
 import component.LichChieu_Form;
-import component.SanPham;
+import component.SanPham_DoAn;
+import component.SanPham_DoUong;
+import com.formdev.flatlaf.FlatLightLaf;
 import component.UuDai_Form; 
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
@@ -17,6 +19,7 @@ public class Main extends javax.swing.JFrame {
     private UuDai_Form uudai;
     public Main() { 
         initComponents();
+        setExtendedState(MAXIMIZED_BOTH);
               try {
 			ConnectDB.getInstance().connect();
 		} catch (SQLException e) {
@@ -32,18 +35,16 @@ public class Main extends javax.swing.JFrame {
                  if (index == 2) {  
                   LichChieu_Form phim = new LichChieu_Form();
                   showForm(phim);
-                }else if(index==5){
-                 
-                }  
+                } 
                  else if(index==3){
                      uudai = new UuDai_Form();
                      showForm(uudai);
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
                 }  
-                 else if(index == 4){
-                     SanPham sanpham = new SanPham();
-                     showForm(sanpham);
+                 else if(index==4){
+                   SanPham_DoUong sp_doUong=new SanPham_DoUong(index);
+                     showForm(sp_doUong);
                  }
                  else if (index == 7) { 
                     System.out.println("Logout");
@@ -117,13 +118,14 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {  
-      
+        FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main().setVisible(true);
             }
         });
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
     private component.Header header1;
