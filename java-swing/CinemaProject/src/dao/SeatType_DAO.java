@@ -21,8 +21,8 @@ public class SeatType_DAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()){
                 String id = rs.getString(1);
-                String name = rs.getNString(2);
-                String desc = rs.getNString(3);
+                String name = rs.getString(2);
+                String desc = rs.getString(3);
                 SeatType obj = new SeatType(id, name, desc);
                 ds.add(obj);
             }

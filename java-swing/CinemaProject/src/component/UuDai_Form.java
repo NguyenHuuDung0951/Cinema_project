@@ -12,12 +12,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Admin
  */
-public class UuDai extends javax.swing.JPanel {
+public class UuDai_Form extends javax.swing.JPanel {
 
     /**
      * Creates new form UuDai
      */
-    public UuDai() {
+    public UuDai_Form() {
         initComponents();
     }
 

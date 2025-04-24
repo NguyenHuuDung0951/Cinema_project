@@ -21,7 +21,7 @@ public class Room_DAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()){
                 String roomID = rs.getString(1);
-                String roomName = rs.getNString(2);
+                String roomName = rs.getString(2);
                 int seats = rs.getInt(3);
                 Room obj = new Room(roomID, roomName, seats);
                 dsRoom.add(obj);

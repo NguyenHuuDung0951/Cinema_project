@@ -4,34 +4,45 @@ import connectDB.ConnectDB;
 import entity.Seat;
 import entity.Room;
 import entity.SeatType;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Seat_DAO {
     public Seat_DAO(){}
 
-    public ArrayList<Seat> getalltbSeat() {
+    public ArrayList<Seat> getalltbSeat() throws SQLException {
+        // 1) Load tất cả Room và SeatType trước
+        Map<String, Room> roomMap = new Room_DAO()
+            .getalltbRoom()
+            .stream()
+            .collect(Collectors.toMap(Room::getRoomID, Function.identity()));
+        Map<String, SeatType> typeMap = new SeatType_DAO()
+            .getalltbSeatType()
+            .stream()
+            .collect(Collectors.toMap(SeatType::getSeatTypeID, Function.identity()));
+
         ArrayList<Seat> ds = new ArrayList<>();
-        try {
-            ConnectDB.getInstance();
-            Connection con = ConnectDB.getConnection();
-            String sql = "Select * from Seat";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()){
-                String seatID = rs.getString(1);
-                String loc = rs.getString(2);
-                String roomID = rs.getString(3);
-                String typeID = rs.getString(4);
-                Seat obj = new Seat(seatID, loc, null, null);
-                // TODO: load Room and SeatType into obj
+        ConnectDB.getInstance().connect();
+        try (Connection con = ConnectDB.getConnection();
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery("SELECT * FROM Seat")) {
+
+            while (rs.next()) {
+                String seatID    = rs.getString("seatID");
+                String location  = rs.getString("location");
+                String roomID    = rs.getString("room");
+                String typeID    = rs.getString("seatTypeID");
+
+                Room room         = roomMap.get(roomID);
+                SeatType seatType = typeMap.get(typeID);
+
+                Seat obj = new Seat(seatID, location, room, seatType);
                 ds.add(obj);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return ds;
     }

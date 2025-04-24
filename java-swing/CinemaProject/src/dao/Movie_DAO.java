@@ -21,8 +21,8 @@ public class Movie_DAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()){
                 String movieID = rs.getString(1);
-                String movieName = rs.getNString(2);
-                String status = rs.getNString(3);
+                String movieName = rs.getString(2);
+                String status = rs.getString(3);
                 int duration = rs.getInt(4);
                 Movie obj = new Movie(movieID, movieName, status, duration);
                 dsMovie.add(obj);

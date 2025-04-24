@@ -23,7 +23,7 @@ public class Employee_DAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()){
                 String employeeID = rs.getString(1);
-                String fullName = rs.getNString(2);
+                String fullName = rs.getString(2);
                 boolean gender = rs.getBoolean(3);
                 LocalDate dob = rs.getDate(4).toLocalDate();
                 String phone = rs.getString(5);

@@ -21,7 +21,7 @@ public class Product_DAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()){
                 String productID = rs.getString(1);
-                String productName = rs.getNString(2);
+                String productName = rs.getString(2);
                 int quantity = rs.getInt(3);
                 String productType = rs.getString(4);
                 double price = rs.getDouble(5);

@@ -1,10 +1,9 @@
 package application;
 
 import component.Form; 
-import component.Phim;
-import component.PhimForm;
+import component.LichChieu_Form;
 import component.SanPham;
-import component.UuDai; 
+import component.UuDai_Form; 
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
@@ -12,11 +11,10 @@ import even.EventMenu;
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
   
 public class Main extends javax.swing.JFrame {
      private Voucher_DAO vc_dao;
-    private UuDai uudai;
+    private UuDai_Form uudai;
     public Main() { 
         initComponents();
               try {
@@ -32,13 +30,13 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                  if (index == 2) {  
-                     PhimForm phim = new PhimForm();
+                  LichChieu_Form phim = new LichChieu_Form();
                   showForm(phim);
                 }else if(index==5){
                  
                 }  
                  else if(index==3){
-                     UuDai uudai = new UuDai();
+                     uudai = new UuDai_Form();
                      showForm(uudai);
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
