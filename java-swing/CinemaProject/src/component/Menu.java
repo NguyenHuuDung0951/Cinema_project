@@ -30,8 +30,17 @@ public class Menu extends javax.swing.JPanel {
         this.event = event;
         addMenu(new ImageIcon(getClass().getResource("/icon/1.png")), "Phim", 0);
         addMenu(new ImageIcon(getClass().getResource("/icon/3.png")), "Lịch Chiếu", 2);
-        addMenu(new ImageIcon(getClass().getResource("/icon/4.png")), "Ưu Đãi", 3);
-        addMenu(new ImageIcon(getClass().getResource("/icon/5.png")), "Sản Phẩm", 4);
+          addMenu(new ImageIcon(getClass().getResource("/icon/3.png")), "Ưu đãi", 3);
+        addMenuWithSub(
+    new ImageIcon(getClass().getResource("/icon/5.png")),
+    "Sản Phẩm", 4,
+    new Object[][] {
+        {"Đồ ăn", new ImageIcon(getClass().getResource("/icon/1.png"))},
+        {"Nước uống", new ImageIcon(getClass().getResource("/icon/2.png"))}
+    }
+);
+
+
         addMenu(new ImageIcon(getClass().getResource("/icon/6.png")), "Thống kê", 5);
         addMenu(new ImageIcon(getClass().getResource("/icon/7.png")), "Hồ Sơ", 6);
           addEmpty();
@@ -118,6 +127,55 @@ public class Menu extends javax.swing.JPanel {
 
         add(pnlMenu, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+    public void addMenuWithSub(Icon icon, String text, int index, Object[][] subItems) {
+    ButtonMenu mainMenu = new ButtonMenu();
+    mainMenu.setIcon(icon);
+    mainMenu.setText(text);
+
+    pnlMenu.add(mainMenu, "wrap");
+
+    // Tạo submenu nhưng chưa add vào pnlMenu
+    for (int i = 0; i < subItems.length; i++) {
+        String subText = (String) subItems[i][0];
+        Icon subIcon = (Icon) subItems[i][1];
+
+        ButtonMenu sub = new ButtonMenu();
+        sub.setText("    " + subText);
+        sub.setIcon(subIcon);
+        sub.setAsSubMenu(true);
+        sub.setVisible(false);
+
+        int subIndex = index * 10 + i;
+        sub.addActionListener(e -> {
+            event.selected(subIndex);
+            setSelected(sub);
+        });
+
+        mainMenu.addSubMenu(sub);
+    }
+
+    // Xử lý khi nhấn menu chính
+    mainMenu.addActionListener(e -> {
+        boolean show = !mainMenu.isShowingSubMenu();
+        mainMenu.setShowingSubMenu(show);
+
+        for (int i = 0; i < mainMenu.getSubMenus().size(); i++) {
+            ButtonMenu sub = mainMenu.getSubMenus().get(i);
+            if (show) {
+                int pos = pnlMenu.getComponentZOrder(mainMenu) + 1 + i;
+                pnlMenu.add(sub, "wrap", pos);
+                sub.setVisible(true);
+            } else {
+                pnlMenu.remove(sub);
+            }
+        }
+
+        pnlMenu.revalidate();
+        pnlMenu.repaint();
+        setSelected(mainMenu);
+    });
+}
+
 
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

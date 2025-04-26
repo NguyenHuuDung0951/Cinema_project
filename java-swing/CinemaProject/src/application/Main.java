@@ -3,8 +3,15 @@ package application;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Menu;
 import component.Form; 
+
+
+import component.SanPham_DoAn;
+import component.SanPham_DoUong;
+
+
 import gui.PhimForm1;
 import gui.UuDai_Form; 
+
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
@@ -33,6 +40,7 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                  if (index == 2) {  
+
 //                     PhimForm1 phim = new PhimForm1();
 //                  showForm(phim);
                 ShowScheduleForm schedule = new ShowScheduleForm();
@@ -40,16 +48,22 @@ public class Main extends javax.swing.JFrame {
                 }else if(index==5){
                  
                 }  
+
                  else if(index==3){
                      uudai = new UuDai_Form();
                      showForm(uudai);
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
                 }  
-//                 else if(index == 4){
-//                     SanPham sanpham = new SanPham();
-//                     showForm(sanpham);
-//                 }
+
+                 else if(index==41){
+                   SanPham_DoUong sp_doUong=new SanPham_DoUong(index);
+                     showForm(sp_doUong);
+                 }      
+                  else if(index==40){
+                   SanPham_DoAn sp_doan=new SanPham_DoAn(index);
+                     showForm(sp_doan);
+                 }
                  else if (index == 7) { 
                     System.out.println("Logout");
                 } else {
@@ -106,6 +120,7 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {  
+
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -113,6 +128,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
     private javax.swing.JPanel jPanel1;
