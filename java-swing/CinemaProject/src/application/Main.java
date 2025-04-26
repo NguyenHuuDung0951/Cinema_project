@@ -1,10 +1,9 @@
 package application;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import component.Menu;
 import component.Form; 
-import component.PhimForm;
 import gui.PhimForm1;
-import gui.LichChieu_Form;
-import component.SanPham;
 import gui.UuDai_Form; 
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
@@ -13,8 +12,9 @@ import even.EventMenu;
 import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
-  
+import gui.ShowScheduleForm;
 public class Main extends javax.swing.JFrame {
+    private Menu menu;
      private Voucher_DAO vc_dao;
     private UuDai_Form uudai;
     public Main() { 
@@ -27,14 +27,16 @@ public class Main extends javax.swing.JFrame {
 		}
         vc_dao = new Voucher_DAO();
         
-        
-        
+            menu = new Menu();
+            main.add(menu, java.awt.BorderLayout.WEST); 
            EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
                  if (index == 2) {  
-                     PhimForm1 phim = new PhimForm1();
-                  showForm(phim);
+//                     PhimForm1 phim = new PhimForm1();
+//                  showForm(phim);
+                ShowScheduleForm schedule = new ShowScheduleForm();
+                     showForm(schedule);
                 }else if(index==5){
                  
                 }  
@@ -74,9 +76,7 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         main = new javax.swing.JPanel();
-        menu = new component.Menu();
         body = new javax.swing.JPanel();
-        header1 = new component.Header();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cinema\n");
@@ -85,30 +85,16 @@ public class Main extends javax.swing.JFrame {
         main.setBackground(new java.awt.Color(255, 255, 255));
         main.setPreferredSize(new java.awt.Dimension(1300, 700));
         main.setLayout(new java.awt.BorderLayout());
-        main.add(menu, java.awt.BorderLayout.WEST);
-
-        javax.swing.GroupLayout header1Layout = new javax.swing.GroupLayout(header1);
-        header1.setLayout(header1Layout);
-        header1Layout.setHorizontalGroup(
-            header1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1072, Short.MAX_VALUE)
-        );
-        header1Layout.setVerticalGroup(
-            header1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 39, Short.MAX_VALUE)
-        );
 
         javax.swing.GroupLayout bodyLayout = new javax.swing.GroupLayout(body);
         body.setLayout(bodyLayout);
         bodyLayout.setHorizontalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 1312, Short.MAX_VALUE)
         );
         bodyLayout.setVerticalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(bodyLayout.createSequentialGroup()
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 661, Short.MAX_VALUE))
+            .addGap(0, 700, Short.MAX_VALUE)
         );
 
         main.add(body, java.awt.BorderLayout.CENTER);
@@ -120,7 +106,7 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {  
-      
+        FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main().setVisible(true);
@@ -129,9 +115,7 @@ public class Main extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
-    private component.Header header1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel main;
-    private component.Menu menu;
     // End of variables declaration//GEN-END:variables
 }
