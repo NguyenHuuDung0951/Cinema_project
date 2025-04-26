@@ -1,11 +1,15 @@
 package application;
 
 import component.Form; 
-import component.LichChieu_Form;
+
+
 import component.SanPham_DoAn;
 import component.SanPham_DoUong;
-import com.formdev.flatlaf.FlatLightLaf;
-import component.UuDai_Form; 
+
+
+import gui.PhimForm1;
+import gui.UuDai_Form; 
+
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
@@ -33,7 +37,7 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                  if (index == 2) {  
-                  LichChieu_Form phim = new LichChieu_Form();
+                     PhimForm1 phim = new PhimForm1();
                   showForm(phim);
                 } 
                  else if(index==3){
@@ -42,9 +46,14 @@ public class Main extends javax.swing.JFrame {
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
                 }  
-                 else if(index==4){
+
+                 else if(index==41){
                    SanPham_DoUong sp_doUong=new SanPham_DoUong(index);
                      showForm(sp_doUong);
+                 }      
+                  else if(index==40){
+                   SanPham_DoAn sp_doan=new SanPham_DoAn(index);
+                     showForm(sp_doan);
                  }
                  else if (index == 7) { 
                     System.out.println("Logout");
@@ -118,7 +127,6 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {  
-        FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main().setVisible(true);
