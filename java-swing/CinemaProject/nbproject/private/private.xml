@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/SeatSelectionForm.java</file>
             <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/connectDB/ConnectDB.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/LichChieu_Form.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/component/Phim.java</file>
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/Phim.java</file>
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/dao/Movie_DAO.java</file>
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/component/AddForm.java</file>
         </group>
     </open-files>
 </project-private>

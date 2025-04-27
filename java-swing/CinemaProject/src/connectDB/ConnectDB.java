@@ -12,7 +12,7 @@ public class ConnectDB {
 
     public static ConnectDB getInstance() {
         return instance;
-    }
+    } 
 
     public void connect() throws SQLException {
         String url = "jdbc:sqlserver://localhost:14330;databaseName=QLRAP";

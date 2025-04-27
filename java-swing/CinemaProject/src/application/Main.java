@@ -1,18 +1,24 @@
 package application;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Form; 
-import component.PhimForm;
-import gui.PhimForm1;
-import gui.LichChieu_Form;
-import component.SanPham;
-import gui.UuDai_Form; 
+import gui.LichChieu;
+import gui.UuDai_Form;  
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
 import even.EventMenu; 
+import gui.Phim;
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.UIManager;
+import raven.popup.GlassPanePopup;
+import raven.toast.Notifications;
   
 public class Main extends javax.swing.JFrame {
      private Voucher_DAO vc_dao;
@@ -32,8 +38,12 @@ public class Main extends javax.swing.JFrame {
            EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
-                 if (index == 2) {  
-                     PhimForm1 phim = new PhimForm1();
+                if(index == 0){
+                    Phim phim  = new Phim();
+                    showForm(phim);
+                }
+                else if (index == 2) {  
+                     LichChieu phim = new LichChieu();
                   showForm(phim);
                 }else if(index==5){
                  
@@ -44,10 +54,6 @@ public class Main extends javax.swing.JFrame {
                         ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                      uudai.loadDataToTable(dsVoucher);       
                 }  
-//                 else if(index == 4){
-//                     SanPham sanpham = new SanPham();
-//                     showForm(sanpham);
-//                 }
                  else if (index == 7) { 
                     System.out.println("Logout");
                 } else {
@@ -60,14 +66,14 @@ public class Main extends javax.swing.JFrame {
         menu.initMenu(event);
      
     } 
-    private void showForm(Component com){
-           body.removeAll();
-           body.add(com);
-           body.repaint();
-           body.revalidate();
-           com.setSize(body.getSize());
-           com.setPreferredSize(body.getSize());
-    }    
+private void showForm(Component com) {
+    body.removeAll();
+    body.setLayout(new java.awt.BorderLayout());
+    body.add(header1, BorderLayout.NORTH); // Add lại header
+    body.add(com, BorderLayout.CENTER);    // Add nội dung mới
+    body.repaint();
+    body.revalidate();
+}  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -119,14 +125,25 @@ public class Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {  
-      
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Main().setVisible(true);
-            }
-        });
+   public static void main(String args[]) {  
+    try {
+        FlatRobotoFont.install();
+        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
+        FlatMacLightLaf.setup();
+        FlatLightLaf.setup();
+    } catch (Exception ex) {
+        ex.printStackTrace();
     }
+
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            Main mainFrame = new Main();
+            GlassPanePopup.install(mainFrame); 
+            Notifications.getInstance().setJFrame(mainFrame);
+            mainFrame.setVisible(true);
+        }
+    });
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
     private component.Header header1;
