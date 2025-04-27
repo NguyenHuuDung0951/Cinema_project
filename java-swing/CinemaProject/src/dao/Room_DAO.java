@@ -3,6 +3,7 @@ package dao;
 import connectDB.ConnectDB;
 import entity.Room;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,5 +31,25 @@ public class Room_DAO {
             e.printStackTrace();
         }
         return dsRoom;
+    }
+    public Room getRoomByID(String roomID) {
+        Room room = null;
+        try {
+            Connection con = ConnectDB.getInstance().getConnection();
+            String sql = "SELECT * FROM Room WHERE room = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, roomID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                room = new Room(
+                    rs.getString("room"),
+                    rs.getString("roomName"),
+                    rs.getInt("numberOfSeats")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return room;
     }
 }

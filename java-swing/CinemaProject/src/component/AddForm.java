@@ -47,7 +47,17 @@ private Movie movie;
     Movie movie = new Movie(movieID, movieName, status, duration);
     return movie;
 }
+public void setMovie(Movie movie) {
+    this.movie = movie;
+    if (movie != null) {
+        txtMaphim.setText(movie.getMovieID());
+        txtTenPhim.setText(movie.getMovieName());
+        txtTrangThai.setText(movie.getStatus());
+        txtThoiLuong.setText(String.valueOf(movie.getDuration()));
 
+        txtMaphim.setEditable(false);
+    }
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

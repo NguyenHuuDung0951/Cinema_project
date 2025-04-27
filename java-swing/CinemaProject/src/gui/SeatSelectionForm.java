@@ -1,17 +1,26 @@
 package gui;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import connectDB.ConnectDB;
 import dao.Seat_DAO;
 import dao.MovieScheduleSeat_DAO;
+import dao.Room_DAO;
 import entity.Seat;
 import entity.MovieScheduleSeat;
+import entity.Room;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
-import com.formdev.flatlaf.FlatLightLaf;
+
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+
 public class SeatSelectionForm extends JFrame {
     private JPanel pnlScreen, pnlSeats, pnlInfo, pnlLegend;
     private JLabel lblTitle, lblDate, lblTime, lblRoom, lblPrice, lblSeats, lblTotal;
@@ -23,78 +32,160 @@ public class SeatSelectionForm extends JFrame {
         "ST02", 90000.0,
         "ST03", 100000.0
     );
+    private static final Color SELECTED_COLOR = new Color(0xFF8800);   // #ff8800 – cam
+
     // Bản đồ location -> Seat
     private Map<String, Seat> mapLoc = new HashMap<>();
     private String scheduleID = "SC001";
+    // Kích thước tối đa bạn muốn hiển thị trên panel info
+    private static final int POSTER_MAX_W = 150;   // px
+    private static final Color ORANGE_BAR = new Color(0xFFA000);
+    private JLabel lblSeatsVal;
+    private JLabel lblTotalVal;
+    private JLabel lblPoster;
+    private String roomName;
+    private ImageIcon loadScaledIcon(String path, int maxW) {
+        URL url = getClass().getResource(path);
+        if (url == null)                                 // ảnh không tồn tại
+            return new ImageIcon();
 
-    public SeatSelectionForm() {
-        initComponents();
+        ImageIcon raw = new ImageIcon(url);              // ảnh gốc
+        int origW = raw.getIconWidth();
+        int origH = raw.getIconHeight();
+
+        // giữ nguyên tỉ lệ (aspect ratio)
+        int newW = Math.min(origW, maxW);
+        int newH = origH * newW / origW;
+
+        Image scaledImg = raw.getImage()
+                             .getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImg);
     }
+
+    public SeatSelectionForm(String movieName, LocalDate date, LocalTime time, String room, String posterPath) {
+        this.scheduleID = "SC001";
+        initComponents();
+        lblTitle.setText(movieName);
+        lblDate.setText(date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        lblTime.setText(time.toString());
+        lblRoom.setText(room);
+        ImageIcon poster = loadScaledIcon(posterPath, POSTER_MAX_W);
+        lblPoster.setIcon(poster);
+    }   
 
     private void initComponents() {
         setTitle("Chọn ghế xem phim");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-
+        
         // Màn hình
-        pnlScreen = new JPanel();
-        pnlScreen.add(new JLabel("Màn hình"));
-        add(pnlScreen, BorderLayout.NORTH);
+        // 1. Panel chứa cả thanh + chữ (xếp dọc)
+        JPanel pnlTop = new JPanel();
+        pnlTop.setLayout(new BoxLayout(pnlTop, BoxLayout.Y_AXIS));
 
+        // 1a. Thanh cam mỏng 2 px, kéo dài toàn khung
+        JPanel bar = new JPanel();
+        bar.setBackground(ORANGE_BAR);
+        bar.setPreferredSize(new Dimension(0, 2));                // height = 2 px
+        bar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 2));   // cho giãn ngang
+
+        // 1b. Dòng chữ “Màn hình”
+        JLabel lblScreen = new JLabel("Màn hình", SwingConstants.CENTER);
+        lblScreen.setFont(lblScreen.getFont().deriveFont(Font.BOLD, 25f));
+        lblScreen.setForeground(new Color(0x9E9E9E));
+        lblScreen.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
+
+        JPanel pnlScreen = new JPanel(new BorderLayout());         // chỉ để canh giữa
+        pnlScreen.add(lblScreen, BorderLayout.CENTER);
+
+        // Thêm vào pnlTop (thanh trước, chữ sau)
+        pnlTop.add(bar);
+        pnlTop.add(pnlScreen);
+
+        // Đặt toàn bộ lên NORTH
+        add(pnlTop, BorderLayout.NORTH);
         // Bảng ghế
         pnlSeats = new JPanel(new GridBagLayout());
+        pnlSeats.putClientProperty("FlatLaf.style", "background:#00000000;");
+
         loadSeats();
-        add(new JScrollPane(pnlSeats), BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(pnlSeats);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        add(scroll, BorderLayout.CENTER);
 
         // Thông tin bên phải
         pnlInfo = new JPanel();
         pnlInfo.setLayout(new BoxLayout(pnlInfo, BoxLayout.Y_AXIS));
-        pnlInfo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlInfo.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        URL posterURL = getClass().getResource("/images/venom.jpg");
-        ImageIcon poster = posterURL != null ? new ImageIcon(posterURL) : new ImageIcon();
-        JLabel lblPoster = new JLabel(poster);
+        ImageIcon posterIcon = loadScaledIcon("/image/avenger.jpg", POSTER_MAX_W);
+        lblPoster = new JLabel(posterIcon);
         lblPoster.setAlignmentX(Component.CENTER_ALIGNMENT);
         pnlInfo.add(lblPoster);
+
         pnlInfo.add(Box.createVerticalStrut(10));
+
 
         lblTitle = new JLabel("Venom: Kẻ Cuối");
         lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 16f));
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         pnlInfo.add(lblTitle);
-        pnlInfo.add(Box.createVerticalStrut(10));
+        pnlInfo.add(Box.createVerticalStrut(15));
+           
+        JPanel pnlMeta = new JPanel(new GridBagLayout());
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.anchor = GridBagConstraints.WEST;
+        gc.insets  = new Insets(10, 8, 4, 5);
 
-        lblDate  = new JLabel("Ngày chiếu: 17/11/2024");
-        lblTime  = new JLabel("Giờ chiếu : 19:47");
-        lblRoom  = new JLabel("Phòng     : Phòng 1");
-        lblPrice = new JLabel(String.format("Giá vé    : %.0f VND", priceMap.get("ST01")));
-        lblSeats = new JLabel("<html><body style='width:100px'>Ghế: </body></html>");
-        lblSeats.setVerticalAlignment(SwingConstants.TOP);
-        lblTotal = new JLabel("Tổng      : 0 VND");
+        int row = 0;
+        lblDate = new JLabel("17/11/2024");
+        row = addRow(pnlMeta, gc, row, "Ngày chiếu:", lblDate);
 
-        for (JLabel l : Arrays.asList(lblDate, lblTime, lblRoom, lblPrice, lblSeats, lblTotal)) {
-            l.setAlignmentX(Component.LEFT_ALIGNMENT);
-            pnlInfo.add(l);
-            pnlInfo.add(Box.createVerticalStrut(5));
-        }
+        lblTime = new JLabel("19:47");
+        row = addRow(pnlMeta, gc, row, "Giờ chiếu:", lblTime);
 
+        lblRoom = new JLabel("Phòng 1");
+        row = addRow(pnlMeta, gc, row, "Phòng:", lblRoom);
+
+        row = addRow(pnlMeta, gc, row, "Giá vé:",     formatVND(60000));
+        row = addRow(pnlMeta, gc, row, "Ghế:",        "");          // ghế sẽ cập nhật
+        lblSeatsVal = (JLabel) pnlMeta.getComponent(pnlMeta.getComponentCount() - 1);
+        row = addRow(pnlMeta, gc, row, "Tổng:",       formatVND(0));
+        lblTotalVal = (JLabel) pnlMeta.getComponent(pnlMeta.getComponentCount() - 1);
+        pnlInfo.add(pnlMeta);
+        pnlInfo.add(Box.createVerticalGlue());
+        
         btnContinue = new JButton("Tiếp tục");
+        btnContinue.putClientProperty("FlatLaf.style",
+            "arc:999;"           // bo tròn pill
+          + "background:#FFA000;"
+          + "foreground:#ffffff;"
+          + "hoverBackground:#FFB733;");
+
         btnContinue.setAlignmentX(Component.CENTER_ALIGNMENT);
-        pnlInfo.add(Box.createVerticalStrut(20));
+//        btnContinue.putClientProperty("JButton.buttonType", "roundRect");
+//        btnContinue.putClientProperty("FlatLaf.style", "arc:999;focusWidth:0;");
+        btnContinue.setMargin(new Insets(10, 16, 10, 16));
         pnlInfo.add(btnContinue);
 
         add(pnlInfo, BorderLayout.EAST);
 
         // Chú giải màu
         pnlLegend = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        pnlLegend.putClientProperty("FlatLaf.style", "background:#00000000;");
         pnlLegend.add(createLegend("Ghế thường", Color.WHITE));
         pnlLegend.add(createLegend("Ghế VIP", Color.YELLOW));
         pnlLegend.add(createLegend("Ghế đôi SweetBox", new Color(255, 200, 200)));
         pnlLegend.add(createLegend("Ghế đã bán", Color.LIGHT_GRAY));
+        pnlLegend.add(createLegend("Ghế đang chọn", SELECTED_COLOR));
+
         add(pnlLegend, BorderLayout.SOUTH);
+        btnContinue.addActionListener(e -> {
+            new ProductOrderForm().setVisible(true); // Mở form chọn đồ ăn/thức uống
+        });
 
         pack();
-        setSize(1200, 700);
+        setSize(1300, 700);
         setLocationRelativeTo(null);
     }
 
@@ -137,6 +228,18 @@ public class SeatSelectionForm extends JFrame {
 
     private void addSeatButton(String loc, Set<String> sold, GridBagConstraints gbc, int span) {
         JToggleButton btn = new JToggleButton(loc);
+        btn.setPreferredSize(new Dimension(56, 32));
+        btn.setMinimumSize(new Dimension(56, 32));
+        btn.setMaximumSize(new Dimension(56, 32));
+        btn.putClientProperty("FlatLaf.style",
+                "arc:8;"                       // bo nút
+              + "focusWidth:0;"                // ẩn viền focus xanh
+              + "selectedBackground:#ff8800;"  // màu chọn
+              + "selectedForeground:#ffffff;"    // chữ trắng khi chọn
+              + "hoverBackground:#FFE2AD;"     // (tuỳ chọn) hover
+        );
+
+
         btn.setOpaque(true);
         Seat seat = mapLoc.get(loc);
         String type = seat != null ? seat.getSeatType().getSeatTypeID() : "ST01";
@@ -146,55 +249,141 @@ public class SeatSelectionForm extends JFrame {
             default:     btn.setBackground(Color.WHITE);
         }
         if (seat != null && sold.contains(seat.getSeatID())) {
+            btn.putClientProperty("FlatLaf.style",
+                    "disabledBackground:#C0C0C0;");
             btn.setEnabled(false);
-            btn.setBackground(Color.LIGHT_GRAY);
         }
         btn.addActionListener(e -> updateSelection());
         gbc.gridwidth = span;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;      // đừng HORIZONTAL nữa
+
         pnlSeats.add(btn, gbc);
     }
 
     private JPanel createLegend(String name, Color col) {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        JButton b = new JButton();
-        b.setPreferredSize(new Dimension(16, 16));
-        b.setOpaque(true);
-        b.setBackground(col);
-        b.setEnabled(false);
-        p.add(b);
-        p.add(new JLabel(name));
+        // 1) Ô vuông đại diện màu
+        JButton legend = new JButton();
+        legend.setPreferredSize(new Dimension(16, 16));
+        legend.setFocusable(false);
+        legend.setBorderPainted(false);
+
+        /* ---- FlatLaf style ---- */
+        String colorHex = String.format("#%02X%02X%02X",
+                           col.getRed(), col.getGreen(), col.getBlue());
+        legend.putClientProperty("FlatLaf.style",
+                "arc:4;"                // bo nhẹ 4px
+              + "borderWidth:0;"        // ẩn viền
+              + "focusWidth:0;"         // ẩn vòng focus
+              + "background:" + colorHex + ";");
+
+        // 2) Nhãn mô tả
+        JLabel lbl = new JLabel(name);
+
+        p.setOpaque(false);             // panel trong suốt (k plan background)
+        p.add(legend);
+        p.add(lbl);
         return p;
     }
+
+
 
     private void updateSelection() {
         ArrayList<String> sel = new ArrayList<>();
         double total = 0;
+
         for (Component c : pnlSeats.getComponents()) {
-            if (c instanceof JToggleButton) {
-                JToggleButton b = (JToggleButton) c;
-                if (b.isSelected() && b.isEnabled()) {
-                    sel.add(b.getText());
-                    Seat seat = mapLoc.get(b.getText());
-                    String type = seat != null ? seat.getSeatType().getSeatTypeID() : "ST01";
-                    total += priceMap.getOrDefault(type, 60000.0);
+            if (!(c instanceof JToggleButton)) continue;
+            JToggleButton b = (JToggleButton) c;
+
+            // Bỏ qua ghế đã bán (disabled)
+            if (!b.isEnabled()) continue;
+
+            Seat seat = mapLoc.get(b.getText());
+            String type = seat != null ? seat.getSeatType().getSeatTypeID() : "ST01";
+
+            // Nếu đang được chọn
+            if (b.isSelected()) {
+                b.setBackground(SELECTED_COLOR);
+                b.setForeground(Color.WHITE);     // chữ trắng
+                sel.add(b.getText());
+                total += priceMap.getOrDefault(type, 60000.0);
+            } else {                   // ghế chưa chọn – trả lại màu gốc
+                b.setForeground(Color.BLACK);
+                switch (type) {
+                    case "ST02": b.setBackground(Color.YELLOW);           break; // VIP
+                    case "ST03": b.setBackground(new Color(255, 200, 200));break; // SweetBox
+                    default:     b.setBackground(Color.WHITE);            break; // thường
                 }
             }
         }
-        String seatsText = String.join(", ", sel);
-        lblSeats.setText("<html><body style='width:100px'>Ghế: " + seatsText + "</body></html>");
-        lblTotal.setText(String.format("Tổng: %.0f VND", total));
+
+        // Cập nhật label thông tin
+        lblSeatsVal.setText("<html><body style='width:90px'>"
+                         + String.join(", ", sel) + "</body></html>");
+        lblTotalVal.setText(String.format(formatVND(total)));
     }
 
     public static void main(String[] args) {
-        FlatLightLaf.setup();
+        FlatMacLightLaf.setup();
         SwingUtilities.invokeLater(() -> {
             try {
-                ConnectDB.getInstance().connect();
+                ConnectDB.getInstance().connect(); // Kết nối DB trước
+
+                Room_DAO roomDao = new Room_DAO();
+                Room room = roomDao.getRoomByID("R001"); // "R001" là roomID lịch chiếu SC001
+                String roomName = (room != null) ? room.getRoomName() : "Không xác định";
+
+                new SeatSelectionForm(
+                    "Avengers: Endgame",
+                    LocalDate.of(2025, 4, 20),
+                    LocalTime.of(19, 47),
+                    roomName, // 🛡️ lấy từ DB thay vì gán cứng
+                    "/image/avenger.jpg"
+                ).setVisible(true);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            new SeatSelectionForm().setVisible(true);
         });
     }
+
+
+
+    private int addRow(JPanel panel, GridBagConstraints gc,
+                        int row, String key, String val) {
+         JLabel lblKey = new JLabel(key);
+         lblKey.setFont(lblKey.getFont().deriveFont(Font.PLAIN, 13f));
+
+         JLabel lblVal = new JLabel(val);
+         lblVal.setFont(lblVal.getFont().deriveFont(Font.BOLD, 13f));
+
+         gc.gridx = 0; gc.gridy = row; gc.weightx = 0;
+         panel.add(lblKey, gc);
+
+         gc.gridx = 1; gc.weightx = 1;
+         panel.add(lblVal, gc);
+
+         return row + 1;
+     }
+
+    private String formatVND(double amount) {
+            NumberFormat nf = NumberFormat.getIntegerInstance(new Locale("vi", "VN"));
+            return nf.format(amount) + " VND";
+        }
+        private int addRow(JPanel panel, GridBagConstraints gc, int row, String key, JLabel lblVal) {
+        JLabel lblKey = new JLabel(key);
+        lblKey.setFont(lblKey.getFont().deriveFont(Font.PLAIN, 13f));
+        lblVal.setFont(lblVal.getFont().deriveFont(Font.BOLD, 13f));
+
+        gc.gridx = 0; gc.gridy = row; gc.weightx = 0;
+        panel.add(lblKey, gc);
+
+        gc.gridx = 1; gc.weightx = 1;
+        panel.add(lblVal, gc);
+
+        return row + 1;
+    }
+
+    
 }

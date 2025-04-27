@@ -1,11 +1,16 @@
 package application;
 
+
 import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import component.Form; 
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont; 
 import gui.LichChieu;
-import gui.UuDai_Form;  
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import component.Menu;
+import component.Form; 
+import component.Header;
+import component.SanPham_DoAn;
+import component.SanPham_DoUong;
+import gui.UuDai_Form; 
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
@@ -19,10 +24,15 @@ import java.util.ArrayList;
 import javax.swing.UIManager;
 import raven.popup.GlassPanePopup;
 import raven.toast.Notifications;
-  
+import gui.ShowScheduleForm;
+
 public class Main extends javax.swing.JFrame {
-     private Voucher_DAO vc_dao;
+    private Menu menu;
+    private Header head = new Header();
+    private Voucher_DAO vc_dao;
     private UuDai_Form uudai;
+
+    
     public Main() { 
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
@@ -33,44 +43,46 @@ public class Main extends javax.swing.JFrame {
 		}
         vc_dao = new Voucher_DAO();
         
-        
-        
-           EventMenu event = new EventMenu() {
+            menu = new Menu();
+            main.add(menu, java.awt.BorderLayout.WEST); 
+                EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
-                if(index == 0){
-                    Phim phim  = new Phim();
+                if (index == 0) {
+                    Phim phim = new Phim();
                     showForm(phim);
-                }
-                else if (index == 2) {  
-                     LichChieu phim = new LichChieu();
-                  showForm(phim);
-                }else if(index==5){
-                 
-                }  
-                 else if(index==3){
-                     uudai = new UuDai_Form();
-                     showForm(uudai);
-                        ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
-                     uudai.loadDataToTable(dsVoucher);       
-                }  
-                 else if (index == 7) { 
+                } else if (index == 1) {
+                    ShowScheduleForm schedule = new ShowScheduleForm();
+                    showForm(schedule);
+                } else if (index == 2) {
+                    LichChieu lichChieu = new LichChieu();
+                    showForm(lichChieu);
+                } else if (index == 3) {
+                    uudai = new UuDai_Form();
+                    showForm(uudai);
+                    ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
+                    uudai.loadDataToTable(dsVoucher);
+                } else if (index == 40) {
+                    SanPham_DoAn spDoAn = new SanPham_DoAn(index);
+                    showForm(spDoAn);
+                } else if (index == 41) {
+                    SanPham_DoUong spDoUong = new SanPham_DoUong(index);
+                    showForm(spDoUong);
+                } else if (index == 7) {
                     System.out.println("Logout");
+                    // Thực hiện logout ở đây nếu cần
                 } else {
-                     showForm(new Form(index)); 
+                    showForm(new Form(index));
                 }
-                   
-                } 
-             
+            }
         };
         menu.initMenu(event);
-     
-    } 
-private void showForm(Component com) {
+    }
+    private void showForm(Component com) {
     body.removeAll();
     body.setLayout(new java.awt.BorderLayout());
-    body.add(header1, BorderLayout.NORTH); // Add lại header
-    body.add(com, BorderLayout.CENTER);    // Add nội dung mới
+    body.add(head, BorderLayout.NORTH); 
+    body.add(com, BorderLayout.CENTER);     
     body.repaint();
     body.revalidate();
 }  
@@ -80,9 +92,7 @@ private void showForm(Component com) {
 
         jPanel1 = new javax.swing.JPanel();
         main = new javax.swing.JPanel();
-        menu = new component.Menu();
         body = new javax.swing.JPanel();
-        header1 = new component.Header();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cinema\n");
@@ -91,30 +101,16 @@ private void showForm(Component com) {
         main.setBackground(new java.awt.Color(255, 255, 255));
         main.setPreferredSize(new java.awt.Dimension(1300, 700));
         main.setLayout(new java.awt.BorderLayout());
-        main.add(menu, java.awt.BorderLayout.WEST);
-
-        javax.swing.GroupLayout header1Layout = new javax.swing.GroupLayout(header1);
-        header1.setLayout(header1Layout);
-        header1Layout.setHorizontalGroup(
-            header1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1072, Short.MAX_VALUE)
-        );
-        header1Layout.setVerticalGroup(
-            header1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 39, Short.MAX_VALUE)
-        );
 
         javax.swing.GroupLayout bodyLayout = new javax.swing.GroupLayout(body);
         body.setLayout(bodyLayout);
         bodyLayout.setHorizontalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 1312, Short.MAX_VALUE)
         );
         bodyLayout.setVerticalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(bodyLayout.createSequentialGroup()
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 661, Short.MAX_VALUE))
+            .addGap(0, 700, Short.MAX_VALUE)
         );
 
         main.add(body, java.awt.BorderLayout.CENTER);
@@ -144,11 +140,12 @@ private void showForm(Component com) {
         }
     });
 }
+
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
-    private component.Header header1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel main;
-    private component.Menu menu;
     // End of variables declaration//GEN-END:variables
 }

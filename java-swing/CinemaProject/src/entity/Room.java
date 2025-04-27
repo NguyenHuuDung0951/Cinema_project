@@ -13,6 +13,12 @@ public class Room {
         this.numberOfSeats = numberOfSeats;
     }
 
+    public Room(String roomID) {
+        this.roomID = roomID;
+    }
+    
+    
+
     public String getRoomID() { return roomID; }
     public void setRoomID(String roomID) { this.roomID = roomID; }
 

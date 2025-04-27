@@ -80,20 +80,76 @@ public class Movie_DAO {
     }
     return movie;
 }
-
-    private void updateMovieInDB(Movie movie) {
- 
-    String sql = "UPDATE phim SET movieName = ?, status = ?, duration = ? WHERE movieID = ?";
-    
-    try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, movie.getMovieName());
-        ps.setString(2, movie.getStatus());
-        ps.setInt(3, movie.getDuration());
-        ps.setString(4, movie.getMovieID());
-        ps.executeUpdate();
+public boolean editMovie(Movie movie) {
+    String sql = "UPDATE Movie SET movieName = ?, status = ?, duration = ? WHERE movieID = ?";
+    try (Connection conn = getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, movie.getMovieName());
+        stmt.setString(2, movie.getStatus());
+        stmt.setInt(3, movie.getDuration());
+        stmt.setString(4, movie.getMovieID());
+        return stmt.executeUpdate() > 0;
     } catch (SQLException e) {
         e.printStackTrace();
-        Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi cập nhật dữ liệu!");
+        return false;
     }
+}
+
+public boolean deleteMovie(String movieID) {
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    try {
+        conn = ConnectDB.getConnection(); 
+        String sql = "DELETE FROM Movie WHERE MovieID = ?";
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, movieID);
+
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0; 
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+public ArrayList<Movie> searchMovieByName(String name) {
+    ArrayList<Movie> result = new ArrayList<>();
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    
+    try {
+        conn = ConnectDB.getConnection();
+        String sql = "SELECT * FROM Movie WHERE MovieName LIKE ?";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, "%" + name + "%");
+        rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            String id = rs.getString("MovieID");
+            String movieName = rs.getString("MovieName");
+            String status = rs.getString("Status");
+            int duration = rs.getInt("Duration");
+            
+            result.add(new Movie(id, movieName, status, duration));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    return result;
 }
 }
