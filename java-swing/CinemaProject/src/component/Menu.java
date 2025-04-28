@@ -13,7 +13,7 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.SwingConstants;  
 import net.miginfocom.swing.MigLayout;
 
 public class Menu extends javax.swing.JPanel {
@@ -32,7 +32,7 @@ public class Menu extends javax.swing.JPanel {
         addMenu(new ImageIcon(getClass().getResource("/icon/3.png")), "Lịch Chiếu", 2);
           addMenu(new ImageIcon(getClass().getResource("/icon/3.png")), "Ưu đãi", 3);
         addMenuWithSub(
-    new ImageIcon(getClass().getResource("/icon/5.png")),
+        new ImageIcon(getClass().getResource("/icon/5.png")),
     "Sản Phẩm", 4,
     new Object[][] {
         {"Đồ ăn", new ImageIcon(getClass().getResource("/icon/1.png"))},
@@ -134,7 +134,6 @@ public class Menu extends javax.swing.JPanel {
 
     pnlMenu.add(mainMenu, "wrap");
 
-    // Tạo submenu nhưng chưa add vào pnlMenu
     for (int i = 0; i < subItems.length; i++) {
         String subText = (String) subItems[i][0];
         Icon subIcon = (Icon) subItems[i][1];
@@ -154,7 +153,6 @@ public class Menu extends javax.swing.JPanel {
         mainMenu.addSubMenu(sub);
     }
 
-    // Xử lý khi nhấn menu chính
     mainMenu.addActionListener(e -> {
         boolean show = !mainMenu.isShowingSubMenu();
         mainMenu.setShowingSubMenu(show);

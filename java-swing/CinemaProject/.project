@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>CinemaProject</name>
+=======
+	<name>java-swing_CinemaProject</name>
+>>>>>>> c97a0a728822cf77c82e7cefeece9778d8935a27
 	<comment></comment>
 	<projects>
 	</projects>

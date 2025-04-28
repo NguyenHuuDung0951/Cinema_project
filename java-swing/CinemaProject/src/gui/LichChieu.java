@@ -10,12 +10,12 @@ import javax.swing.ImageIcon;
  *
  * @author LENOVO
  */
-public class PhimForm1 extends javax.swing.JPanel {
+public class LichChieu extends javax.swing.JPanel {
 
     /**
      * Creates new form PhimForm
      */
-    public PhimForm1() { 
+    public LichChieu() { 
        
         initComponents();
          loadMovies();
@@ -28,7 +28,7 @@ private void loadMovies() {
     phim3.MovieCard("Địa Đạo", new ImageIcon(getClass().getResource("/image/godzilla.jpg")),
             new String[]{"11:00", "15:30", "19:00"});
     phim4.MovieCard("Địa Đạo", new ImageIcon(getClass().getResource("/image/diadao.jpg")),
-            new String[]{"10:30", "13:00","19:00","21:00"});
+            new String[]{"10:30", "13:00","19:00"});
     phim5.MovieCard("Địa Đạo", new ImageIcon(getClass().getResource("/image/diadao.jpg")),
             new String[]{"12:00", "16:30", "21:00"});
     phim6.MovieCard("Địa Đạo", new ImageIcon(getClass().getResource("/image/diadao.jpg")),

@@ -1,29 +1,41 @@
 package application;
 
+
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont; 
+import gui.LichChieu;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Menu;
 import component.Form; 
-
-
+import component.Header;
+import component.LoadingScreen;
 import component.SanPham_DoAn;
 import component.SanPham_DoUong;
-
-
-import gui.PhimForm1;
 import gui.UuDai_Form; 
-
 import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
 import even.EventMenu; 
+import gui.LoginForm;
+import gui.Phim;
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.UIManager;
+import raven.popup.GlassPanePopup;
+import raven.toast.Notifications;
 import gui.ShowScheduleForm;
+
 public class Main extends javax.swing.JFrame {
     private Menu menu;
-     private Voucher_DAO vc_dao;
+    private Header head = new Header();
+    private Voucher_DAO vc_dao;
     private UuDai_Form uudai;
+    
+
+    
     public Main() { 
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
@@ -36,54 +48,47 @@ public class Main extends javax.swing.JFrame {
         
             menu = new Menu();
             main.add(menu, java.awt.BorderLayout.WEST); 
-           EventMenu event = new EventMenu() {
+                EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
-                 if (index == 2) {  
-
-//                     PhimForm1 phim = new PhimForm1();
-//                  showForm(phim);
-                ShowScheduleForm schedule = new ShowScheduleForm();
-                     showForm(schedule);
-                }else if(index==5){
-                 
-                }  
-
-                 else if(index==3){
-                     uudai = new UuDai_Form();
-                     showForm(uudai);
-                        ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
-                     uudai.loadDataToTable(dsVoucher);       
-                }  
-
-                 else if(index==41){
-                   SanPham_DoUong sp_doUong=new SanPham_DoUong(index);
-                     showForm(sp_doUong);
-                 }      
-                  else if(index==40){
-                   SanPham_DoAn sp_doan=new SanPham_DoAn(index);
-                     showForm(sp_doan);
-                 }
-                 else if (index == 7) { 
+                if (index == 0) {
+                    Phim phim = new Phim();
+                    showForm(phim);
+                } else if (index == 2) {
+                    ShowScheduleForm schedule = new ShowScheduleForm();
+                    showForm(schedule);
+//                } else if (index == 2) {
+//                    LichChieu lichChieu = new LichChieu();
+//                    showForm(lichChieu);
+                } else if (index == 3) {
+                    uudai = new UuDai_Form();
+                    showForm(uudai);
+                    ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
+                    uudai.loadDataToTable(dsVoucher);
+                } else if (index == 40) {
+                    SanPham_DoAn spDoAn = new SanPham_DoAn(index);
+                    showForm(spDoAn);
+                } else if (index == 41) {
+                    SanPham_DoUong spDoUong = new SanPham_DoUong(index);
+                    showForm(spDoUong);
+                } else if (index == 7) {
                     System.out.println("Logout");
+                    // Thực hiện logout ở đây nếu cần
                 } else {
-                     showForm(new Form(index)); 
+                    showForm(new Form(index));
                 }
-                   
-                } 
-             
+            }
         };
         menu.initMenu(event);
-     
-    } 
-    private void showForm(Component com){
-           body.removeAll();
-           body.add(com);
-           body.repaint();
-           body.revalidate();
-           com.setSize(body.getSize());
-           com.setPreferredSize(body.getSize());
-    }    
+    }
+    private void showForm(Component com) {
+    body.removeAll();
+    body.setLayout(new java.awt.BorderLayout());
+    body.add(head, BorderLayout.NORTH); 
+    body.add(com, BorderLayout.CENTER);     
+    body.repaint();
+    body.revalidate();
+}  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -119,16 +124,63 @@ public class Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {  
-
+ public static void main(String args[]) {  
+    try {
+        FlatRobotoFont.install();
+        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         FlatMacLightLaf.setup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Main().setVisible(true);
-            }
-        });
+        FlatLightLaf.setup();
+    } catch (Exception ex) {
+        ex.printStackTrace();
     }
+
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            // 1. Mở màn hình Loading trước
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.setVisible(true);
+
+            // 2. Tạo 1 Thread để chạy loading
+            new Thread(() -> {
+                try {
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(30); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
+                        loadingScreen.updateProgress(i);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                loadingScreen.dispose();
+                
+                LoginForm login = new LoginForm();
+                login.setVisible(true);
+
+                // 4. Chờ login xong
+                while (login.isDisplayable()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+              
+                if (login.isLoginSuccessful()) {
+                Main mainFrame = new Main();
+                GlassPanePopup.install(mainFrame); 
+                Notifications.getInstance().setJFrame(mainFrame);
+                mainFrame.setVisible(true);
+            } else {
+                System.exit(0); 
+}
+            }).start();
+        }
+    });
+}
+
     
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
     private javax.swing.JPanel jPanel1;

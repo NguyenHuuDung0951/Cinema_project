@@ -15,6 +15,8 @@ public class Movie {
         this.duration = duration;
     }
 
+  
+
     public String getMovieID() { return movieID; }
     public void setMovieID(String movieID) { this.movieID = movieID; }
 
@@ -38,5 +40,10 @@ public class Movie {
     @Override
     public int hashCode() {
         return Objects.hash(movieID);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" + "movieID=" + movieID + ", movieName=" + movieName + ", status=" + status + ", duration=" + duration + '}';
     }
 }

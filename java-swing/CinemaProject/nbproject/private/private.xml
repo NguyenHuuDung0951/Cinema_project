@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/ShowScheduleForm.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/SeatSelectionForm.java</file>
@@ -23,6 +24,11 @@
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/InvoiceForm.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/util/PromotionUtil.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/entity/CartItem.java</file>
+=======
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/component/LoadingScreen.java</file>
+            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/LoginForm.java</file>
+>>>>>>> c97a0a728822cf77c82e7cefeece9778d8935a27
         </group>
     </open-files>
 </project-private>
