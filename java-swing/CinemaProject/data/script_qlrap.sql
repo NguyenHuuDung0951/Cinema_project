@@ -72,8 +72,8 @@ CREATE TABLE MovieSchedule (
     scheduleID VARCHAR(50) PRIMARY KEY,
     movieID VARCHAR(50),
     room VARCHAR(50),
-    startTime DATE,
-    endTime DATE,
+    startTime DATETIME,
+    endTime DATETIME,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID),
     FOREIGN KEY (room) REFERENCES Room(room)
 );
@@ -163,6 +163,8 @@ VALUES
     ('ST03', 'Couple', N'Ghế đôi');
 
 --MOVIE SCHEDULE
+DELETE FROM MovieSchedule
+
 INSERT INTO MovieSchedule (scheduleID, movieID, room, startTime, endTime)
 VALUES 
 ('SC001', 'M001', 'R001', '2025-04-20 19:47:00', '2025-04-20 21:41:00'), 
