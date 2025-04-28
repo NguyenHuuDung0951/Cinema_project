@@ -71,4 +71,8 @@ public class Voucher {
     public String toString() {
         return "Voucher{" + "voucherID=" + voucherID + ", voucherName=" + voucherName + ", startDate=" + startDate + ", endDate=" + endDate + ", minimumPrice=" + minimumPrice + ", valueVoucher=" + valueVoucher + '}';
     }
+    public double getValueVoucherAsDouble() {
+        return Double.parseDouble(valueVoucher.replace("%", "")) / 100.0;
+    }
+
 }

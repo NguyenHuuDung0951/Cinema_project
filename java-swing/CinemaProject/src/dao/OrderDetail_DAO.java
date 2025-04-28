@@ -2,37 +2,21 @@ package dao;
 
 import connectDB.ConnectDB;
 import entity.OrderDetail;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 
 public class OrderDetail_DAO {
-    public OrderDetail_DAO(){}
-
-    public ArrayList<OrderDetail> getalltbOrderDetail() {
-        ArrayList<OrderDetail> ds = new ArrayList<>();
-        try {
-            ConnectDB.getInstance();
-            Connection con = ConnectDB.getConnection();
-            String sql = "Select * from OrderDetail";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()){
-                String detailID = rs.getString(1);
-                String ticketID = rs.getString(2);
-                String orderID  = rs.getString(3);
-                String productID= rs.getString(4);
-                String schedID  = rs.getString(5);
-                int qty         = rs.getInt(6);
-                OrderDetail obj = new OrderDetail(detailID, null, null, null, null, qty);
-                // TODO: load TicketDetail, Order, Product, MovieSchedule into obj
-                ds.add(obj);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean addOrderDetail(OrderDetail detail) throws SQLException {
+        String sql = "INSERT INTO OrderDetail (ticketID, orderID, productID, scheduleID, quantity) VALUES (?, ?, ?, ?, ?)";
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, detail.getTicketDetail().getTicketID());
+            ps.setString(2, detail.getOrder().getOrderID());
+            ps.setString(3, detail.getProduct().getProductID());
+            ps.setString(4, detail.getSchedule().getScheduleID());
+            ps.setInt(5, detail.getQuantity());
+            return ps.executeUpdate() > 0;
         }
-        return ds;
     }
 }

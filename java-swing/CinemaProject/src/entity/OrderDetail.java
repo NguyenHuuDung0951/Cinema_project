@@ -9,7 +9,7 @@ public class OrderDetail {
     private Product product;
     private MovieSchedule schedule;
     private int quantity;
-
+    
     public OrderDetail(String orderDetailID, TicketDetail ticketDetail,
                        Orders order, Product product,
                        MovieSchedule schedule, int quantity) {

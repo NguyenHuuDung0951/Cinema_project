@@ -1,21 +1,27 @@
 package gui;
 
+import entity.CartItem;
 import entity.Product;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.text.NumberFormat;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
+import model.BookingData;
 
 public class CartPanel extends JPanel {
     private final JPanel itemsPanel;
     private final JLabel lblTotal;
-    private final Map<Product, Integer> cartItems = new HashMap<>();
+    private final ArrayList<CartItem> cartItems = new ArrayList<>();
+    private final BookingData bookingData;
+    
+    private ProductOrderForm parent;
 
-    public CartPanel() {
+    public CartPanel(BookingData bookingData, ProductOrderForm parent) {
+        this.bookingData = bookingData;
+        this.parent = parent;
         setLayout(new BorderLayout(10, 10));
         setPreferredSize(new Dimension(250, 0));
         setBackground(Color.WHITE);
@@ -48,6 +54,18 @@ public class CartPanel extends JPanel {
 
         JButton btnContinue = new JButton("Tiếp tục");
         btnContinue.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnContinue.addActionListener(e -> {
+            SwingUtilities.getWindowAncestor(this).dispose();
+            bookingData.setCartItems(new ArrayList<>(cartItems));
+
+            double foodTotal = 0;
+            for (CartItem item : cartItems) {
+                foodTotal += item.getProduct().getPrice() * item.getQuantity();
+            }
+            bookingData.setProductTotal(foodTotal);
+
+            new InvoiceForm(bookingData).setVisible(true);
+        });
 
         bottomPanel.add(btnClear);
         bottomPanel.add(lblTotal);
@@ -57,17 +75,27 @@ public class CartPanel extends JPanel {
     }
 
     public void addToCart(Product p) {
-        cartItems.put(p, cartItems.getOrDefault(p, 0) + 1);
+        addOrUpdateCartItem(p);
         refreshCart();
+    }
+
+    private void addOrUpdateCartItem(Product p) {
+        for (CartItem item : cartItems) {
+            if (item.getProduct().equals(p)) {
+                item.setQuantity(item.getQuantity() + 1);
+                return;
+            }
+        }
+        cartItems.add(new CartItem(p, 1));
     }
 
     private void refreshCart() {
         itemsPanel.removeAll();
         double total = 0;
 
-        for (Map.Entry<Product, Integer> entry : cartItems.entrySet()) {
-            Product p = entry.getKey();
-            int quantity = entry.getValue();
+        for (CartItem item : cartItems) {
+            Product p = item.getProduct();
+            int quantity = item.getQuantity();
 
             JPanel itemPanel = new JPanel(new GridBagLayout());
             itemPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
@@ -78,7 +106,6 @@ public class CartPanel extends JPanel {
             gbc.insets = new Insets(5, 5, 5, 5);
             gbc.anchor = GridBagConstraints.WEST;
 
-            // Ảnh sản phẩm
             JLabel imgLabel = new JLabel();
             imgLabel.setPreferredSize(new Dimension(40, 40));
             String imgPath = "src/image/" + p.getProductID().toLowerCase() + ".jpg";
@@ -94,7 +121,6 @@ public class CartPanel extends JPanel {
             gbc.gridheight = 2;
             itemPanel.add(imgLabel, gbc);
 
-            // Tên và giá
             JPanel infoPanel = new JPanel();
             infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
             infoPanel.setBackground(Color.WHITE);
@@ -113,11 +139,10 @@ public class CartPanel extends JPanel {
             gbc.gridheight = 2;
             itemPanel.add(infoPanel, gbc);
 
-            // Số lượng (JSpinner)
             JSpinner spnQty = new JSpinner(new SpinnerNumberModel(quantity, 1, 100, 1));
             spnQty.setPreferredSize(new Dimension(50, 25));
             spnQty.addChangeListener(e -> {
-                cartItems.put(p, (int) spnQty.getValue());
+                item.setQuantity((int) spnQty.getValue());
                 refreshCart();
             });
 
@@ -128,10 +153,9 @@ public class CartPanel extends JPanel {
             gbc.fill = GridBagConstraints.NONE;
             itemPanel.add(spnQty, gbc);
 
-            // Nút xoá
             JButton btnRemove = new JButton("Xóa");
             btnRemove.addActionListener(e -> {
-                cartItems.remove(p);
+                cartItems.remove(item);
                 refreshCart();
             });
 
@@ -147,7 +171,6 @@ public class CartPanel extends JPanel {
         itemsPanel.revalidate();
         itemsPanel.repaint();
         KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
-
     }
 
     private String formatVND(double amount) {

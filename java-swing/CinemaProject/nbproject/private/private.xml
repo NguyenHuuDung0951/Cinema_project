@@ -16,6 +16,13 @@
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/WrapLayout.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/CartPanel.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/PhimForm1.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/application/loading.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/UuDai_Form.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/Voucher_DAO.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/model/BookingData.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/InvoiceForm.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/util/PromotionUtil.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/entity/CartItem.java</file>
         </group>
     </open-files>
 </project-private>
