@@ -162,216 +162,6 @@ VALUES
     ('ST02', 'VIP', N'Ghế cao cấp'),
     ('ST03', 'Couple', N'Ghế đôi');
 
--- SEAT 
-INSERT INTO Seat (seatID, location, room, seatTypeID) VALUES
-('S001', 'A1', 'R001', 'ST01'),
-('S002', 'A2', 'R001', 'ST01'),
-('S003', 'A3', 'R001', 'ST01'),
-('S004', 'A4', 'R001', 'ST01'),
-('S005', 'A5', 'R001', 'ST01'),
-('S006', 'A6', 'R001', 'ST01'),
-('S007', 'A7', 'R001', 'ST01'),
-('S008', 'A8', 'R001', 'ST01'),
-('S009', 'A9', 'R001', 'ST01'),
-('S010', 'A10', 'R001', 'ST01'),
-('S011', 'A11', 'R001', 'ST01'),
-('S012', 'A12', 'R001', 'ST01'),
-('S013', 'A13', 'R001', 'ST01'),
-('S014', 'A14', 'R001', 'ST01'),
-('S015', 'A15', 'R001', 'ST01'),
-('S016', 'A16', 'R001', 'ST01'),
-
-('S017', 'B1', 'R001', 'ST01'),
-('S018', 'B2', 'R001', 'ST01'),
-('S019', 'B3', 'R001', 'ST01'),
-('S020', 'B4', 'R001', 'ST01'),
-('S021', 'B5', 'R001', 'ST01'),
-('S022', 'B6', 'R001', 'ST01'),
-('S023', 'B7', 'R001', 'ST01'),
-('S024', 'B8', 'R001', 'ST01'),
-('S025', 'B9', 'R001', 'ST01'),
-('S026', 'B10', 'R001', 'ST01'),
-('S027', 'B11', 'R001', 'ST01'),
-('S028', 'B12', 'R001', 'ST01'),
-('S029', 'B13', 'R001', 'ST01'),
-('S030', 'B14', 'R001', 'ST01'),
-('S031', 'B15', 'R001', 'ST01'),
-('S032', 'B16', 'R001', 'ST01'),
-
-('S033', 'C1', 'R001', 'ST01'),
-('S034', 'C2', 'R001', 'ST01'),
-('S035', 'C3', 'R001', 'ST01'),
-('S036', 'C4', 'R001', 'ST01'),
-('S037', 'C5', 'R001', 'ST01'),
-('S038', 'C6', 'R001', 'ST01'),
-('S039', 'C7', 'R001', 'ST01'),
-('S040', 'C8', 'R001', 'ST01'),
-('S041', 'C9', 'R001', 'ST01'),
-('S042', 'C10', 'R001', 'ST01'),
-('S043', 'C11', 'R001', 'ST01'),
-('S044', 'C12', 'R001', 'ST01'),
-('S045', 'C13', 'R001', 'ST01'),
-('S046', 'C14', 'R001', 'ST01'),
-('S047', 'C15', 'R001', 'ST01'),
-('S048', 'C16', 'R001', 'ST01'),
-
-('S049', 'D1', 'R001', 'ST01'),
-('S050', 'D2', 'R001', 'ST01'),
-('S051', 'D3', 'R001', 'ST01'),
-('S052', 'D4', 'R001', 'ST01'),
-('S053', 'D5', 'R001', 'ST01'),
-('S054', 'D6', 'R001', 'ST01'),
-('S055', 'D7', 'R001', 'ST01'),
-('S056', 'D8', 'R001', 'ST01'),
-('S057', 'D9', 'R001', 'ST01'),
-('S058', 'D10', 'R001', 'ST01'),
-('S059', 'D11', 'R001', 'ST01'),
-('S060', 'D12', 'R001', 'ST01'),
-('S061', 'D13', 'R001', 'ST01'),
-('S062', 'D14', 'R001', 'ST01'),
-('S063', 'D15', 'R001', 'ST01'),
-('S064', 'D16', 'R001', 'ST01'),
-
--- Ghế VIP
-('S065', 'E1', 'R001', 'ST02'),
-('S066', 'E2', 'R001', 'ST02'),
-('S067', 'E3', 'R001', 'ST02'),
-('S068', 'E4', 'R001', 'ST02'),
-('S069', 'E5', 'R001', 'ST02'),
-('S070', 'E6', 'R001', 'ST02'),
-('S071', 'E7', 'R001', 'ST02'),
-('S072', 'E8', 'R001', 'ST02'),
-('S073', 'E9', 'R001', 'ST02'),
-('S074', 'E10', 'R001', 'ST02'),
-('S075', 'E11', 'R001', 'ST02'),
-('S076', 'E12', 'R001', 'ST02'),
-('S077', 'E13', 'R001', 'ST02'),
-('S078', 'E14', 'R001', 'ST02'),
-('S079', 'E15', 'R001', 'ST02'),
-
--- Ghế VIP tiếp theo
-('S080', 'F1', 'R001', 'ST02'),
-('S081', 'F2', 'R001', 'ST02'),
-('S082', 'F3', 'R001', 'ST02'),
-('S083', 'F4', 'R001', 'ST02'),
-('S084', 'F5', 'R001', 'ST02'),
-('S085', 'F6', 'R001', 'ST02'),
-('S086', 'F7', 'R001', 'ST02'),
-('S087', 'F8', 'R001', 'ST02'),
-('S088', 'F9', 'R001', 'ST02'),
-('S089', 'F10', 'R001', 'ST02'),
-('S090', 'F11', 'R001', 'ST02'),
-('S091', 'F12', 'R001', 'ST02'),
-('S092', 'F13', 'R001', 'ST02'),
-('S093', 'F14', 'R001', 'ST02'),
-('S094', 'F15', 'R001', 'ST02'),
-
-('S095', 'G1', 'R001', 'ST02'),
-('S096', 'G2', 'R001', 'ST02'),
-('S097', 'G3', 'R001', 'ST02'),
-('S098', 'G4', 'R001', 'ST02'),
-('S099', 'G5', 'R001', 'ST02'),
-('S100', 'G6', 'R001', 'ST02'),
-('S101', 'G7', 'R001', 'ST02'),
-('S102', 'G8', 'R001', 'ST02'),
-('S103', 'G9', 'R001', 'ST02'),
-('S104', 'G10', 'R001', 'ST02'),
-('S105', 'G11', 'R001', 'ST02'),
-('S106', 'G12', 'R001', 'ST02'),
-('S107', 'G13', 'R001', 'ST02'),
-('S108', 'G14', 'R001', 'ST02'),
-('S109', 'G15', 'R001', 'ST02'),
-
-('S110', 'H1', 'R001', 'ST02'),
-('S111', 'H2', 'R001', 'ST02'),
-('S112', 'H3', 'R001', 'ST02'),
-('S113', 'H4', 'R001', 'ST02'),
-('S114', 'H5', 'R001', 'ST02'),
-('S115', 'H6', 'R001', 'ST02'),
-('S116', 'H7', 'R001', 'ST02'),
-('S117', 'H8', 'R001', 'ST02'),
-('S118', 'H9', 'R001', 'ST02'),
-('S119', 'H10', 'R001', 'ST02'),
-('S120', 'H11', 'R001', 'ST02'),
-('S121', 'H12', 'R001', 'ST02'),
-('S122', 'H13', 'R001', 'ST02'),
-('S123', 'H14', 'R001', 'ST02'),
-('S124', 'H15', 'R001', 'ST02'),
-
-('S125', 'I1', 'R001', 'ST02'),
-('S126', 'I2', 'R001', 'ST02'),
-('S127', 'I3', 'R001', 'ST02'),
-('S128', 'I4', 'R001', 'ST02'),
-('S129', 'I5', 'R001', 'ST02'),
-('S130', 'I6', 'R001', 'ST02'),
-('S131', 'I7', 'R001', 'ST02'),
-('S132', 'I8', 'R001', 'ST02'),
-('S133', 'I9', 'R001', 'ST02'),
-('S134', 'I10', 'R001', 'ST02'),
-('S135', 'I11', 'R001', 'ST02'),
-('S136', 'I12', 'R001', 'ST02'),
-('S137', 'I13', 'R001', 'ST02'),
-('S138', 'I14', 'R001', 'ST02'),
-('S139', 'I15', 'R001', 'ST02'),
-
-('S140', 'J1', 'R001', 'ST02'),
-('S141', 'J2', 'R001', 'ST02'),
-('S142', 'J3', 'R001', 'ST02'),
-('S143', 'J4', 'R001', 'ST02'),
-('S144', 'J5', 'R001', 'ST02'),
-('S145', 'J6', 'R001', 'ST02'),
-('S146', 'J7', 'R001', 'ST02'),
-('S147', 'J8', 'R001', 'ST02'),
-('S148', 'J9', 'R001', 'ST02'),
-('S149', 'J10', 'R001', 'ST02'),
-('S150', 'J11', 'R001', 'ST02'),
-('S151', 'J12', 'R001', 'ST02'),
-('S152', 'J13', 'R001', 'ST02'),
-('S153', 'J14', 'R001', 'ST02'),
-('S154', 'J15', 'R001', 'ST02'),
-
-('S155', 'K1', 'R001', 'ST02'),
-('S156', 'K2', 'R001', 'ST02'),
-('S157', 'K3', 'R001', 'ST02'),
-('S158', 'K4', 'R001', 'ST02'),
-('S159', 'K5', 'R001', 'ST02'),
-('S160', 'K6', 'R001', 'ST02'),
-('S161', 'K7', 'R001', 'ST02'),
-('S162', 'K8', 'R001', 'ST02'),
-('S163', 'K9', 'R001', 'ST02'),
-('S164', 'K10', 'R001', 'ST02'),
-('S165', 'K11', 'R001', 'ST02'),
-('S166', 'K12', 'R001', 'ST02'),
-('S167', 'K13', 'R001', 'ST02'),
-('S168', 'K14', 'R001', 'ST02'),
-('S169', 'K15', 'R001', 'ST02'),
-
-('S170', 'L1', 'R001', 'ST02'),
-('S171', 'L2', 'R001', 'ST02'),
-('S172', 'L3', 'R001', 'ST02'),
-('S173', 'L4', 'R001', 'ST02'),
-('S174', 'L5', 'R001', 'ST02'),
-('S175', 'L6', 'R001', 'ST02'),
-('S176', 'L7', 'R001', 'ST02'),
-('S177', 'L8', 'R001', 'ST02'),
-('S178', 'L9', 'R001', 'ST02'),
-('S179', 'L10', 'R001', 'ST02'),
-('S180', 'L11', 'R001', 'ST02'),
-('S181', 'L12', 'R001', 'ST02'),
-('S182', 'L13', 'R001', 'ST02'),
-('S183', 'L14', 'R001', 'ST02'),
-('S184', 'L15', 'R001', 'ST02'),
-
--- Ghế Couple
-('S185', 'M1-2', 'R001', 'ST03'),
-('S186', 'M3-4', 'R001', 'ST03'),
-('S187', 'M5-6', 'R001', 'ST03'),
-('S188', 'M7-8', 'R001', 'ST03'),
-('S189', 'M9-10', 'R001', 'ST03'),
-('S190', 'M11-12', 'R001', 'ST03'),
-('S191', 'M13-14', 'R001', 'ST03'),
-('S192', 'M15-16', 'R001', 'ST03');
-
 --MOVIE SCHEDULE
 INSERT INTO MovieSchedule (scheduleID, movieID, room, startTime, endTime)
 VALUES 
@@ -382,25 +172,6 @@ VALUES
 ('SC005', 'M003', 'R001', '2025-04-20 03:15:00', '2025-04-20 05:30:00'), 
 ('SC006', 'M004', 'R001', '2025-04-20 00:00:00', '2025-04-20 02:00:00'), 
 ('SC007', 'M005', 'R001', '2025-04-20 10:00:00', '2025-04-20 11:30:00');
-
---MOVIE SCHEDULE SEAT
---Thêm các ghế đã được đặt (không thể đặt được nữa)
-INSERT INTO MovieScheduleSeat (scheduleID, seatID, isAvailable)
-VALUES 
-('SC001', 'S055', 0),
-('SC001', 'S071', 0),
-('SC001', 'S087', 0),
-('SC001', 'S088', 0),
-('SC001', 'S102', 0),
-('SC001', 'S103', 0),
-('SC001', 'S188', 0),
-('SC001', 'S189', 0),
-('SC001', 'S190', 0);
---Thêm các ghế còn lại (có thể đặt các ghế còn lại)
-INSERT INTO MovieScheduleSeat (scheduleID, seatID)
-SELECT 'SC001', seatID
-FROM Seat
-WHERE seatID NOT IN ('S055', 'S071', 'S087', 'S088', 'S102', 'S103', 'S188', 'S189', 'S190');
 
 CREATE TABLE Voucher (
 	voucherID VARCHAR(50) PRIMARY KEY,
@@ -418,10 +189,6 @@ INSERT INTO Voucher (voucherID, voucherName, startDate, endDate, minimumPrice, v
 ('KM011', N'Khuyến mãi 11', '2024-11-01', '2025-12-01', 1000000.0, '35.0%');
 GO
 
-DELETE FROM MovieScheduleSeat
-GO
-DELETE FROM Seat
-GO
 INSERT INTO Seat (seatID, location, room, seatTypeID) VALUES
 -- Hàng A
 ('S001',  'A1',  'R001', 'ST01'), ('S002',  'A2',  'R001', 'ST01'),
@@ -567,10 +334,56 @@ FROM Seat
 WHERE seatID NOT IN ('S055', 'S071', 'S087', 'S088', 'S102', 'S103', 'S188', 'S189', 'S190');
 GO
 
+CREATE TRIGGER trg_AutoID_Orders
+ON Orders
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(50)
+    DECLARE @Number INT
 
+    SELECT @Number = ISNULL(MAX(CAST(SUBSTRING(orderID, 2, LEN(orderID)) AS INT)), 0) + 1
+    FROM Orders
 
+    SET @NewID = 'O' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3)
 
+    INSERT INTO Orders(orderID, orderDate, totalPrice, employeeID, voucherID)
+    SELECT @NewID, orderDate, totalPrice, employeeID, voucherID
+    FROM inserted
+END
 
+CREATE OR ALTER TRIGGER trg_AutoID_OrderDetail
+ON OrderDetail
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(50)
+    DECLARE @Number INT
 
+    SELECT @Number = ISNULL(MAX(CAST(SUBSTRING(orderDetailID, 3, LEN(orderDetailID)) AS INT)), 0) + 1
+    FROM OrderDetail
 
+    SET @NewID = 'OD' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3)
 
+    INSERT INTO OrderDetail(orderDetailID, ticketID, orderID, productID, scheduleID, quantity)
+    SELECT @NewID, ticketID, orderID, productID, scheduleID, quantity
+    FROM inserted
+END
+
+CREATE OR ALTER TRIGGER trg_AutoID_TicketDetail
+ON TicketDetail
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @NewID VARCHAR(50)
+    DECLARE @Number INT
+
+    SELECT @Number = ISNULL(MAX(CAST(SUBSTRING(ticketID, 2, LEN(ticketID)) AS INT)), 0) + 1
+    FROM TicketDetail
+
+    SET @NewID = 'T' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3)
+
+    INSERT INTO TicketDetail(ticketID, movieID, showDate, seatID, room, ticketPrice)
+    SELECT @NewID, movieID, showDate, seatID, room, ticketPrice
+    FROM inserted
+END

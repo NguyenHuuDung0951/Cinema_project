@@ -54,12 +54,12 @@ public class Main extends javax.swing.JFrame {
                 if (index == 0) {
                     Phim phim = new Phim();
                     showForm(phim);
-                } else if (index == 1) {
+                } else if (index == 2) {
                     ShowScheduleForm schedule = new ShowScheduleForm();
                     showForm(schedule);
-                } else if (index == 2) {
-                    LichChieu lichChieu = new LichChieu();
-                    showForm(lichChieu);
+//                } else if (index == 2) {
+//                    LichChieu lichChieu = new LichChieu();
+//                    showForm(lichChieu);
                 } else if (index == 3) {
                     uudai = new UuDai_Form();
                     showForm(uudai);

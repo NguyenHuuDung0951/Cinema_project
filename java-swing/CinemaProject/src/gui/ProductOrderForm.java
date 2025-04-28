@@ -3,6 +3,7 @@ package gui;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import dao.Product_DAO;
 import entity.Product;
+import model.BookingData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +15,14 @@ public class ProductOrderForm extends JFrame {
     private JPanel productPanel;
     private JButton btnTatCa, btnDoAn, btnThucUong;
     private CartPanel cartPanel;
+    private BookingData bookingData;
 
-    public ProductOrderForm() {
+    public ProductOrderForm(BookingData bookingData) {
+        this.bookingData = bookingData;
+        initComponents();
+    }
+
+    private void initComponents() {
         setTitle("Chọn đồ ăn & thức uống");
         setSize(1200, 700);
         setLocationRelativeTo(null);
@@ -27,10 +34,10 @@ public class ProductOrderForm extends JFrame {
         btnTatCa = new JButton("Tất cả");
         btnDoAn = new JButton("Đồ ăn");
         btnThucUong = new JButton("Thức uống");
-        btnTatCa.putClientProperty("FlatLaf.style", "focusColor:#00000000;"); // hoặc: "focusColor:transparent;"
+
+        btnTatCa.putClientProperty("FlatLaf.style", "focusWidth:0;focusColor:#00000000;");
         btnDoAn.putClientProperty("FlatLaf.style", "focusWidth:0;");
         btnThucUong.putClientProperty("FlatLaf.style", "focusWidth:0;");
-
 
         filterPanel.add(btnTatCa);
         filterPanel.add(btnDoAn);
@@ -46,7 +53,7 @@ public class ProductOrderForm extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // Right cart panel
-        cartPanel = new CartPanel();
+        cartPanel = new CartPanel(bookingData, this);
         cartPanel.setPreferredSize(new Dimension(280, 0));
         add(cartPanel, BorderLayout.EAST);
 
@@ -79,6 +86,8 @@ public class ProductOrderForm extends JFrame {
         card.setPreferredSize(new Dimension(160, 230));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        card.setBackground(Color.WHITE);
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         JLabel lblImg = new JLabel();
         String imgPath = "src/image/" + p.getProductID().toLowerCase() + ".jpg";
@@ -99,9 +108,6 @@ public class ProductOrderForm extends JFrame {
         lblPrice.setFont(lblPrice.getFont().deriveFont(Font.BOLD, 12f));
         lblPrice.setForeground(new Color(0, 102, 204));
         lblPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        card.setBackground(Color.WHITE);
 
         card.add(Box.createVerticalStrut(10));
         card.add(lblImg);
@@ -126,6 +132,9 @@ public class ProductOrderForm extends JFrame {
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
-        SwingUtilities.invokeLater(() -> new ProductOrderForm().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            BookingData bookingData = new BookingData();  // Dummy
+            new ProductOrderForm(bookingData).setVisible(true);
+        });
     }
 }

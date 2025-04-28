@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import model.BookingData;
 
 
 public class SeatSelectionForm extends JFrame {
@@ -181,12 +182,40 @@ public class SeatSelectionForm extends JFrame {
 
         add(pnlLegend, BorderLayout.SOUTH);
         btnContinue.addActionListener(e -> {
-            new ProductOrderForm().setVisible(true); // Mở form chọn đồ ăn/thức uống
+            BookingData bookingData = new BookingData();
+
+            // Gán thông tin phim
+            bookingData.setMovieName(lblTitle.getText());
+            bookingData.setPosterPath("/image/avenger.jpg");  // hoặc dùng đúng posterPath
+            bookingData.setShowDate(lblDate.getText());
+            bookingData.setShowTime(lblTime.getText());
+            bookingData.setRoomName(lblRoom.getText());
+
+            // Gán ghế đã chọn
+            String selectedSeats = lblSeatsVal.getText().replaceAll("<[^>]*>", ""); // xoá thẻ html
+            bookingData.setSelectedSeats(selectedSeats);
+
+            // Gán tổng tiền vé
+            bookingData.setTicketTotal(parseVND(lblTotalVal.getText())); // cần thêm hàm parse
+
+            // Mở ProductOrderForm và truyền BookingData
+            new ProductOrderForm(bookingData).setVisible(true);
+            dispose(); // đóng form chọn ghế
         });
+
 
         pack();
         setSize(1300, 700);
         setLocationRelativeTo(null);
+    }
+    private double parseVND(String vndText) {
+        try {
+            return NumberFormat.getNumberInstance(new Locale("vi", "VN"))
+                .parse(vndText.replace("VND", "").trim()).doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     private void loadSeats() {

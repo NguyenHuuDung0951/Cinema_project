@@ -2,37 +2,29 @@ package dao;
 
 import connectDB.ConnectDB;
 import entity.Orders;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class Orders_DAO {
-    public Orders_DAO(){}
-
-    public ArrayList<Orders> getalltbOrders() {
-        ArrayList<Orders> dsOrders = new ArrayList<>();
-        try {
-            ConnectDB.getInstance();
-            Connection con = ConnectDB.getConnection();
-            String sql = "Select * from Orders";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()){
-                String orderID = rs.getString(1);
-                LocalDate orderDate = rs.getDate(2).toLocalDate();
-                double totalPrice = rs.getDouble(3);
-                String empID = rs.getString(4);
-                // If voucher column exists: String voucherID = rs.getString(5);
-                Orders obj = new Orders(orderID, orderDate, totalPrice, null, null);
-                // TODO: load Employee & Voucher into obj
-                dsOrders.add(obj);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean addOrder(Orders order) throws SQLException {
+        String sql = "INSERT INTO Orders (orderDate, totalPrice, employeeID, voucherID) VALUES (?, ?, ?, ?)";
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDate(1, java.sql.Date.valueOf(order.getOrderDate()));
+            ps.setDouble(2, order.getTotalPrice());
+            ps.setString(3, order.getEmployee().getEmployeeID());
+            ps.setString(4, order.getVoucher().getVoucherID());
+            return ps.executeUpdate() > 0;
         }
-        return dsOrders;
+    }
+
+    public boolean updateTotalPrice(Orders order) throws SQLException {
+        String sql = "UPDATE Orders SET totalPrice = ? WHERE orderID = ?";
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDouble(1, order.getTotalPrice());
+            ps.setString(2, order.getOrderID());
+            return ps.executeUpdate() > 0;
+        }
     }
 }
