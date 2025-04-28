@@ -127,6 +127,10 @@ private List<Movie> getSelectedMovies() {
         pnlHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
+        btnAdd = new component.ButtonAction();
+        btnDel1 = new component.ButtonAction();
+        btnUpdate1 = new component.ButtonAction();
+        txtSearch1 = new component.ButtonAction();
         pnlbody = new javax.swing.JPanel();
         scroll = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -154,6 +158,34 @@ private List<Movie> getSelectedMovies() {
             }
         });
 
+        btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnDel1.setText("Xóa");
+        btnDel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDel1ActionPerformed(evt);
+            }
+        });
+
+        btnUpdate1.setText("Sửa");
+        btnUpdate1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdate1ActionPerformed(evt);
+            }
+        });
+
+        txtSearch1.setText("Tìm kiếm");
+        txtSearch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearch1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlHeaderLayout = new javax.swing.GroupLayout(pnlHeader);
         pnlHeader.setLayout(pnlHeaderLayout);
         pnlHeaderLayout.setHorizontalGroup(
@@ -161,7 +193,15 @@ private List<Movie> getSelectedMovies() {
             .addGroup(pnlHeaderLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(833, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 410, Short.MAX_VALUE)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(btnDel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlHeaderLayout.setVerticalGroup(
@@ -169,8 +209,13 @@ private List<Movie> getSelectedMovies() {
             .addGroup(pnlHeaderLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addGroup(pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
 
         add(pnlHeader, java.awt.BorderLayout.NORTH);
@@ -211,7 +256,7 @@ private List<Movie> getSelectedMovies() {
             pnlbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlbodyLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+                .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -238,7 +283,7 @@ private List<Movie> getSelectedMovies() {
     }
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
+    private void btnDel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDel1ActionPerformed
       List<Movie> list = getSelectedMovies();
 
     if (!list.isEmpty()) {
@@ -281,9 +326,9 @@ private List<Movie> getSelectedMovies() {
 } else {
     Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn phim để xóa");
 }
-    }//GEN-LAST:event_btnDelActionPerformed
+    }//GEN-LAST:event_btnDel1ActionPerformed
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+    private void btnUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdate1ActionPerformed
     List<Movie> list = getSelectedMovies();
     
     if (!list.isEmpty()) {
@@ -336,14 +381,88 @@ private List<Movie> getSelectedMovies() {
     }
 
 
-    }//GEN-LAST:event_btnUpdateActionPerformed
+    }//GEN-LAST:event_btnUpdate1ActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
-        // TODO add your handling code here:
+        AddForm create = new AddForm();
+
+    DefaultOption option = new DefaultOption() {
+        @Override
+        public boolean closeWhenClickOutside() {
+            return true;
+        }
+    };
+
+    String[] actions = new String[]{"Lưu", "Hủy"};
+
+    GlassPanePopup.showPopup(new SimplePopupBorder(create, "Thêm Phim", actions, (popupController, selectedIndex) -> {
+        if (selectedIndex == 0) {  
+            try {
+              
+                if (create.validateInput()) {  
+                    Movie movie = create.getMovie();
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    model.addRow(new Object[]{
+                        movie.getMovieID(),
+                        movie.getMovieName(),
+                        movie.getStatus(),
+                        movie.getDuration()
+                    });
+
+                    Movie_DAO movieDao = new Movie_DAO();
+                    boolean isSaved = movieDao.addMovie(movie);
+
+                    if (isSaved) {
+                        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Phim đã được thêm thành công!");
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi lưu phim vào cơ sở dữ liệu.");
+                    }
+
+                    popupController.closePopup();
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin phim chưa hợp lệ!");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi thêm phim!");
+            }
+        } else { 
+            popupController.closePopup();
+        }
+    }), option);
     }//GEN-LAST:event_buttonAction1ActionPerformed
+
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction2ActionPerformed
+        
+    }//GEN-LAST:event_buttonAction2ActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction3ActionPerformed
+        
+    }//GEN-LAST:event_buttonAction3ActionPerformed
+
+    private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
+        String keyword = txtSearch.getText().trim(); 
+
+    if (!keyword.isEmpty()) {
+        Movie_DAO dao = new Movie_DAO();
+        ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
+
+        if (!searchResults.isEmpty()) {
+            loadTableMovie(searchResults);
+        } else {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
+            loadTableMovie(new ArrayList<>()); 
+        }
+    } else {
+        loadTableMovie();
+    }
+    }//GEN-LAST:event_txtSearch1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private component.ButtonAction btnAdd;
+    private component.ButtonAction btnDel1;
+    private component.ButtonAction btnUpdate1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -353,5 +472,6 @@ private List<Movie> getSelectedMovies() {
     private javax.swing.JScrollPane scroll;
     private javax.swing.JTable table;
     private javax.swing.JTextField txtSearch;
+    private component.ButtonAction txtSearch1;
     // End of variables declaration//GEN-END:variables
 }
