@@ -13,7 +13,7 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.SwingConstants;  
 import net.miginfocom.swing.MigLayout;
 
 public class Menu extends javax.swing.JPanel {

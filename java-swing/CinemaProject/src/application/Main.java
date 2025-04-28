@@ -8,6 +8,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Menu;
 import component.Form; 
 import component.Header;
+import component.LoadingScreen;
 import component.SanPham_DoAn;
 import component.SanPham_DoUong;
 import gui.UuDai_Form; 
@@ -15,6 +16,7 @@ import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
 import even.EventMenu; 
+import gui.LoginForm;
 import gui.Phim;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -31,6 +33,7 @@ public class Main extends javax.swing.JFrame {
     private Header head = new Header();
     private Voucher_DAO vc_dao;
     private UuDai_Form uudai;
+    
 
     
     public Main() { 
@@ -121,7 +124,7 @@ public class Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-   public static void main(String args[]) {  
+ public static void main(String args[]) {  
     try {
         FlatRobotoFont.install();
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
@@ -133,10 +136,45 @@ public class Main extends javax.swing.JFrame {
 
     java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
-            Main mainFrame = new Main();
-            GlassPanePopup.install(mainFrame); 
-            Notifications.getInstance().setJFrame(mainFrame);
-            mainFrame.setVisible(true);
+            // 1. Mở màn hình Loading trước
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.setVisible(true);
+
+            // 2. Tạo 1 Thread để chạy loading
+            new Thread(() -> {
+                try {
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(30); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
+                        loadingScreen.updateProgress(i);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                loadingScreen.dispose();
+                
+                LoginForm login = new LoginForm();
+                login.setVisible(true);
+
+                // 4. Chờ login xong
+                while (login.isDisplayable()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+              
+                if (login.isLoginSuccessful()) {
+                Main mainFrame = new Main();
+                GlassPanePopup.install(mainFrame); 
+                Notifications.getInstance().setJFrame(mainFrame);
+                mainFrame.setVisible(true);
+            } else {
+                System.exit(0); 
+}
+            }).start();
         }
     });
 }
