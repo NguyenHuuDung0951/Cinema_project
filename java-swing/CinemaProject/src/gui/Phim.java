@@ -127,7 +127,6 @@ private List<Movie> getSelectedMovies() {
         pnlHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        btnAdd = new component.ButtonAction();
         pnlbody = new javax.swing.JPanel();
         scroll = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -155,13 +154,6 @@ private List<Movie> getSelectedMovies() {
             }
         });
 
-        btnAdd.setText("buttonAction1");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pnlHeaderLayout = new javax.swing.GroupLayout(pnlHeader);
         pnlHeader.setLayout(pnlHeaderLayout);
         pnlHeaderLayout.setHorizontalGroup(
@@ -169,19 +161,15 @@ private List<Movie> getSelectedMovies() {
             .addGroup(pnlHeaderLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(270, 270, 270)
-                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(444, Short.MAX_VALUE))
+                .addContainerGap(833, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlHeaderLayout.setVerticalGroup(
             pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlHeaderLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
@@ -249,55 +237,6 @@ private List<Movie> getSelectedMovies() {
         loadTableMovie();
     }
     }//GEN-LAST:event_txtSearchActionPerformed
-
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-     AddForm create = new AddForm();
-
-    DefaultOption option = new DefaultOption() {
-        @Override
-        public boolean closeWhenClickOutside() {
-            return true;
-        }
-    };
-
-    String[] actions = new String[]{"Lưu", "Hủy"};
-
-    GlassPanePopup.showPopup(new SimplePopupBorder(create, "Thêm Phim", actions, (popupController, selectedIndex) -> {
-        if (selectedIndex == 0) {  
-            try {
-              
-                if (create.validateInput()) {  
-                    Movie movie = create.getMovie();
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.addRow(new Object[]{
-                        movie.getMovieID(),
-                        movie.getMovieName(),
-                        movie.getStatus(),
-                        movie.getDuration()
-                    });
-
-                    Movie_DAO movieDao = new Movie_DAO();
-                    boolean isSaved = movieDao.addMovie(movie);
-
-                    if (isSaved) {
-                        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Phim đã được thêm thành công!");
-                    } else {
-                        Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi lưu phim vào cơ sở dữ liệu.");
-                    }
-
-                    popupController.closePopup();
-                } else {
-                    Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin phim chưa hợp lệ!");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi thêm phim!");
-            }
-        } else { 
-            popupController.closePopup();
-        }
-    }), option);
-    }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
       List<Movie> list = getSelectedMovies();
@@ -405,7 +344,6 @@ private List<Movie> getSelectedMovies() {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private component.ButtonAction btnAdd;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;

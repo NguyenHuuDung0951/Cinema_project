@@ -108,9 +108,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                   <Component id="txtSearch" min="-2" pref="211" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="270" max="-2" attributes="0"/>
-                  <Component id="btnAdd" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="444" max="32767" attributes="0"/>
+                  <EmptySpace pref="833" max="32767" attributes="0"/>
               </Group>
               <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
           </Group>
@@ -119,11 +117,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel1" min="-2" pref="48" max="-2" attributes="0"/>
-                  <EmptySpace pref="9" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtSearch" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnAdd" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                  <Component id="txtSearch" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -146,14 +141,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSearchActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="component.ButtonAction" name="btnAdd">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="buttonAction1"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
