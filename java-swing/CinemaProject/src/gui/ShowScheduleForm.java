@@ -5,6 +5,7 @@ import dao.MovieSchedule_DAO;
 import entity.Movie;
 import entity.MovieSchedule;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,17 +36,22 @@ import javax.swing.border.EmptyBorder;
 public class ShowScheduleForm extends JPanel {
     private JPanel panelGrid;
     private JPanel bottomPanel;
-
+    
     public ShowScheduleForm() {
-        setLayout(new BorderLayout());
-
+        setLayout(new BorderLayout(0, 0));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         JLabel title = new JLabel("THÔNG TIN LỊCH CHIẾU", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 30));
+        title.setBorder(BorderFactory.createEmptyBorder(20, 10, 5, 10));
         add(title, BorderLayout.NORTH);
 
         panelGrid = new JPanel(new GridLayout(0, 3, 20, 20)); // 3 cột
-        panelGrid.setBorder(null);
-        add(new JScrollPane(panelGrid), BorderLayout.CENTER);
+        panelGrid.setBackground(new java.awt.Color(255, 255, 255));
+        JScrollPane scrollPane = new JScrollPane(panelGrid);
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setBackground(new java.awt.Color(255, 255, 255));
+        add(scrollPane, BorderLayout.CENTER);
         JDateChooser dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd-MM-yyyy");
         dateChooser.setPreferredSize(new Dimension(200, 35));
@@ -57,8 +64,10 @@ public class ShowScheduleForm extends JPanel {
         });
         
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        datePanel.setBackground(new java.awt.Color(255, 255, 255));
         datePanel.add(dateChooser);
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        bottomPanel.setBackground(new java.awt.Color(255, 255, 255));
         bottomPanel.add(datePanel); // thay vì add(dateChooser) + add(btnSearch)
         add(bottomPanel, BorderLayout.SOUTH);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

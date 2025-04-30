@@ -22,6 +22,15 @@ CREATE TABLE Employee (
     FOREIGN KEY (accountID) REFERENCES Account(accountID)
 );
 
+CREATE TABLE Voucher (
+	voucherID VARCHAR(50) PRIMARY KEY,
+	voucherName NVARCHAR(50),
+	startDate DATE,
+	endDate DATE,
+	minimumPrice FLOAT,
+	valueVoucher NVARCHAR(10)
+);
+
 CREATE TABLE Orders (
     orderID VARCHAR(50) PRIMARY KEY,
     orderDate DATE,
@@ -72,8 +81,8 @@ CREATE TABLE MovieSchedule (
     scheduleID VARCHAR(50) PRIMARY KEY,
     movieID VARCHAR(50),
     room VARCHAR(50),
-    startTime DATE,
-    endTime DATE,
+    startTime DATETIME,
+    endTime DATETIME,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID),
     FOREIGN KEY (room) REFERENCES Room(room)
 );
@@ -90,7 +99,7 @@ CREATE TABLE MovieScheduleSeat (
 CREATE TABLE TicketDetail (
     ticketID VARCHAR(50) PRIMARY KEY,
     movieID VARCHAR(50),
-    showDate DATE,
+    showDate DATETIME,
     seatID VARCHAR(50),
     room VARCHAR(50),
     ticketPrice FLOAT,
@@ -101,12 +110,10 @@ CREATE TABLE TicketDetail (
 
 CREATE TABLE OrderDetail (
     orderDetailID VARCHAR(50) PRIMARY KEY,
-    ticketID VARCHAR(50),
     orderID VARCHAR(50),
     productID VARCHAR(50),
     scheduleID VARCHAR(50),
     quantity INT,
-    FOREIGN KEY (ticketID) REFERENCES TicketDetail(ticketID),
     FOREIGN KEY (orderID) REFERENCES Orders(orderID),
     FOREIGN KEY (productID) REFERENCES Product(productID),
     FOREIGN KEY (scheduleID) REFERENCES MovieSchedule(scheduleID)
@@ -133,7 +140,7 @@ INSERT INTO Product (productID, productName, quantity, productType, price)
 VALUES 
     ('P001', N'Bắp rang bơ', 100, 'Đồ ăn', 35000),
     ('P002', N'Nước ngọt Coca-Cola', 120, 'Thức uống', 25000),
-    ('P003', N'Combo Bắp nước', 50, 'Combo', 55000),
+    ('P003', N'Combo Bắp nước', 50, 'Đồ ăn', 55000),
     ('P004', N'Nước suối Aquafina', 60, 'Thức uống', 15000),
     ('P005', N'Bắp rang bơ size lớn', 40, 'Đồ ăn', 80000);
 
@@ -173,14 +180,6 @@ VALUES
 ('SC006', 'M004', 'R001', '2025-04-20 00:00:00', '2025-04-20 02:00:00'), 
 ('SC007', 'M005', 'R001', '2025-04-20 10:00:00', '2025-04-20 11:30:00');
 
-CREATE TABLE Voucher (
-	voucherID VARCHAR(50) PRIMARY KEY,
-	voucherName NVARCHAR(50),
-	startDate DATE,
-	endDate DATE,
-	minimumPrice FLOAT,
-	valueVoucher NVARCHAR(10)
-)
 
 INSERT INTO Voucher (voucherID, voucherName, startDate, endDate, minimumPrice, valueVoucher) VALUES
 ('KM008', N'Khuyến mãi 8', '2024-09-01', '2024-11-30', 39000.0, '30.0%'),
@@ -316,23 +315,6 @@ INSERT INTO Seat (seatID, location, room, seatTypeID) VALUES
 ('S197','M09-10','R001','ST03'),('S198','M11-12','R001','ST03'),
 ('S199','M13-14','R001','ST03'),('S200','M15-16','R001','ST03');
 GO
-INSERT INTO MovieScheduleSeat (scheduleID, seatID, isAvailable)
-VALUES 
-('SC001', 'S055', 0),
-('SC001', 'S071', 0),
-('SC001', 'S087', 0),
-('SC001', 'S088', 0),
-('SC001', 'S102', 0),
-('SC001', 'S103', 0),
-('SC001', 'S188', 0),
-('SC001', 'S189', 0),
-('SC001', 'S190', 0);
---Thêm các ghế còn lại (có thể đặt các ghế còn lại)
-INSERT INTO MovieScheduleSeat (scheduleID, seatID)
-SELECT 'SC001', seatID
-FROM Seat
-WHERE seatID NOT IN ('S055', 'S071', 'S087', 'S088', 'S102', 'S103', 'S188', 'S189', 'S190');
-GO
 
 CREATE TRIGGER trg_AutoID_Orders
 ON Orders
@@ -365,8 +347,8 @@ BEGIN
 
     SET @NewID = 'OD' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3)
 
-    INSERT INTO OrderDetail(orderDetailID, ticketID, orderID, productID, scheduleID, quantity)
-    SELECT @NewID, ticketID, orderID, productID, scheduleID, quantity
+    INSERT INTO OrderDetail(orderDetailID, orderID, productID, scheduleID, quantity)
+    SELECT @NewID, orderID, productID, scheduleID, quantity
     FROM inserted
 END
 

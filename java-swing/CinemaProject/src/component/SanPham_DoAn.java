@@ -1,13 +1,95 @@
 package component;
 
+import dao.Product_DAO;
+import entity.Product;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 public class SanPham_DoAn extends javax.swing.JPanel {
 
     public SanPham_DoAn(int index) {
         initComponents();
         setOpaque(false);
-        
+        try {
+            connectDB.ConnectDB.getInstance().connect();
+        } catch (SQLException ex) {
+            Logger.getLogger(SanPham_DoAn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        loadProducts();
+
     }
 
+    private void loadProducts() {
+        Product_DAO dao = new Product_DAO();
+        List<Product> list = dao.getalltbProduct();  // lấy tất cả sản phẩm
+        jPanel3.removeAll();
+        for (Product p : list) {
+            JPanel card = new JPanel();
+            card.setPreferredSize(new Dimension(160, 230));
+            card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+            card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+            card.setBackground(Color.WHITE);
+
+            // Ảnh
+            String imgPath = "/image/" + p.getProductID().toLowerCase() + ".jpg";
+            ImageIcon icon = new ImageIcon(getClass().getResource(imgPath));
+            Image scaled = icon.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH);
+            JLabel lblImg = new JLabel(new ImageIcon(scaled));
+            lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // Tên
+            JLabel lblName = new JLabel(
+                    "<html><div style='text-align:center;'>" + p.getProductName() + "</div></html>",
+                    JLabel.CENTER
+            );
+            lblName.setFont(lblName.getFont().deriveFont(Font.BOLD, 14f));
+            lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // Số lượng
+            JLabel lblQty = new JLabel("Số lượng: " + p.getQuantity(), JLabel.CENTER);
+            lblQty.setFont(lblQty.getFont().deriveFont(12f));
+            lblQty.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // Giá
+            JLabel lblPrice = new JLabel("Giá: " + formatVND(p.getPrice()), JLabel.CENTER);
+            lblPrice.setFont(lblPrice.getFont().deriveFont(Font.BOLD, 12f));
+            lblPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // Thêm vào card
+            card.add(Box.createVerticalStrut(10));
+            card.add(lblImg);
+            card.add(Box.createVerticalStrut(8));
+            card.add(lblName);
+            card.add(lblQty);
+            card.add(lblPrice);
+
+            // Add card vào jPanel3
+            jPanel3.add(card);
+        }
+        jPanel3.revalidate();
+        jPanel3.repaint();
+    }
+
+    private String formatVND(double amount) {
+        NumberFormat nf = NumberFormat.getIntegerInstance(new Locale("vi", "VN"));
+        return nf.format(amount) + " VND";
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -83,13 +165,10 @@ public class SanPham_DoAn extends javax.swing.JPanel {
         jPanel10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 153, 255), 4));
 
         jLabel13.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
-        jLabel13.setText("Bắp Socola Lớn");
 
         jLabel14.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jLabel14.setText("Số lượng :50");
 
         jLabel15.setFont(new java.awt.Font("Times New Roman", 3, 12)); // NOI18N
-        jLabel15.setText("70.000đ");
 
         jButton12.setBackground(new java.awt.Color(255, 51, 51));
         jButton12.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
@@ -721,7 +800,7 @@ public class SanPham_DoAn extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-
+    private Product_DAO product_dao;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton12;
@@ -743,11 +822,6 @@ public class SanPham_DoAn extends javax.swing.JPanel {
     private javax.swing.JButton jButton27;
     private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -772,10 +846,6 @@ public class SanPham_DoAn extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel40;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -789,12 +859,8 @@ public class SanPham_DoAn extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

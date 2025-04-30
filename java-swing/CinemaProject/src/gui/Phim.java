@@ -7,6 +7,7 @@ import dao.Movie_DAO;
 import entity.Movie;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import javax.swing.SwingUtilities;
@@ -17,18 +18,17 @@ import raven.popup.GlassPanePopup;
 import raven.popup.component.SimplePopupBorder;
 import raven.toast.Notifications;
 
-
-
 public class Phim extends javax.swing.JPanel {
+
     private Movie movie;
+
     public Phim() {
         initComponents();
         init();
         loadTableMovie();
-    } 
-private void init() {
+    }
 
-             
+    private void init() {
         pnlbody.putClientProperty(FlatClientProperties.STYLE, ""
                 + "arc:25;"
                 + "background:$Table.background");
@@ -58,7 +58,7 @@ private void init() {
                     + "thumbInsets:3,3,3,3;"
                     + "background:$Table.background;");
             txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tìm kiếm...");
-            txtSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON, new FlatSVGIcon("icon/search.svg")); 
+            txtSearch.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON, new FlatSVGIcon("icon/search.svg"));
             txtSearch.putClientProperty(FlatClientProperties.STYLE, ""
                     + "arc:15;"
                     + "borderWidth:0;"
@@ -70,52 +70,51 @@ private void init() {
         });
     }
 
-private void loadTableMovie() {
-    Movie_DAO movieDao = new Movie_DAO();
-    ArrayList<Movie> list = movieDao.getalltbMovie(); 
-    
-    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    model.setRowCount(0); 
+    private void loadTableMovie() {
+        Movie_DAO movieDao = new Movie_DAO();
+        ArrayList<Movie> list = movieDao.getalltbMovie();
 
-    for (Movie movie : list) {
-        Object[] row = {
-            movie.getMovieID(),
-            movie.getMovieName(),
-            movie.getStatus(),
-            movie.getDuration()
-        };
-        model.addRow(row); 
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        for (Movie movie : list) {
+            Object[] row = {
+                movie.getMovieID(),
+                movie.getMovieName(),
+                movie.getStatus(),
+                movie.getDuration()
+            };
+            model.addRow(row);
+        }
     }
-}
-private void loadTableMovie(List<Movie> list) {
-    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    model.setRowCount(0); 
 
-    for (Movie movie : list) {
-        Object[] row = {
-            movie.getMovieID(),
-            movie.getMovieName(),
-            movie.getStatus(),
-            movie.getDuration()
-        };
-        model.addRow(row); 
+    private void loadTableMovie(List<Movie> list) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        for (Movie movie : list) {
+            Object[] row = {
+                movie.getMovieID(),
+                movie.getMovieName(),
+                movie.getStatus(),
+                movie.getDuration()
+            };
+            model.addRow(row);
+        }
     }
-}
-private List<Movie> getSelectedMovies() {
-    List<Movie> selectedMovies = new ArrayList<>();
-    int[] selectedRows = table.getSelectedRows(); 
-    for (int row : selectedRows) {
-        String movieID = table.getValueAt(row, 0).toString().trim();
-        String movieName = table.getValueAt(row, 1).toString().trim();
-        String status = table.getValueAt(row, 2).toString().trim();
-        int duration = Integer.parseInt(table.getValueAt(row, 3).toString().trim());
-        selectedMovies.add(new Movie(movieID, movieName, status, duration));
+
+    private List<Movie> getSelectedMovies() {
+        List<Movie> selectedMovies = new ArrayList<>();
+        int[] selectedRows = table.getSelectedRows();
+        for (int row : selectedRows) {
+            String movieID = table.getValueAt(row, 0).toString().trim();
+            String movieName = table.getValueAt(row, 1).toString().trim();
+            String status = table.getValueAt(row, 2).toString().trim();
+            int duration = Integer.parseInt(table.getValueAt(row, 3).toString().trim());
+            selectedMovies.add(new Movie(movieID, movieName, status, duration));
+        }
+        return selectedMovies;
     }
-    return selectedMovies;
-}
- 
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -146,9 +145,10 @@ private List<Movie> getSelectedMovies() {
         pnlHeader.setBackground(new java.awt.Color(255, 255, 255));
         pnlHeader.setMinimumSize(new java.awt.Dimension(200, 100));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Danh Sách Phim");
+        jLabel1.setText("DANH SÁCH PHIM");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 0, 10, 0));
         jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         txtSearch.setText(" ");
@@ -262,80 +262,36 @@ private List<Movie> getSelectedMovies() {
 
         add(pnlbody, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
     
     
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-    String keyword = txtSearch.getText().trim(); 
+        String keyword = txtSearch.getText().trim();
 
-    if (!keyword.isEmpty()) {
-        Movie_DAO dao = new Movie_DAO();
-        ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
+        if (!keyword.isEmpty()) {
+            Movie_DAO dao = new Movie_DAO();
+            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
 
-        if (!searchResults.isEmpty()) {
-            loadTableMovie(searchResults);
+            if (!searchResults.isEmpty()) {
+                loadTableMovie(searchResults);
+            } else {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
+                loadTableMovie(new ArrayList<>());
+            }
         } else {
-            Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
-            loadTableMovie(new ArrayList<>()); 
+            loadTableMovie();
         }
-    } else {
-        loadTableMovie();
-    }
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void btnDel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDel1ActionPerformed
-      List<Movie> list = getSelectedMovies();
+        List<Movie> list = getSelectedMovies();
 
-    if (!list.isEmpty()) {
-        Movie data = list.get(0);
-
-    if (data == null) {
-        Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim để xóa");
-        return;
-    }
-
-    DefaultOption option = new DefaultOption() {
-        @Override
-        public boolean closeWhenClickOutside() {
-            return true;
-        }
-    };
-
-    String[] actions = new String[]{"Xóa", "Hủy"};
-
-    GlassPanePopup.showPopup(new SimplePopupBorder(new JPanel(), "Xóa Phim [" + data.getMovieName() + "]", actions, (popupController, selectedIndex) -> {
-        if (selectedIndex == 0) {
-            try {
-                Movie_DAO dao = new Movie_DAO(); 
-                if (dao.deleteMovie(data.getMovieID())) {
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Xóa phim thành công");
-                    loadTableMovie();
-                    popupController.closePopup();
-                } else {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, "Xóa phim thất bại");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi xóa phim!");
-            }
-        } else { 
-            popupController.closePopup();
-        }
-    }), option);
-
-} else {
-    Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn phim để xóa");
-}
-    }//GEN-LAST:event_btnDel1ActionPerformed
-
-    private void btnUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdate1ActionPerformed
-    List<Movie> list = getSelectedMovies();
-    
-    if (!list.isEmpty()) {
-        if (list.size() == 1) {
+        if (!list.isEmpty()) {
             Movie data = list.get(0);
-            AddForm form = new AddForm();
-            form.setMovie(data);
+
+            if (data == null) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim để xóa");
+                return;
+            }
 
             DefaultOption option = new DefaultOption() {
                 @Override
@@ -343,30 +299,23 @@ private List<Movie> getSelectedMovies() {
                     return true;
                 }
             };
- 
-            String[] actions = new String[]{"Sửa", "Hủy"};
 
-            GlassPanePopup.showPopup(new SimplePopupBorder(form, "Sửa Phim [" + data.getMovieName() + "]", actions, (popupController, selectedIndex) -> {
+            String[] actions = new String[]{"Xóa", "Hủy"};
+
+            GlassPanePopup.showPopup(new SimplePopupBorder(new JPanel(), "Xóa Phim [" + data.getMovieName() + "]", actions, (popupController, selectedIndex) -> {
                 if (selectedIndex == 0) {
                     try {
-                        if (form.validateInput()) {
-                            Movie editedMovie = form.getMovie();
-                            editedMovie.setMovieID(data.getMovieID());
-
-                            Movie_DAO dao = new Movie_DAO();
-                            if (dao.editMovie(editedMovie)) {
-                                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật phim thành công");
-                                loadTableMovie();
-                                popupController.closePopup();
-                            } else {
-                                Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật phim thất bại");
-                            }
+                        Movie_DAO dao = new Movie_DAO();
+                        if (dao.deleteMovie(data.getMovieID())) {
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Xóa phim thành công");
+                            loadTableMovie();
+                            popupController.closePopup();
                         } else {
-                            Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin chưa hợp lệ!");
+                            Notifications.getInstance().show(Notifications.Type.ERROR, "Xóa phim thất bại");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi cập nhật phim!");
+                        Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi xóa phim!");
                     }
                 } else {
                     popupController.closePopup();
@@ -374,11 +323,61 @@ private List<Movie> getSelectedMovies() {
             }), option);
 
         } else {
-            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chỉ chọn một phim để chỉnh sửa");
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn phim để xóa");
         }
-    } else {
-        Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn phim để chỉnh sửa");
-    }
+    }//GEN-LAST:event_btnDel1ActionPerformed
+
+    private void btnUpdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdate1ActionPerformed
+        List<Movie> list = getSelectedMovies();
+
+        if (!list.isEmpty()) {
+            if (list.size() == 1) {
+                Movie data = list.get(0);
+                AddForm form = new AddForm();
+                form.setMovie(data);
+
+                DefaultOption option = new DefaultOption() {
+                    @Override
+                    public boolean closeWhenClickOutside() {
+                        return true;
+                    }
+                };
+
+                String[] actions = new String[]{"Sửa", "Hủy"};
+
+                GlassPanePopup.showPopup(new SimplePopupBorder(form, "Sửa Phim [" + data.getMovieName() + "]", actions, (popupController, selectedIndex) -> {
+                    if (selectedIndex == 0) {
+                        try {
+                            if (form.validateInput()) {
+                                Movie editedMovie = form.getMovie();
+                                editedMovie.setMovieID(data.getMovieID());
+
+                                Movie_DAO dao = new Movie_DAO();
+                                if (dao.editMovie(editedMovie)) {
+                                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật phim thành công");
+                                    loadTableMovie();
+                                    popupController.closePopup();
+                                } else {
+                                    Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật phim thất bại");
+                                }
+                            } else {
+                                Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin chưa hợp lệ!");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi cập nhật phim!");
+                        }
+                    } else {
+                        popupController.closePopup();
+                    }
+                }), option);
+
+            } else {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chỉ chọn một phim để chỉnh sửa");
+            }
+        } else {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn phim để chỉnh sửa");
+        }
 
 
     }//GEN-LAST:event_btnUpdate1ActionPerformed
@@ -386,76 +385,76 @@ private List<Movie> getSelectedMovies() {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
         AddForm create = new AddForm();
 
-    DefaultOption option = new DefaultOption() {
-        @Override
-        public boolean closeWhenClickOutside() {
-            return true;
-        }
-    };
-
-    String[] actions = new String[]{"Lưu", "Hủy"};
-
-    GlassPanePopup.showPopup(new SimplePopupBorder(create, "Thêm Phim", actions, (popupController, selectedIndex) -> {
-        if (selectedIndex == 0) {  
-            try {
-              
-                if (create.validateInput()) {  
-                    Movie movie = create.getMovie();
-                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    model.addRow(new Object[]{
-                        movie.getMovieID(),
-                        movie.getMovieName(),
-                        movie.getStatus(),
-                        movie.getDuration()
-                    });
-
-                    Movie_DAO movieDao = new Movie_DAO();
-                    boolean isSaved = movieDao.addMovie(movie);
-
-                    if (isSaved) {
-                        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Phim đã được thêm thành công!");
-                    } else {
-                        Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi lưu phim vào cơ sở dữ liệu.");
-                    }
-
-                    popupController.closePopup();
-                } else {
-                    Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin phim chưa hợp lệ!");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi thêm phim!");
+        DefaultOption option = new DefaultOption() {
+            @Override
+            public boolean closeWhenClickOutside() {
+                return true;
             }
-        } else { 
-            popupController.closePopup();
-        }
-    }), option);
+        };
+
+        String[] actions = new String[]{"Lưu", "Hủy"};
+
+        GlassPanePopup.showPopup(new SimplePopupBorder(create, "Thêm Phim", actions, (popupController, selectedIndex) -> {
+            if (selectedIndex == 0) {
+                try {
+
+                    if (create.validateInput()) {
+                        Movie movie = create.getMovie();
+                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                        model.addRow(new Object[]{
+                            movie.getMovieID(),
+                            movie.getMovieName(),
+                            movie.getStatus(),
+                            movie.getDuration()
+                        });
+
+                        Movie_DAO movieDao = new Movie_DAO();
+                        boolean isSaved = movieDao.addMovie(movie);
+
+                        if (isSaved) {
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Phim đã được thêm thành công!");
+                        } else {
+                            Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi lưu phim vào cơ sở dữ liệu.");
+                        }
+
+                        popupController.closePopup();
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin phim chưa hợp lệ!");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi thêm phim!");
+                }
+            } else {
+                popupController.closePopup();
+            }
+        }), option);
     }//GEN-LAST:event_buttonAction1ActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction2ActionPerformed
-        
+
     }//GEN-LAST:event_buttonAction2ActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction3ActionPerformed
-        
+
     }//GEN-LAST:event_buttonAction3ActionPerformed
 
     private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
-        String keyword = txtSearch.getText().trim(); 
+        String keyword = txtSearch.getText().trim();
 
-    if (!keyword.isEmpty()) {
-        Movie_DAO dao = new Movie_DAO();
-        ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
+        if (!keyword.isEmpty()) {
+            Movie_DAO dao = new Movie_DAO();
+            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
 
-        if (!searchResults.isEmpty()) {
-            loadTableMovie(searchResults);
+            if (!searchResults.isEmpty()) {
+                loadTableMovie(searchResults);
+            } else {
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
+                loadTableMovie(new ArrayList<>());
+            }
         } else {
-            Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
-            loadTableMovie(new ArrayList<>()); 
+            loadTableMovie();
         }
-    } else {
-        loadTableMovie();
-    }
     }//GEN-LAST:event_txtSearch1ActionPerformed
 
 

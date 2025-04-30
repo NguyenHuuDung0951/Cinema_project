@@ -12,13 +12,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class ProductOrderForm extends JFrame {
+
     private JPanel productPanel;
     private JButton btnTatCa, btnDoAn, btnThucUong;
     private CartPanel cartPanel;
-    private BookingData bookingData;
 
-    public ProductOrderForm(BookingData bookingData) {
-        this.bookingData = bookingData;
+    public ProductOrderForm() {
         initComponents();
     }
 
@@ -26,7 +25,7 @@ public class ProductOrderForm extends JFrame {
         setTitle("Chọn đồ ăn & thức uống");
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
         // Top filter buttons
@@ -53,10 +52,11 @@ public class ProductOrderForm extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // Right cart panel
-        cartPanel = new CartPanel(bookingData, this);
+        BookingData bd = BookingData.getInstance();
+        cartPanel = new CartPanel();
         cartPanel.setPreferredSize(new Dimension(280, 0));
         add(cartPanel, BorderLayout.EAST);
-
+        
         // Load all products initially
         loadProducts("Tất cả");
 
@@ -72,8 +72,9 @@ public class ProductOrderForm extends JFrame {
         ArrayList<Product> list = dao.getalltbProduct();
 
         for (Product p : list) {
-            if (!filterType.equals("Tất cả") && !p.getProductType().equalsIgnoreCase(filterType))
+            if (!filterType.equals("Tất cả") && !p.getProductType().equalsIgnoreCase(filterType)) {
                 continue;
+            }
             productPanel.add(createProductCard(p));
         }
 
@@ -132,9 +133,8 @@ public class ProductOrderForm extends JFrame {
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
-        SwingUtilities.invokeLater(() -> {
-            BookingData bookingData = new BookingData();  // Dummy
-            new ProductOrderForm(bookingData).setVisible(true);
+        SwingUtilities.invokeLater(() -> { // Dummy
+            new ProductOrderForm().setVisible(true);
         });
     }
 }

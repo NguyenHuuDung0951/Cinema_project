@@ -12,16 +12,12 @@ import java.util.Locale;
 import model.BookingData;
 
 public class CartPanel extends JPanel {
+
     private final JPanel itemsPanel;
     private final JLabel lblTotal;
     private final ArrayList<CartItem> cartItems = new ArrayList<>();
-    private final BookingData bookingData;
-    
-    private ProductOrderForm parent;
 
-    public CartPanel(BookingData bookingData, ProductOrderForm parent) {
-        this.bookingData = bookingData;
-        this.parent = parent;
+    public CartPanel() {
         setLayout(new BorderLayout(10, 10));
         setPreferredSize(new Dimension(250, 0));
         setBackground(Color.WHITE);
@@ -56,15 +52,13 @@ public class CartPanel extends JPanel {
         btnContinue.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnContinue.addActionListener(e -> {
             SwingUtilities.getWindowAncestor(this).dispose();
-            bookingData.setCartItems(new ArrayList<>(cartItems));
-
-            double foodTotal = 0;
-            for (CartItem item : cartItems) {
-                foodTotal += item.getProduct().getPrice() * item.getQuantity();
-            }
-            bookingData.setProductTotal(foodTotal);
-
-            new InvoiceForm(bookingData).setVisible(true);
+            BookingData bd = BookingData.getInstance();
+            bd.setCartItems(new ArrayList<>(cartItems));
+            double foodTotal = cartItems.stream()
+                    .mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity())
+                    .sum();
+            bd.setProductTotal(foodTotal);
+            new InvoiceForm().setVisible(true);
         });
 
         bottomPanel.add(btnClear);

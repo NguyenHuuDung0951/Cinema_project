@@ -212,7 +212,6 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="3"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="B&#x1eaf;p Socola L&#x1edb;n"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel14">
@@ -220,7 +219,6 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="12" style="3"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="S&#x1ed1; l&#x1b0;&#x1ee3;ng :50"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel15">
@@ -228,7 +226,6 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="12" style="3"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="70.000&#x111;"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton12">

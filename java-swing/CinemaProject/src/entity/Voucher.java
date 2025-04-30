@@ -10,6 +10,11 @@ public class Voucher {
     private double minimumPrice ;
     private String valueVoucher;
 
+    public Voucher(String voucherID) {
+        this.voucherID = voucherID;
+    }
+
+    
     public Voucher(String voucherID, String voucherName, LocalDate startDate, LocalDate endDate, double minimumPrice, String valueVoucher) {
         this.voucherID = voucherID;
         this.voucherName = voucherName;

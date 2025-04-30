@@ -1,11 +1,47 @@
 package model;
 
 import entity.CartItem;
+import entity.TicketDetail;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BookingData {
     private static BookingData instance;
+    private String movieID;
+    private String roomID;
+    private String voucherID;
+    public String getMovieID() {
+        return movieID;
+    }
 
+    public void setVoucherID(String voucherID) {
+        this.voucherID = voucherID;
+    }
+
+    public String getVoucherID() {
+        return voucherID;
+    }
+
+    public void setMovieID(String movieID) {
+        this.movieID = movieID;
+    }
+
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
+    }
+
+    public void setScheduleID(String scheduleID) {
+        this.scheduleID = scheduleID;
+    }
+
+    public String getRoomID() {
+        return roomID;
+    }
+
+    public String getScheduleID() {
+        return scheduleID;
+    }
+    private String scheduleID;
     private String movieName;
     private String posterPath;
     private String roomName;
@@ -15,6 +51,15 @@ public class BookingData {
     private double ticketTotal;
     private double productTotal;
     private ArrayList<CartItem> cartItems;
+    private List<TicketDetail> lastTickets = new ArrayList<>();
+
+    public List<TicketDetail> getLastTickets() {
+        return lastTickets;
+    }
+
+    public void setLastTickets(List<TicketDetail> lastTickets) {
+        this.lastTickets = lastTickets;
+    }
 
     public BookingData() {
         cartItems = new ArrayList<>();
@@ -34,9 +79,14 @@ public class BookingData {
         showDate = null;
         showTime = null;
         selectedSeats = null;
+        movieID = null;
+        roomID = null;
+        scheduleID = null;
+        voucherID = null;
         ticketTotal = 0;
         productTotal = 0;
         cartItems.clear();
+        lastTickets.clear();
     }
 
     // Getters & Setters

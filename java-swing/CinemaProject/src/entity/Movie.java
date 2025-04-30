@@ -8,6 +8,11 @@ public class Movie {
     private String status;
     private int duration;
 
+    public Movie(String movieID) {
+        this.movieID = movieID;
+    }
+
+    
     public Movie(String movieID, String movieName, String status, int duration) {
         this.movieID = movieID;
         this.movieName = movieName;

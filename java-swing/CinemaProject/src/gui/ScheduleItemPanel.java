@@ -4,6 +4,7 @@
  */
 package gui;
 
+import dao.MovieScheduleSeat_DAO;
 import dao.Room_DAO;
 import entity.Movie;
 import entity.MovieSchedule;
@@ -14,22 +15,28 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.BookingData;
 
 /**
  *
  * @author khang
  */
-
 public class ScheduleItemPanel extends JPanel {
+
     public ScheduleItemPanel(Movie movie, ArrayList<MovieSchedule> schedules) {
         setLayout(new BorderLayout(5, 5));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -39,11 +46,9 @@ public class ScheduleItemPanel extends JPanel {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
         add(lblTitle, BorderLayout.NORTH);
 
-        // (Có thể thêm poster ở đây nếu có ảnh)
-        // Load ảnh dựa vào movieID
         String imgFileName = movieImageMap.get(movie.getMovieID());
         if (imgFileName != null) {
-            String imgPath = "src/image/" + imgFileName; // <-- đúng thư mục ảnh bạn nói
+            String imgPath = "src/image/" + imgFileName;
 
             File imgFile = new File(imgPath);
             if (imgFile.exists()) {
@@ -78,19 +83,32 @@ public class ScheduleItemPanel extends JPanel {
                 Room_DAO roomDao = new Room_DAO();
                 Room room = schedule.getRoom();
                 if (room == null) {
-                    // Nếu getRoom() == null, thì phải load thủ công từ Room_DAO
-                    room = new Room_DAO().getRoomByID("R001"); // hoặc schedule.getRoomID() nếu có
+                    room = new Room_DAO().getRoomByID("R001");
                 }
                 String roomName = (room != null) ? room.getRoomName() : "Không rõ";
                 JButton btnTime = new JButton(start + " ~ " + end);
                 btnTime.addActionListener(e -> {
-                    new SeatSelectionForm(
-                        movie.getMovieName(),
-                        schedule.getStartTime().toLocalDate(),
-                        schedule.getStartTime().toLocalTime(),
-                        roomName,
-                        "/image/avenger.jpg" // đường dẫn poster
-                    ).setVisible(true);
+                    BookingData bd = BookingData.getInstance();
+                    bd.setMovieID(movie.getMovieID());
+                    bd.setMovieName(movie.getMovieName());
+                    bd.setRoomID(schedule.getRoom().getRoomID());
+                    bd.setRoomName(schedule.getRoom().getRoomName());
+                    bd.setScheduleID(schedule.getScheduleID());
+                    bd.setShowDate(schedule.getStartTime().toLocalDate().toString());
+                    bd.setShowTime(schedule.getStartTime().toLocalTime().toString());
+                    bd.setPosterPath("/image/" + imgFileName);
+                    // Khởi tạo ghế trong DB nếu cần
+                    try {
+                        new MovieScheduleSeat_DAO().initSeatsForSchedule(schedule.getScheduleID());
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this,
+                                "Không thể khởi tạo ghế: " + ex.getMessage(),
+                                "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    // Mở form chọn ghế
+                    new SeatSelectionForm().setVisible(true);
                 });
                 timePanel.add(btnTime);
             } catch (Exception ex) {
@@ -107,6 +125,7 @@ public class ScheduleItemPanel extends JPanel {
     }
     // Map tên phim/movieID -> tên file ảnh
     private static final Map<String, String> movieImageMap = new HashMap<>();
+
     static {
         movieImageMap.put("M001", "avenger.jpg");
         movieImageMap.put("M002", "nhabanu.jpg");
@@ -116,6 +135,3 @@ public class ScheduleItemPanel extends JPanel {
     }
 
 }
-
-
-

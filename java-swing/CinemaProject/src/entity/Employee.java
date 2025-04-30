@@ -12,6 +12,12 @@ public class Employee {
     private String email;
     private Account account;    // FK object
 
+    public Employee(String employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    
+    
     public Employee(String employeeID, String fullName, boolean gender,
                     LocalDate dateOfBirth, String phoneNumber,
                     String email, Account account) {

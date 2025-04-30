@@ -3,13 +3,13 @@ package application;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont; 
-import gui.LichChieu;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Menu;
 import component.Form; 
 import component.Header;
 import component.LoadingScreen;
 import component.SanPham_DoAn;
+import component.SanPham_DoAn_1;
 import component.SanPham_DoUong;
 import gui.UuDai_Form; 
 import connectDB.ConnectDB;
@@ -57,16 +57,13 @@ public class Main extends javax.swing.JFrame {
                 } else if (index == 2) {
                     ShowScheduleForm schedule = new ShowScheduleForm();
                     showForm(schedule);
-//                } else if (index == 2) {
-//                    LichChieu lichChieu = new LichChieu();
-//                    showForm(lichChieu);
                 } else if (index == 3) {
                     uudai = new UuDai_Form();
                     showForm(uudai);
                     ArrayList<Voucher> dsVoucher = vc_dao.getalltbVoucher();
                     uudai.loadDataToTable(dsVoucher);
                 } else if (index == 40) {
-                    SanPham_DoAn spDoAn = new SanPham_DoAn(index);
+                    SanPham_DoAn_1 spDoAn = new SanPham_DoAn_1(index);
                     showForm(spDoAn);
                 } else if (index == 41) {
                     SanPham_DoUong spDoUong = new SanPham_DoUong(index);
