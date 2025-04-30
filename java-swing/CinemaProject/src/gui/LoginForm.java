@@ -46,7 +46,6 @@ public boolean isLoginSuccessful() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         header1.setBackground(new java.awt.Color(229, 229, 229));
         header1.setMinimumSize(new java.awt.Dimension(200, 200));
@@ -125,7 +124,20 @@ public boolean isLoginSuccessful() {
                 .addContainerGap(86, Short.MAX_VALUE))
         );
 
-        jPanel1.add(header1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 170, -1, -1));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(400, 400, 400)
+                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 

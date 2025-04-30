@@ -170,6 +170,8 @@ VALUES
     ('ST03', 'Couple', N'Ghế đôi');
 
 --MOVIE SCHEDULE
+DELETE FROM MovieSchedule
+
 INSERT INTO MovieSchedule (scheduleID, movieID, room, startTime, endTime)
 VALUES 
 ('SC001', 'M001', 'R001', '2025-04-20 19:47:00', '2025-04-20 21:41:00'), 
