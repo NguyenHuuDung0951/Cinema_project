@@ -6,6 +6,7 @@ import entity.Product;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -102,10 +103,11 @@ public class CartPanel extends JPanel {
 
             JLabel imgLabel = new JLabel();
             imgLabel.setPreferredSize(new Dimension(40, 40));
-            String imgPath = "src/image/" + p.getProductID().toLowerCase() + ".jpg";
-            File imgFile = new File(imgPath);
-            if (imgFile.exists()) {
-                ImageIcon icon = new ImageIcon(imgPath);
+            String posterPath = p.getPosterPath();
+            URL url = getClass().getResource(posterPath);
+
+            if (url != null) {
+                ImageIcon icon = new ImageIcon(url);
                 Image scaled = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
                 imgLabel.setIcon(new ImageIcon(scaled));
             }

@@ -7,6 +7,7 @@ import model.BookingData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -91,11 +92,14 @@ public class ProductOrderForm extends JFrame {
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         JLabel lblImg = new JLabel();
-        String imgPath = "src/image/" + p.getProductID().toLowerCase() + ".jpg";
-        ImageIcon icon = new ImageIcon(imgPath);
-        Image scaled = icon.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH);
-        lblImg.setIcon(new ImageIcon(scaled));
-        lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
+        String posterPath = p.getPosterPath();
+        URL url = getClass().getResource(posterPath);
+        if (url != null) {
+            ImageIcon icon = new ImageIcon(url);
+            Image scaled = icon.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH);
+            lblImg.setIcon(new ImageIcon(scaled));
+            lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
+        }
 
         JLabel lblName = new JLabel("<html><div style='text-align:center;'>" + p.getProductName() + "</div></html>", JLabel.CENTER);
         lblName.setFont(lblName.getFont().deriveFont(Font.BOLD, 14f));

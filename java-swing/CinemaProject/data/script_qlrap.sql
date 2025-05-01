@@ -45,15 +45,17 @@ CREATE TABLE Product (
     productID VARCHAR(50) PRIMARY KEY,
     productName NVARCHAR(100),
     quantity INT,
-    productType VARCHAR(50),
-    price FLOAT
+    productType NVARCHAR(50),
+    price FLOAT,
+	posterPath VARCHAR(50)
 );
 
 CREATE TABLE Movie (
     movieID VARCHAR(50) PRIMARY KEY,
     movieName NVARCHAR(100),
 	status NVARCHAR(20),
-    duration INT
+    duration INT,
+	posterPath VARCHAR(50)
 );
 
 CREATE TABLE Room (
@@ -136,22 +138,29 @@ VALUES
     ('EM002', N'Nguyễn Văn Sỹ',  0, '2005-09-06', '0938078300', 'vansy05@gmail.com',         'AC002');
 
 -- PRODUCT
-INSERT INTO Product (productID, productName, quantity, productType, price)
+INSERT INTO Product (productID, productName, quantity, productType, price, posterPath)
 VALUES 
-    ('P001', N'Bắp rang bơ', 100, 'Đồ ăn', 35000),
-    ('P002', N'Nước ngọt Coca-Cola', 120, 'Thức uống', 25000),
-    ('P003', N'Combo Bắp nước', 50, 'Đồ ăn', 55000),
-    ('P004', N'Nước suối Aquafina', 60, 'Thức uống', 15000),
-    ('P005', N'Bắp rang bơ size lớn', 40, 'Đồ ăn', 80000);
+    ('P001', N'Bắp rang bơ', 100, N'Đồ ăn', 35000, '/image/p001.jpg'),
+    ('P002', N'Nước ngọt Coca-Cola', 120, N'Thức uống', 25000, '/image/p002.jpg'),
+    ('P003', N'Combo Bắp nước', 50, N'Đồ ăn', 55000, '/image/p003.jpg'),
+    ('P004', N'Nước suối Aquafina', 60, N'Thức uống', 15000, '/image/p004.jpg'),
+    ('P005', N'Bắp rang bơ size lớn', 40, N'Đồ ăn', 80000, '/image/p005.jpg'),
+	('P006', N'Bắp Socola', 100, N'Đồ ăn', 55000, '/image/p006.png'),
+    ('P007', N'Nước ngọt Pepsi', 120, N'Thức uống', 25000, '/image/p007.jpg'),
+    ('P008', N'ComBo 2 Bắp', 50, N'Đồ ăn', 65000, '/image/p008.jpg'),
+    ('P009', N'Nước Sprite', 60, N'Thức uống', 20000, '/image/p009.jpg'),
+    ('P010', N'Bắp Nhỏ', 40, N'Đồ ăn', 30000, '/image/p010.jpg'),
+	 ('P011', N'Nước FanTa Cam', 50, N'Thức uống', 20000, '/image/p011.jpg'),
+    ('P012', N'Nước FanTa Dâu', 40, N'Thức uống', 20000, '/image/p012.jpg');
 
 -- MOVIE 
-INSERT INTO Movie (movieID, movieName, status, duration)
+INSERT INTO Movie (movieID, movieName, status, duration, posterPath)
 VALUES 
-    ('M001', N'Avengers: Endgame', N'Đã phát hành', 181),
-    ('M002', N'Nhà bà Nữ', N'Đã phát hành', 120),
-    ('M003', N'John Wick 4', N'Đã phát hành', 169),
-    ('M004', N'Siêu lừa gặp siêu lầy 6', N'Đã phát hành', 115),
-    ('M005', N'Spiderman: No Way Home', N'Đã phát hành', 148);
+    ('M001', N'Avengers: Endgame', N'Đã phát hành', 181, '/image/avenger.jpg'),
+    ('M002', N'Nhà bà Nữ', N'Đã phát hành', 120, '/image/nhabanu.jpg'),
+    ('M003', N'John Wick 4', N'Đã phát hành', 169, '/image/johnwick4.jpg'),
+    ('M004', N'Siêu lừa gặp siêu lầy 6', N'Đã phát hành', 115, '/image/sieuluagapsieulay6.jpg'),
+    ('M005', N'Spiderman: No Way Home', N'Đã phát hành', 148, '/image/spiderman.jpg');
 
 -- ROOM 
 INSERT INTO Room (room, roomName, numberOfSeats)
@@ -335,7 +344,7 @@ BEGIN
     SELECT @NewID, orderDate, totalPrice, employeeID, voucherID
     FROM inserted
 END
-
+GO
 CREATE OR ALTER TRIGGER trg_AutoID_OrderDetail
 ON OrderDetail
 INSTEAD OF INSERT
@@ -353,7 +362,7 @@ BEGIN
     SELECT @NewID, orderID, productID, scheduleID, quantity
     FROM inserted
 END
-
+GO
 CREATE OR ALTER TRIGGER trg_AutoID_TicketDetail
 ON TicketDetail
 INSTEAD OF INSERT
@@ -371,3 +380,24 @@ BEGIN
     SELECT @NewID, movieID, showDate, seatID, room, ticketPrice
     FROM inserted
 END
+GO
+CREATE OR ALTER TRIGGER trg_AutoID_MovieSchedule
+ON MovieSchedule
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @NewID   VARCHAR(50);
+    DECLARE @Number  INT;
+    SELECT @Number = ISNULL(
+        MAX(CAST(RIGHT(scheduleID, LEN(scheduleID) - 2) AS INT))
+    , 0) + 1
+    FROM MovieSchedule;
+    SET @NewID = 'SC' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3);
+
+    INSERT INTO MovieSchedule(scheduleID, movieID, room, startTime, endTime)
+    SELECT 
+        @NewID,
+        movieID, room, startTime, endTime
+    FROM inserted;
+END;
+

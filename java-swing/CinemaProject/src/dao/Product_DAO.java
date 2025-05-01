@@ -25,7 +25,8 @@ public class Product_DAO {
                 int quantity = rs.getInt(3);
                 String productType = rs.getString(4);
                 double price = rs.getDouble(5);
-                Product obj = new Product(productID, productName, quantity, productType, price);
+                String posterPath = rs.getString(6);
+                Product obj = new Product(productID, productName, quantity, productType, price, posterPath);
                 dsProduct.add(obj);
             }
         } catch (SQLException e) {

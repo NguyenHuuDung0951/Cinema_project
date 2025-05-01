@@ -192,10 +192,12 @@ public class InvoiceForm extends JFrame {
         double before = totalTicket + totalFood;
         Voucher best = PromotionUtil.findBestVoucher(before);
         double discountPct = best != null ? best.getValueVoucherAsDouble() : 0;
+        double discountAmount = before * discountPct;
+        bookingData.setDiscountAmount(discountAmount);
         bookingData.setVoucherID(best != null ? best.getVoucherID() : null);
-        double after = before * (1 - discountPct);
+        double after = before - discountAmount;
         double vat = after * 0.1;
-        
+
         lblTotalTicket.setText("Tổng vé: " + formatVND(totalTicket));
         lblTotalFood.setText("Tổng món: " + formatVND(totalFood));
         lblDiscount.setText("Giảm giá: " + (int) (discountPct * 100) + "%");

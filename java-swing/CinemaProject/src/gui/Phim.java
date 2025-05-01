@@ -1,16 +1,26 @@
 package gui;
 
+import java.net.URL;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import component.AddForm;
+import dao.MovieScheduleSeat_DAO;
+import dao.MovieSchedule_DAO;
 import dao.Movie_DAO;
 import entity.Movie;
+import entity.MovieSchedule;
+import java.awt.Image;
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import raven.popup.DefaultOption;
@@ -20,12 +30,13 @@ import raven.toast.Notifications;
 
 public class Phim extends javax.swing.JPanel {
 
+    private ArrayList<Movie> listMovies = new ArrayList<>();
     private Movie movie;
 
     public Phim() {
         initComponents();
         init();
-        loadTableMovie();
+        loadTableMovieNoImage();
     }
 
     private void init() {
@@ -70,21 +81,19 @@ public class Phim extends javax.swing.JPanel {
         });
     }
 
-    private void loadTableMovie() {
-        Movie_DAO movieDao = new Movie_DAO();
-        ArrayList<Movie> list = movieDao.getalltbMovie();
+    private void loadTableMovieNoImage() {
+        Movie_DAO dao = new Movie_DAO();
+        listMovies = dao.getalltbMovie();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-
-        for (Movie movie : list) {
-            Object[] row = {
-                movie.getMovieID(),
-                movie.getMovieName(),
-                movie.getStatus(),
-                movie.getDuration()
-            };
-            model.addRow(row);
+        for (Movie m : listMovies) {
+            model.addRow(new Object[]{
+                m.getMovieID(),
+                m.getMovieName(),
+                m.getStatus(),
+                m.getDuration()
+            });
         }
     }
 
@@ -103,17 +112,27 @@ public class Phim extends javax.swing.JPanel {
         }
     }
 
+//    private List<Movie> getSelectedMovies() {
+//        List<Movie> selectedMovies = new ArrayList<>();
+//        int[] selectedRows = table.getSelectedRows();
+//        for (int row : selectedRows) {
+//            String movieID = table.getValueAt(row, 0).toString().trim();
+//            String movieName = table.getValueAt(row, 1).toString().trim();
+//            String status = table.getValueAt(row, 2).toString().trim();
+//            int duration = Integer.parseInt(table.getValueAt(row, 3).toString().trim());
+//            String posterPath = table.getValueAt(row, 4).toString().trim();
+//            selectedMovies.add(new Movie(movieID, movieName, status, duration, posterPath));
+//        }
+//        return selectedMovies;
+//    }
     private List<Movie> getSelectedMovies() {
-        List<Movie> selectedMovies = new ArrayList<>();
-        int[] selectedRows = table.getSelectedRows();
-        for (int row : selectedRows) {
-            String movieID = table.getValueAt(row, 0).toString().trim();
-            String movieName = table.getValueAt(row, 1).toString().trim();
-            String status = table.getValueAt(row, 2).toString().trim();
-            int duration = Integer.parseInt(table.getValueAt(row, 3).toString().trim());
-            selectedMovies.add(new Movie(movieID, movieName, status, duration));
+        List<Movie> selected = new ArrayList<>();
+        int[] rows = table.getSelectedRows();
+        for (int r : rows) {
+            // Lấy nguyên object Movie đã load, bao gồm posterPath
+            selected.add(listMovies.get(r));
         }
-        return selectedMovies;
+        return selected;
     }
 
     @SuppressWarnings("unchecked")
@@ -262,8 +281,8 @@ public class Phim extends javax.swing.JPanel {
 
         add(pnlbody, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         String keyword = txtSearch.getText().trim();
 
@@ -278,7 +297,7 @@ public class Phim extends javax.swing.JPanel {
                 loadTableMovie(new ArrayList<>());
             }
         } else {
-            loadTableMovie();
+            loadTableMovieNoImage();
         }
     }//GEN-LAST:event_txtSearchActionPerformed
 
@@ -305,14 +324,27 @@ public class Phim extends javax.swing.JPanel {
             GlassPanePopup.showPopup(new SimplePopupBorder(new JPanel(), "Xóa Phim [" + data.getMovieName() + "]", actions, (popupController, selectedIndex) -> {
                 if (selectedIndex == 0) {
                     try {
-                        Movie_DAO dao = new Movie_DAO();
-                        if (dao.deleteMovie(data.getMovieID())) {
-                            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Xóa phim thành công");
-                            loadTableMovie();
-                            popupController.closePopup();
+                        MovieScheduleSeat_DAO seatDao = new MovieScheduleSeat_DAO();
+                        boolean seatOK = seatDao.deleteByMovieID(data.getMovieID());
+
+                        MovieSchedule_DAO schedDao = new MovieSchedule_DAO();
+                        boolean schedOK = schedDao.deleteSchedulesByMovieID(data.getMovieID());
+
+                        Movie_DAO movieDao = new Movie_DAO();
+                        boolean movieOK = movieDao.deleteMovie(data.getMovieID());
+
+                        if (schedOK && movieOK && seatOK) {
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS,
+                                    "Xóa phim thành công");
+                        } else if (!movieOK) {
+                            Notifications.getInstance().show(Notifications.Type.ERROR,
+                                    "Xóa phim thất bại");
                         } else {
-                            Notifications.getInstance().show(Notifications.Type.ERROR, "Xóa phim thất bại");
+                            Notifications.getInstance().show(Notifications.Type.WARNING,
+                                    "Phim đã xóa nhưng một số lịch chiếu chưa xóa hết");
                         }
+                        loadTableMovieNoImage();
+                        popupController.closePopup();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi xóa phim!");
@@ -334,7 +366,16 @@ public class Phim extends javax.swing.JPanel {
             if (list.size() == 1) {
                 Movie data = list.get(0);
                 AddForm form = new AddForm();
-                form.setMovie(data);
+                MovieSchedule sched = new MovieSchedule_DAO()
+                        .getalltbMovieSchedule().stream()
+                        .filter(s -> s.getMovie().getMovieID().equals(data.getMovieID()))
+                        .findFirst().orElse(null);
+
+                if (sched != null) {
+                    form.setMovieAndSchedule(data, sched);
+                } else {
+                    form.setMovie(data);
+                }
 
                 DefaultOption option = new DefaultOption() {
                     @Override
@@ -355,7 +396,7 @@ public class Phim extends javax.swing.JPanel {
                                 Movie_DAO dao = new Movie_DAO();
                                 if (dao.editMovie(editedMovie)) {
                                     Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật phim thành công");
-                                    loadTableMovie();
+                                    loadTableMovieNoImage();
                                     popupController.closePopup();
                                 } else {
                                     Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật phim thất bại");
@@ -416,7 +457,20 @@ public class Phim extends javax.swing.JPanel {
                         } else {
                             Notifications.getInstance().show(Notifications.Type.ERROR, "Có lỗi xảy ra khi lưu phim vào cơ sở dữ liệu.");
                         }
-
+                        MovieSchedule_DAO schedDao = new MovieSchedule_DAO();
+                        LocalDateTime start = create.getStartDateTime();
+                        LocalDateTime end = create.getEndDateTime();
+                        String roomID = "R001";
+                        boolean isSchedSaved = schedDao.addMovieSchedule(
+                                movie.getMovieID(), roomID, start, end
+                        );
+                        if (isSchedSaved) {
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS,
+                                    "Lịch chiếu đã được thêm thành công!");
+                        } else {
+                            Notifications.getInstance().show(Notifications.Type.ERROR,
+                                    "Phim lưu thành công nhưng lỗi lưu lịch chiếu!");
+                        }
                         popupController.closePopup();
                     } else {
                         Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin phim chưa hợp lệ!");
@@ -453,7 +507,7 @@ public class Phim extends javax.swing.JPanel {
                 loadTableMovie(new ArrayList<>());
             }
         } else {
-            loadTableMovie();
+            loadTableMovieNoImage();
         }
     }//GEN-LAST:event_txtSearch1ActionPerformed
 
@@ -473,4 +527,5 @@ public class Phim extends javax.swing.JPanel {
     private javax.swing.JTextField txtSearch;
     private component.ButtonAction txtSearch1;
     // End of variables declaration//GEN-END:variables
+
 }

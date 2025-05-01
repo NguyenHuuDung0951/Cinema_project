@@ -7,6 +7,7 @@ import gui.WrapLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -81,8 +82,9 @@ public class SanPham_DoAn_1 extends JPanel {
         ));
 
         JLabel lblImg = new JLabel();
-        String imgPath = "src/image/" + p.getProductID().toLowerCase() + ".jpg";
-        ImageIcon icon = new ImageIcon(imgPath);
+        String path = p.getPosterPath();
+        URL url = getClass().getResource(path);
+        ImageIcon icon = new ImageIcon(url);
         Image img = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
         lblImg.setIcon(new ImageIcon(img));
         lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);

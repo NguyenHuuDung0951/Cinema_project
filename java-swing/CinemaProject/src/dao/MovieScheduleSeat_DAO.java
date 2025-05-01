@@ -59,15 +59,30 @@ public class MovieScheduleSeat_DAO {
             return ps.executeUpdate() > 0;
         }
     }
-    
+
     public void initSeatsForSchedule(String scheduleID) throws SQLException {
         String sql = "INSERT INTO MovieScheduleSeat(scheduleID, seatID, isAvailable)"
                 + "SELECT ?, seatID, 1 FROM Seat WHERE seatID NOT IN (SELECT seatID FROM MovieScheduleSeat WHERE scheduleID = ?)";
-        try (Connection con = ConnectDB.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, scheduleID);
             ps.setString(2, scheduleID);
             ps.executeUpdate();
+        }
+    }
+
+    public boolean deleteByMovieID(String movieID) {
+        String sql
+                = "DELETE FROM MovieScheduleSeat "
+                + "WHERE scheduleID IN ("
+                + "  SELECT scheduleID FROM MovieSchedule WHERE movieID = ?"
+                + ")";
+        try (Connection conn = ConnectDB.getInstance().getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, movieID);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

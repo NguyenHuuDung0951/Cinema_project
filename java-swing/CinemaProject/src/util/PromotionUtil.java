@@ -34,18 +34,6 @@ public class PromotionUtil {
         }
     }
 
-    // Mock data: danh sách khuyến mãi hiện tại (hoặc sau này bạn đọc từ DB)
-//    private static ArrayList<Promotion> promotionList = new ArrayList<>();
-//
-//    static {
-//        promotionList.add(new Promotion("KM005", LocalDate.of(2024,10,1), LocalDate.of(2024,12,1), 300000, 0.30));
-//        promotionList.add(new Promotion("KM008", LocalDate.of(2024,9,1), LocalDate.of(2024,11,30), 39000, 0.30));
-//        promotionList.add(new Promotion("KM010", LocalDate.of(2024,11,1), LocalDate.of(2025,1,1), 59000, 0.35));
-//        promotionList.add(new Promotion("KM011", LocalDate.of(2024,11,1), LocalDate.of(2025,12,1), 1000000, 0.35));
-//    }
-    /**
-     * Trả về phần trăm khuyến mãi cao nhất có thể áp dụng
-     */
     public static Voucher findBestVoucher(double totalPrice) {
         Voucher_DAO dao = new Voucher_DAO();
         ArrayList<Voucher> vouchers = dao.getalltbVoucher();

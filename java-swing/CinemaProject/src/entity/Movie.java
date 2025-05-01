@@ -7,17 +7,26 @@ public class Movie {
     private String movieName;
     private String status;
     private int duration;
+    private String posterPath;
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
     public Movie(String movieID) {
         this.movieID = movieID;
     }
 
     
-    public Movie(String movieID, String movieName, String status, int duration) {
+    public Movie(String movieID, String movieName, String status, int duration, String posterPath) {
         this.movieID = movieID;
         this.movieName = movieName;
         this.status = status;
         this.duration = duration;
+        this.posterPath = posterPath;
     }
 
   

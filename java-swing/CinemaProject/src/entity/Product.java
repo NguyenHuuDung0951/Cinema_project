@@ -9,18 +9,27 @@ public class Product {
     private int quantity;
     private String productType;
     private double price;
-
+    private String posterPath;
     public Product(String productID) {
         this.productID = productID;
     }
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
     public Product(String productID, String productName, int quantity,
-            String productType, double price) {
+            String productType, double price, String posterPath) {
         this.productID = productID;
         this.productName = productName;
         this.quantity = quantity;
         this.productType = productType;
         this.price = price;
+        this.posterPath = posterPath;
     }
 
     public String getProductID() {

@@ -76,6 +76,8 @@ public class PaymentService {
                 );
             }
             bd.setLastTickets(tickets);
+            String qrContent = order.getOrderID();
+            bd.generateQrCode(qrContent, 150);
             // 3. Ghi OrderDetail cho sản phẩm
             OrderDetail_DAO odDao = new OrderDetail_DAO();
             MovieSchedule sched = new MovieSchedule(bd.getScheduleID());
@@ -93,7 +95,6 @@ public class PaymentService {
             JOptionPane.showMessageDialog(null, "Thanh toán thành công!");
             String invoicePath = "export/HD_" + order.getOrderID() + ".pdf";
             String ticketFolder = "export/VE_" + order.getOrderID();
-
             PDFGenerator.generateInvoicePDF(invoicePath);
             PDFGenerator.generateTicketPDFs(ticketFolder);
             if (Desktop.isDesktopSupported()) {

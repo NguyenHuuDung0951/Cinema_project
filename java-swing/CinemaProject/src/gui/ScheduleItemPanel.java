@@ -15,6 +15,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -46,25 +47,21 @@ public class ScheduleItemPanel extends JPanel {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
         add(lblTitle, BorderLayout.NORTH);
 
-        String imgFileName = movieImageMap.get(movie.getMovieID());
-        if (imgFileName != null) {
-            String imgPath = "src/image/" + imgFileName;
+        String posterPath = movie.getPosterPath();      
 
-            File imgFile = new File(imgPath);
-            if (imgFile.exists()) {
-                ImageIcon icon = new ImageIcon(imgPath);
-                Image scaled = icon.getImage().getScaledInstance(160, 220, Image.SCALE_SMOOTH);
-                JLabel lblPoster = new JLabel(new ImageIcon(scaled));
-                lblPoster.setHorizontalAlignment(JLabel.CENTER);
-                add(lblPoster, BorderLayout.CENTER);
-            } else {
-                JLabel lblPoster = new JLabel("Không tìm thấy ảnh", JLabel.CENTER);
-                add(lblPoster, BorderLayout.CENTER);
-            }
-        } else {
-            JLabel lblPoster = new JLabel("Không có ảnh", JLabel.CENTER);
-            add(lblPoster, BorderLayout.CENTER);
+        URL url = getClass().getResource(posterPath);
+        ImageIcon icon = null;
+        if (url != null) {
+            icon = new ImageIcon(
+                    new ImageIcon(url)
+                            .getImage()
+                            .getScaledInstance(160, 220, Image.SCALE_SMOOTH)
+            );
         }
+        JLabel lblPoster = (icon != null
+                ? new JLabel(icon, JLabel.CENTER)
+                : new JLabel("Không tìm thấy ảnh", JLabel.CENTER));
+        add(lblPoster, BorderLayout.CENTER);
 
         // Nút trailer + chi tiết
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -96,7 +93,7 @@ public class ScheduleItemPanel extends JPanel {
                     bd.setScheduleID(schedule.getScheduleID());
                     bd.setShowDate(schedule.getStartTime().toLocalDate().toString());
                     bd.setShowTime(schedule.getStartTime().toLocalTime().toString());
-                    bd.setPosterPath("/image/" + imgFileName);
+                    bd.setPosterPath(movie.getPosterPath());
                     // Khởi tạo ghế trong DB nếu cần
                     try {
                         new MovieScheduleSeat_DAO().initSeatsForSchedule(schedule.getScheduleID());
@@ -123,15 +120,4 @@ public class ScheduleItemPanel extends JPanel {
 
         add(bottomPanel, BorderLayout.SOUTH);
     }
-    // Map tên phim/movieID -> tên file ảnh
-    private static final Map<String, String> movieImageMap = new HashMap<>();
-
-    static {
-        movieImageMap.put("M001", "avenger.jpg");
-        movieImageMap.put("M002", "nhabanu.jpg");
-        movieImageMap.put("M003", "johnwick4.jpg");
-        movieImageMap.put("M004", "sieuluagapsieulay6.jpg");
-        movieImageMap.put("M005", "spiderman.jpg");
-    }
-
 }

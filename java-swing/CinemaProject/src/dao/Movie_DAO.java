@@ -27,7 +27,8 @@ public class Movie_DAO {
                 String movieName = rs.getString(2);
                 String status = rs.getString(3);
                 int duration = rs.getInt(4);
-                Movie obj = new Movie(movieID, movieName, status, duration);
+                String posterPath = rs.getString(5);
+                Movie obj = new Movie(movieID, movieName, status, duration, posterPath);
                 dsMovie.add(obj); 
             }
         } catch (SQLException e) {
@@ -36,7 +37,7 @@ public class Movie_DAO {
         return dsMovie;
     }
     public boolean addMovie(Movie movie) {
-        String sql = "INSERT INTO Movie (movieID, movieName, status, duration) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Movie (movieID, movieName, status, duration, posterPath) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -45,7 +46,7 @@ public class Movie_DAO {
             stmt.setString(2, movie.getMovieName());
             stmt.setString(3, movie.getStatus());
             stmt.setInt(4, movie.getDuration());
-
+            stmt.setString(5, movie.getPosterPath());
             
             int rowsAffected = stmt.executeUpdate();
 
@@ -81,13 +82,14 @@ public class Movie_DAO {
     return movie;
 }
 public boolean editMovie(Movie movie) {
-    String sql = "UPDATE Movie SET movieName = ?, status = ?, duration = ? WHERE movieID = ?";
+    String sql = "UPDATE Movie SET movieName = ?, status = ?, duration = ?, posterPath = ? WHERE movieID = ?";
     try (Connection conn = getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setString(1, movie.getMovieName());
         stmt.setString(2, movie.getStatus());
         stmt.setInt(3, movie.getDuration());
-        stmt.setString(4, movie.getMovieID());
+        stmt.setString(4, movie.getPosterPath());
+        stmt.setString(5, movie.getMovieID());
         return stmt.executeUpdate() > 0;
     } catch (SQLException e) {
         e.printStackTrace();
@@ -136,8 +138,8 @@ public ArrayList<Movie> searchMovieByName(String name) {
             String movieName = rs.getString("MovieName");
             String status = rs.getString("Status");
             int duration = rs.getInt("Duration");
-            
-            result.add(new Movie(id, movieName, status, duration));
+            String posterPath = rs.getString("posterPath");
+            result.add(new Movie(id, movieName, status, duration, posterPath));
         }
     } catch (Exception e) {
         e.printStackTrace();

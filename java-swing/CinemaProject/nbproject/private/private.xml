@@ -3,7 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/entity/Account.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/entity/CartItem.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/entity/Employee.java</file>
@@ -25,10 +24,8 @@
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/MovieSchedule_DAO.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/ShowScheduleForm.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/OrderDetail_DAO.java</file>
-            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/ScheduleItemPanel.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/Orders_DAO.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/TicketDetail_DAO.java</file>
-            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/SeatSelectionForm.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/ProductOrderForm.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/Seat_DAO.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/util/SeatPriceUtil.java</file>
@@ -36,20 +33,20 @@
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/util/PDFGenerator.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/Header.java</file>
-            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/LichChieu.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/Phim.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/UuDai_Form.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/ButtonAction.java</file>
             <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/MovieScheduleSeat_DAO.java</file>
-=======
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/application/Main.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/component/LoadingScreen.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/LoginForm.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/Phim.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/ShowScheduleForm.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/SeatSelectionForm.java</file>
-            <file>file:/D:/javaswing/Cinema_project/java-swing/CinemaProject/src/gui/ProductOrderForm.java</file>
->>>>>>> cd59b567124ff69c8654d3da34769c51825a4c5e
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/SeatSelectionForm.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/ScheduleItemPanel.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/Product_DAO.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/SanPham_DoAn_1.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/application/loading.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/gui/LoginForm.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/table.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/Phim1.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/dao/Movie_DAO.java</file>
+            <file>file:/D:/Cinema_project/java-swing/CinemaProject/src/component/AddForm.java</file>
         </group>
     </open-files>
 </project-private>

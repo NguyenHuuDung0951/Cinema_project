@@ -30,12 +30,6 @@ public class SeatSelectionForm extends JFrame {
     private JLabel lblTitle, lblDate, lblTime, lblRoom, lblPrice, lblSeats, lblTotal;
     private JButton btnContinue;
 
-    // Giá theo loại ghế
-//    private final Map<String, Double> priceMap = Map.of(
-//        "ST01", 60000.0,
-//        "ST02", 90000.0,
-//        "ST03", 100000.0
-//    );
     private static final Color SELECTED_COLOR = new Color(0xFF8800);   // #ff8800 – cam
 
     // Bản đồ location -> Seat
@@ -68,15 +62,6 @@ public class SeatSelectionForm extends JFrame {
                 .getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImg);
     }
-    private static final Map<String, String> movieImageMap = new HashMap<>();
-
-    static {
-        movieImageMap.put("M001", "avenger.jpg");
-        movieImageMap.put("M002", "nhabanu.jpg");
-        movieImageMap.put("M003", "johnwick4.jpg");
-        movieImageMap.put("M004", "sieuluagapsieulay6.jpg");
-        movieImageMap.put("M005", "spiderman.jpg");
-    }
 
     public SeatSelectionForm() {
 
@@ -92,8 +77,9 @@ public class SeatSelectionForm extends JFrame {
         lblRoom.setText(bd.getRoomName());
 
         // Poster
-        String imgFile = movieImageMap.getOrDefault(bd.getMovieID(), "default.jpg");
-        lblPoster.setIcon(loadScaledIcon("/image/" + imgFile, POSTER_MAX_W));
+        String posterPath = bd.getPosterPath();                   // ví dụ "/image/avenger.jpg" hoặc đường dẫn tuyệt đối
+        ImageIcon icon = loadScaledIcon(posterPath, POSTER_MAX_W); // loadScaledIcon đã xử lý getResource bên trong
+        lblPoster.setIcon(icon);
     }
 
     private void initComponents() {
@@ -185,8 +171,7 @@ public class SeatSelectionForm extends JFrame {
                 + "hoverBackground:#FFB733;");
 
         btnContinue.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        btnContinue.putClientProperty("JButton.buttonType", "roundRect");
-//        btnContinue.putClientProperty("FlatLaf.style", "arc:999;focusWidth:0;");
+
         btnContinue.setMargin(new Insets(10, 16, 10, 16));
         pnlInfo.add(btnContinue);
 
@@ -205,13 +190,6 @@ public class SeatSelectionForm extends JFrame {
         btnContinue.addActionListener(e -> {
             BookingData bd = BookingData.getInstance();
 
-            // Gán thông tin phim
-//            bd.setMovieName(lblTitle.getText());
-//            bd.setPosterPath("/image/avenger.jpg");
-//            bd.setShowDate(lblDate.getText());
-//            bd.setShowTime(lblTime.getText());
-//            bd.setRoomName(lblRoom.getText());
-            // Gán ghế đã chọn
             String selectedSeats = lblSeatsVal.getText().replaceAll("<[^>]*>", "");
             bd.setSelectedSeats(selectedSeats);
 
@@ -407,7 +385,6 @@ public class SeatSelectionForm extends JFrame {
                 bd.setShowDate(s.getStartTime().toLocalDate().toString());
                 bd.setShowTime(s.getStartTime().toLocalTime().toString());
                 // Poster set thông qua map, không cần bd.setPosterPath
-                
                 new SeatSelectionForm().setVisible(true);
 
             } catch (SQLException e) {

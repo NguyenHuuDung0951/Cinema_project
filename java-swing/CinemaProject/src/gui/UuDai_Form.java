@@ -68,7 +68,6 @@ public class UuDai_Form extends javax.swing.JPanel {
                 + "borderWidth:0;"
                 + "focusWidth:0;"
                 + "innerFocusWidth:0;"
-                + "margin:5,20,5,20;"
                 + "background:$Panel.background");
         jButton2.setText("Sửa");
         jButton2.putClientProperty(FlatClientProperties.STYLE, ""
@@ -76,7 +75,6 @@ public class UuDai_Form extends javax.swing.JPanel {
                 + "borderWidth:0;"
                 + "focusWidth:0;"
                 + "innerFocusWidth:0;"
-                + "margin:5,20,5,20;"
                 + "background:$Panel.background");
         jButton3.setText("Xóa");
         jButton3.putClientProperty(FlatClientProperties.STYLE, ""
@@ -84,7 +82,6 @@ public class UuDai_Form extends javax.swing.JPanel {
                 + "borderWidth:0;"
                 + "focusWidth:0;"
                 + "innerFocusWidth:0;"
-                + "margin:5,20,5,20;"
                 + "background:$Panel.background");
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"5 khuyến mãi gần nhất", "4 khuyến mãi gần nhất", "3 khuyến mãi gần nhất"}));
         jComboBox1.putClientProperty(FlatClientProperties.STYLE, ""
@@ -92,7 +89,6 @@ public class UuDai_Form extends javax.swing.JPanel {
                 + "borderWidth:0;"
                 + "focusWidth:0;"
                 + "innerFocusWidth:0;"
-                + "margin:5,20,5,20;"
                 + "background:#ffffff");
         jTextField1.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Tìm kiếm...");
         jTextField1.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_ICON, new FlatSVGIcon("icon/search.svg"));

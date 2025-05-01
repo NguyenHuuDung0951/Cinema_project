@@ -8,7 +8,6 @@ import component.Menu;
 import component.Form; 
 import component.Header;
 import component.LoadingScreen;
-import component.SanPham_DoAn;
 import component.SanPham_DoAn_1;
 import component.SanPham_DoUong;
 import gui.UuDai_Form; 
@@ -141,7 +140,7 @@ public class Main extends javax.swing.JFrame {
             new Thread(() -> {
                 try {
                     for (int i = 0; i <= 100; i++) {
-                        Thread.sleep(30); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
+                        Thread.sleep(5); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
                         loadingScreen.updateProgress(i);
                     }
                 } catch (InterruptedException e) {
