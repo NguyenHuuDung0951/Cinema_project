@@ -179,7 +179,6 @@ VALUES
     ('ST03', 'Couple', N'Ghế đôi');
 
 --MOVIE SCHEDULE
-DELETE FROM MovieSchedule
 
 INSERT INTO MovieSchedule (scheduleID, movieID, room, startTime, endTime)
 VALUES 
