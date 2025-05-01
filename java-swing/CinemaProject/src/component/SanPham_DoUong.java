@@ -53,7 +53,11 @@ public class SanPham_DoUong extends JPanel {
 
         btnSearch.addActionListener(e -> loadProducts(txtSearch.getText().trim()));
         btnAdd.addActionListener(e -> {
-            // TODO: mở dialog thêm SP mới
+            JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm sản phẩm", true);
+            dialog.setContentPane(new ThemSanPham());
+            dialog.pack(); // hoặc dialog.setSize(width, height);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
         });
     }
 
@@ -89,10 +93,10 @@ public class SanPham_DoUong extends JPanel {
         lblImg.setIcon(new ImageIcon(img));
         lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblName = new JLabel("<html><div style='text-align:center;'>" + p.getProductName() + "</div></html>");
+        JLabel lblName = new JLabel(p.getProductName(), SwingConstants.CENTER);
         lblName.setFont(lblName.getFont().deriveFont(Font.BOLD, 14f));
+        lblName.setMaximumSize(new Dimension(Short.MAX_VALUE, 40));
         lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblName.setMaximumSize(new Dimension(150, 40));
 
         JLabel lblQty = new JLabel("Số lượng: " + p.getQuantity());
         lblQty.setAlignmentX(Component.CENTER_ALIGNMENT);

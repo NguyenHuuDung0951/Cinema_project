@@ -94,10 +94,10 @@ public class SanPham_DoAn_1 extends JPanel {
         lblImg.setIcon(new ImageIcon(img));
         lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblName = new JLabel("<html><div style='text-align:center;'>" + p.getProductName() + "</div></html>");
+        JLabel lblName = new JLabel(p.getProductName(), SwingConstants.CENTER);
         lblName.setFont(lblName.getFont().deriveFont(Font.BOLD, 14f));
+        lblName.setMaximumSize(new Dimension(Short.MAX_VALUE, 40));
         lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lblName.setMaximumSize(new Dimension(150, 40));
 
         JLabel lblQty = new JLabel("Số lượng: " + p.getQuantity());
         lblQty.setAlignmentX(Component.CENTER_ALIGNMENT);
