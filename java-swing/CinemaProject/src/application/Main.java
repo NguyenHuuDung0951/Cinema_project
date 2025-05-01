@@ -15,6 +15,7 @@ import connectDB.ConnectDB;
 import dao.Voucher_DAO;
 import entity.Voucher;
 import even.EventMenu; 
+import gui.HoSo;
 import gui.LoginForm;
 import gui.Phim;
 import java.awt.BorderLayout;
@@ -67,7 +68,12 @@ public class Main extends javax.swing.JFrame {
                 } else if (index == 41) {
                     SanPham_DoUong spDoUong = new SanPham_DoUong(index);
                     showForm(spDoUong);
-                } else if (index == 7) {
+                } else if(index == 6){
+                    HoSo hoso = new HoSo();
+                    showForm(hoso);
+                            
+                } 
+                else if (index == 7) {
                     System.out.println("Logout");
                     // Thực hiện logout ở đây nếu cần
                 } else {
@@ -129,50 +135,50 @@ public class Main extends javax.swing.JFrame {
     } catch (Exception ex) {
         ex.printStackTrace();
     }
-new Main().setVisible(true);
-//    java.awt.EventQueue.invokeLater(new Runnable() {
-//        public void run() {
-//            // 1. Mở màn hình Loading trước
-//            LoadingScreen loadingScreen = new LoadingScreen();
-//            loadingScreen.setVisible(true);
-//
-//            // 2. Tạo 1 Thread để chạy loading
-//            new Thread(() -> {
-//                try {
-//                    for (int i = 0; i <= 100; i++) {
-//                        Thread.sleep(5); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
-//                        loadingScreen.updateProgress(i);
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                loadingScreen.dispose();
-//                
-//                LoginForm login = new LoginForm();
-//                login.setVisible(true);
-//
-//                // 4. Chờ login xong
-//                while (login.isDisplayable()) {
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//              
-//                if (login.isLoginSuccessful()) {
-//                Main mainFrame = new Main();
-//                GlassPanePopup.install(mainFrame); 
-//                Notifications.getInstance().setJFrame(mainFrame);
-//                mainFrame.setVisible(true);
-//            } else {
-//                System.exit(0); 
-//}
-//            }).start();
-//        }
-//    });
+//new Main().setVisible(true);
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            // 1. Mở màn hình Loading trước
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.setVisible(true);
+
+            // 2. Tạo 1 Thread để chạy loading
+            new Thread(() -> {
+                try {
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(5); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
+                        loadingScreen.updateProgress(i);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                loadingScreen.dispose();
+                
+                LoginForm login = new LoginForm();
+                login.setVisible(true);
+
+                // 4. Chờ login xong
+                while (login.isDisplayable()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+              
+                if (login.isLoginSuccessful()) {
+                Main mainFrame = new Main();
+                GlassPanePopup.install(mainFrame); 
+                Notifications.getInstance().setJFrame(mainFrame);
+                mainFrame.setVisible(true);
+            } else {
+                System.exit(0); 
+}
+            }).start();
+        }
+    });
 }
 
     

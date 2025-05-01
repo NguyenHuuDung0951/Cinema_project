@@ -28,6 +28,27 @@ public class SanPham_DoAn_1 extends JPanel {
             ex.printStackTrace();
         }
         loadProducts("");
+                    txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+                @Override
+                public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                    searchLive();
+                }
+
+                @Override
+                public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                    searchLive();
+                }
+
+                @Override
+                public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                   
+                }
+
+                private void searchLive() {
+                    String keyword = txtSearch.getText().trim();
+                    loadProducts(keyword);  
+                }
+            });
     }
 
     private void initComponents() {
@@ -55,7 +76,7 @@ public class SanPham_DoAn_1 extends JPanel {
         btnAdd.addActionListener(e -> {
             JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm sản phẩm", true);
             dialog.setContentPane(new ThemSanPham());
-            dialog.pack(); // hoặc dialog.setSize(width, height);
+            dialog.pack(); 
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
         });

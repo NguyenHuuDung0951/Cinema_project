@@ -14,6 +14,13 @@ public class UuDai_Form extends javax.swing.JPanel {
 
     public UuDai_Form() {
         initComponents();
+        jTable1.putClientProperty(FlatClientProperties.STYLE, ""
+                    + "rowHeight:50;"
+                    + "showHorizontalLines:true;"
+                    + "intercellSpacing:0,1;"
+                    + "cellFocusColor:$TableHeader.hoverBackground;"
+                    + "selectionBackground:$TableHeader.hoverBackground;"
+                    + "selectionForeground:$Table.foreground;");
     }
 
     @SuppressWarnings("unchecked")
@@ -21,7 +28,7 @@ public class UuDai_Form extends javax.swing.JPanel {
     private void initComponents() {
         setLayout(new BorderLayout());
         setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();   
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -146,7 +153,7 @@ public class UuDai_Form extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

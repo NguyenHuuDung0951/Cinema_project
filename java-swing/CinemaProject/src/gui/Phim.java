@@ -79,6 +79,33 @@ public class Phim extends javax.swing.JPanel {
                     + "background:$Panel.background");
 
         });
+        txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+    @Override
+    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        searchLive();
+    }
+
+    @Override
+    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        searchLive();
+    }
+
+    @Override
+    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+      
+    }
+
+    private void searchLive() {
+        String keyword = txtSearch.getText().trim();
+        if (!keyword.isEmpty()) {
+            Movie_DAO dao = new Movie_DAO();
+            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
+            loadTableMovie(searchResults);
+        } else {
+            loadTableMovieNoImage();
+        }
+    }
+});
     }
 
     private void loadTableMovieNoImage() {
@@ -148,7 +175,6 @@ public class Phim extends javax.swing.JPanel {
         btnAdd = new component.ButtonAction();
         btnDel1 = new component.ButtonAction();
         btnUpdate1 = new component.ButtonAction();
-        txtSearch1 = new component.ButtonAction();
         pnlbody = new javax.swing.JPanel();
         scroll = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -198,13 +224,6 @@ public class Phim extends javax.swing.JPanel {
             }
         });
 
-        txtSearch1.setText("Tìm kiếm");
-        txtSearch1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearch1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pnlHeaderLayout = new javax.swing.GroupLayout(pnlHeader);
         pnlHeader.setLayout(pnlHeaderLayout);
         pnlHeaderLayout.setHorizontalGroup(
@@ -212,9 +231,7 @@ public class Phim extends javax.swing.JPanel {
             .addGroup(pnlHeaderLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 410, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 517, Short.MAX_VALUE)
                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(btnDel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,8 +249,7 @@ public class Phim extends javax.swing.JPanel {
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnUpdate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
         );
 
@@ -258,8 +274,15 @@ public class Phim extends javax.swing.JPanel {
             new String [] {
                 "Mã Phim", "Tên Phim", "Trạng Thái", "Thời Lượng(Phút)"
             }
-        ));
-        table.getTableHeader().setReorderingAllowed(false);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scroll.setViewportView(table);
 
         javax.swing.GroupLayout pnlbodyLayout = new javax.swing.GroupLayout(pnlbody);
@@ -273,10 +296,7 @@ public class Phim extends javax.swing.JPanel {
         );
         pnlbodyLayout.setVerticalGroup(
             pnlbodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlbodyLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
         );
 
         add(pnlbody, java.awt.BorderLayout.CENTER);
@@ -284,21 +304,21 @@ public class Phim extends javax.swing.JPanel {
 
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        String keyword = txtSearch.getText().trim();
-
-        if (!keyword.isEmpty()) {
-            Movie_DAO dao = new Movie_DAO();
-            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
-
-            if (!searchResults.isEmpty()) {
-                loadTableMovie(searchResults);
-            } else {
-                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
-                loadTableMovie(new ArrayList<>());
-            }
-        } else {
-            loadTableMovieNoImage();
-        }
+//        String keyword = txtSearch.getText().trim();
+//
+//        if (!keyword.isEmpty()) {
+//            Movie_DAO dao = new Movie_DAO();
+//            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
+//
+//            if (!searchResults.isEmpty()) {
+//                loadTableMovie(searchResults);
+//            } else {
+//                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
+//                loadTableMovie(new ArrayList<>());
+//            }
+//        } else {
+//            loadTableMovieNoImage();
+//        }
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void btnDel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDel1ActionPerformed
@@ -493,24 +513,6 @@ public class Phim extends javax.swing.JPanel {
 
     }//GEN-LAST:event_buttonAction3ActionPerformed
 
-    private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
-        String keyword = txtSearch.getText().trim();
-
-        if (!keyword.isEmpty()) {
-            Movie_DAO dao = new Movie_DAO();
-            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
-
-            if (!searchResults.isEmpty()) {
-                loadTableMovie(searchResults);
-            } else {
-                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
-                loadTableMovie(new ArrayList<>());
-            }
-        } else {
-            loadTableMovieNoImage();
-        }
-    }//GEN-LAST:event_txtSearch1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private component.ButtonAction btnAdd;
@@ -525,7 +527,6 @@ public class Phim extends javax.swing.JPanel {
     private javax.swing.JScrollPane scroll;
     private javax.swing.JTable table;
     private javax.swing.JTextField txtSearch;
-    private component.ButtonAction txtSearch1;
     // End of variables declaration//GEN-END:variables
 
 }
