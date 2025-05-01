@@ -53,8 +53,13 @@ public class SanPham_DoAn_1 extends JPanel {
 
         btnSearch.addActionListener(e -> loadProducts(txtSearch.getText().trim()));
         btnAdd.addActionListener(e -> {
-            // TODO: mở dialog thêm SP mới
+            JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm sản phẩm", true);
+            dialog.setContentPane(new ThemSanPham());
+            dialog.pack(); // hoặc dialog.setSize(width, height);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
         });
+
     }
 
     private void loadProducts(String keyword) {
