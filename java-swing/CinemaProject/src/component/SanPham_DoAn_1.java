@@ -63,7 +63,7 @@ public class SanPham_DoAn_1 extends JPanel {
         ArrayList<Product> list = dao.getalltbProduct();
         NumberFormat nf = NumberFormat.getIntegerInstance(new Locale("vi", "VN"));
         for (Product p : list) {
-            if (keyword.isEmpty() || p.getProductName().toLowerCase().contains(keyword.toLowerCase())) {
+            if ((p.getProductType().equalsIgnoreCase("Đồ ăn")) && (keyword.isEmpty() || p.getProductName().toLowerCase().contains(keyword.toLowerCase()))) {
                 pnlFood.add(createProductCard(p, nf));
             }
         }
