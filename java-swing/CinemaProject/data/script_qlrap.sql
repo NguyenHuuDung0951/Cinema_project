@@ -153,6 +153,8 @@ VALUES
 	 ('P011', N'Nước FanTa Cam', 50, N'Thức uống', 20000, '/image/p011.jpg'),
     ('P012', N'Nước FanTa Dâu', 40, N'Thức uống', 20000, '/image/p012.jpg');
 
+DELETE FROM Product
+WHERE productID = 'P111'
 -- MOVIE 
 INSERT INTO Movie (movieID, movieName, status, duration, posterPath)
 VALUES 
