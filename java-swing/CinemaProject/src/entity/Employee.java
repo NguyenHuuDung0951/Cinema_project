@@ -30,6 +30,11 @@ public class Employee {
         this.account = account;
     }
 
+    public Employee(String eid, String name) {
+        this.employeeID = eid;
+        this.fullName = name;
+    }
+
     public String getEmployeeID() { return employeeID; }
     public void setEmployeeID(String employeeID) { this.employeeID = employeeID; }
 

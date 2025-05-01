@@ -1,6 +1,7 @@
 DELETE FROM OrderDetail
-DELETE FROM Orders
 DELETE FROM TicketDetail
+DELETE FROM Orders
+
 
 SELECT * FROM Orders
 SELECT * FROM OrderDetail

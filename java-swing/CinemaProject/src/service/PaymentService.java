@@ -3,6 +3,7 @@ package service;
 import dao.*;
 import entity.*;
 import java.awt.Desktop;
+import static java.awt.SystemColor.desktop;
 import java.io.File;
 import java.io.IOException;
 import model.BookingData;
@@ -37,7 +38,6 @@ public class PaymentService {
                     ? new Voucher(bd.getVoucherID())
                     : null);
             new Orders_DAO().addOrder(order);
-
             // 2. Ghi TicketDetail cho mỗi ghế
             TicketDetail_DAO ticketDao = new TicketDetail_DAO();
             Seat_DAO seatDao = new Seat_DAO();
@@ -65,7 +65,8 @@ public class PaymentService {
                         dateTime,
                         seat,
                         new Room(bd.getRoomID()),
-                        pricePerSeat
+                        pricePerSeat,
+                        order
                 );
                 ticketDao.addTicket(ticket);
                 tickets.add(ticket);
@@ -104,21 +105,18 @@ public class PaymentService {
                     if (invoiceFile.exists()) {
                         desktop.open(invoiceFile);
                     }
-
-                    // 4b. Mở tất cả ticket PDF trong thư mục
-                    File ticketDir = new File(ticketFolder);
-                    if (ticketDir.exists() && ticketDir.isDirectory()) {
-                        for (File f : ticketDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"))) {
+                    for (TicketDetail t : bd.getLastTickets()) {
+                        String path = ticketFolder + "/Ticket_" + t.getSeat().getLocation() + ".pdf";
+                        File f = new File(path);
+                        if (f.exists()) {
                             desktop.open(f);
                         }
                     }
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
-                    // Nếu muốn: thông báo lỗi mở file
                 }
             }
             bd.reset();
-            // Đường dẫn thư mục sẽ lưu hóa đơn & vé
 
             return true;
 

@@ -58,8 +58,8 @@ public class SanPham_DoAn_1 extends JPanel {
             dialog.pack(); // hoặc dialog.setSize(width, height);
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
+            loadProducts(txtSearch.getText().trim());
         });
-
     }
 
     private void loadProducts(String keyword) {

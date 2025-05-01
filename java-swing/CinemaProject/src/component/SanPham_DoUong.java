@@ -58,6 +58,7 @@ public class SanPham_DoUong extends JPanel {
             dialog.pack(); // hoặc dialog.setSize(width, height);
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
+            loadProducts(txtSearch.getText().trim());
         });
     }
 

@@ -105,9 +105,11 @@ CREATE TABLE TicketDetail (
     seatID VARCHAR(50),
     room VARCHAR(50),
     ticketPrice FLOAT,
+	orderID VARCHAR(50),
     FOREIGN KEY (movieID) REFERENCES Movie(movieID),
     FOREIGN KEY (seatID) REFERENCES Seat(seatID),
-    FOREIGN KEY (room) REFERENCES Room(room)
+    FOREIGN KEY (room) REFERENCES Room(room),
+	FOREIGN KEY (orderID) REFERENCES Orders(orderID)
 );
 
 CREATE TABLE OrderDetail (
@@ -375,8 +377,8 @@ BEGIN
 
     SET @NewID = 'T' + RIGHT('000' + CAST(@Number AS VARCHAR(3)), 3)
 
-    INSERT INTO TicketDetail(ticketID, movieID, showDate, seatID, room, ticketPrice)
-    SELECT @NewID, movieID, showDate, seatID, room, ticketPrice
+    INSERT INTO TicketDetail(ticketID, movieID, showDate, seatID, room, ticketPrice, orderID)
+    SELECT @NewID, movieID, showDate, seatID, room, ticketPrice, orderID
     FROM inserted
 END
 GO

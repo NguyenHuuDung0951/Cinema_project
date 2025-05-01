@@ -1,13 +1,16 @@
 package dao;
 
 import connectDB.ConnectDB;
+import entity.Employee;
 import entity.Orders;
+import entity.Voucher;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 public class Orders_DAO {
 
@@ -48,4 +51,33 @@ public class Orders_DAO {
             return ps.executeUpdate() > 0;
         }
     }
+
+    public Orders getOrderByID(String orderID) throws SQLException {
+        String sql = ""
+                + "SELECT o.orderID, o.orderDate, o.totalPrice, "
+                + "       o.employeeID, e.fullName, "
+                + "       o.voucherID "
+                + "FROM Orders o "
+                + "  JOIN Employee e ON o.employeeID = e.employeeID "
+                + "WHERE o.orderID = ?";
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, orderID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    LocalDate date = rs.getDate("orderDate").toLocalDate();
+                    double total = rs.getDouble("totalPrice");
+                    String eid = rs.getString("employeeID");
+                    String name = rs.getString("fullName");
+                    Employee emp = new Employee(eid, name);
+
+                    String vid = rs.getString("voucherID");
+                    Voucher v = vid != null ? new Voucher(vid) : null;
+
+                    return new Orders(orderID, date, total, emp, v);
+                }
+                return null;
+            }
+        }
+    }
+
 }

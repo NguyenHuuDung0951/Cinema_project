@@ -12,19 +12,28 @@ public class TicketDetail {
     private Seat seat;
     private Room room;
     private double ticketPrice;
+    private Orders orders;
 
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
+    }
     public TicketDetail(String ticketID) {
         this.ticketID = ticketID;
     }
 
     public TicketDetail(String ticketID, Movie movie, LocalDateTime showDate,
-            Seat seat, Room room, double ticketPrice) {
+            Seat seat, Room room, double ticketPrice, Orders orders) {
         this.ticketID = ticketID;
         this.movie = movie;
         this.showDate = showDate;
         this.seat = seat;
         this.room = room;
         this.ticketPrice = ticketPrice;
+        this.orders = orders;
     }
 
     public String getTicketID() {
