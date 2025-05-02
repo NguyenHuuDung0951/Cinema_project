@@ -25,7 +25,20 @@ public class CapNhatSanPham extends javax.swing.JPanel {
      */
     public CapNhatSanPham(Product p) {
         initComponents();
+        
+        
         jTextField1.setText(p.getProductID());
+        jTextField1.setEditable(false);
+
+        jTextField2.setText(p.getProductName());
+        jTextField3.setText(String.valueOf(p.getQuantity()));
+        jTextField5.setText(String.valueOf(p.getPrice()));
+        jComboBox1.setSelectedItem(p.getProductType());
+
+        // Gán tên file ảnh
+        String fileName = p.getPosterPath().substring(p.getPosterPath().lastIndexOf("/") + 1);
+        jTextField4.setText(fileName);
+        posterFileName = fileName;
     }
 
     /**
@@ -92,14 +105,13 @@ public class CapNhatSanPham extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6))
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)

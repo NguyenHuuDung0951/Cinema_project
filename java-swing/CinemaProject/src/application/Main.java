@@ -22,6 +22,8 @@ import entity.OrderDetail;
 import entity.Orders;
 import entity.TicketDetail;
 import entity.Voucher;
+import gui.LoginForm;
+import even.EventMenu;
 import even.EventMenu;
 import gui.LoginForm;
 import gui.Phim;
@@ -105,7 +107,19 @@ public class Main extends javax.swing.JFrame {
                     ProfileForm profile = new ProfileForm(currentEmployee);
                     showForm(profile);
                 } else if (index == 7) {
-                    //Log out
+                    int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                            Main.this,
+                            "Bạn có chắc chắn muốn đăng xuất?",
+                            "Xác nhận đăng xuất",
+                            javax.swing.JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                        dispose();
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.setVisible(true);
+                    }
+
                 } else {
                     showForm(new Form(index));
                 }
@@ -220,6 +234,11 @@ public class Main extends javax.swing.JFrame {
                 loadingScreen.setVisible(true);
 
                 new Thread(() -> {
+                    loadingScreen.dispose();
+
+                    LoginForm login = new LoginForm();
+                    login.setVisible(true);
+
                     try {
                         for (int i = 0; i <= 100; i++) {
                             Thread.sleep(5);
@@ -230,9 +249,6 @@ public class Main extends javax.swing.JFrame {
                     }
 
                     loadingScreen.dispose();
-
-                    LoginForm login = new LoginForm();
-                    login.setVisible(true);
 
                     while (login.isDisplayable()) {
                         try {
@@ -259,8 +275,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel body;
     private javax.swing.JPanel jPanel1;

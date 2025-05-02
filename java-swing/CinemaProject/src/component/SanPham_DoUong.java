@@ -37,7 +37,7 @@ public class SanPham_DoUong extends JPanel {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         topPanel.setBackground(getBackground());
         txtSearch = new JTextField(80);
-         btnSearch = new JButton("Tìm");
+        btnSearch = new JButton("Tìm");
         btnSearch.setBackground(Color.red);
         btnAdd = new JButton("Thêm SP");
         btnAdd.setBackground(Color.green);
@@ -54,13 +54,34 @@ public class SanPham_DoUong extends JPanel {
         add(scroll, BorderLayout.CENTER);
 
         btnSearch.addActionListener(e -> loadProducts(txtSearch.getText().trim()));
+        txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchLive();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchLive();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+
+            }
+
+            private void searchLive() {
+                String keyword = txtSearch.getText().trim();
+                loadProducts(keyword);
+            }
+        });
         btnAdd.addActionListener(e -> {
             JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm sản phẩm", true);
             dialog.setContentPane(new ThemSanPham());
 
             dialog.pack();
 
-            dialog.pack(); 
+            dialog.pack();
 
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
@@ -84,11 +105,11 @@ public class SanPham_DoUong extends JPanel {
 
     private JPanel createProductCard(Product p, NumberFormat nf) {
         JPanel card = new JPanel();
-        card.setPreferredSize(new Dimension(400, 300));
+        card.setPreferredSize(new Dimension(350, 300));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY,4),
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 4),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
@@ -99,9 +120,6 @@ public class SanPham_DoUong extends JPanel {
         Image img = icon.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
         lblImg.setIcon(new ImageIcon(img));
         lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
-
 
         JLabel lblName = new JLabel(p.getProductName(), SwingConstants.CENTER);
         lblName.setFont(lblName.getFont().deriveFont(Font.BOLD, 14f));
@@ -126,39 +144,37 @@ public class SanPham_DoUong extends JPanel {
             b.setFont(b.getFont().deriveFont(11f));
             btnPanel.add(b);
         }
-        
-        
+
         btnDelete.addActionListener(e -> {
-    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        try {
-            Product_DAO dao = new Product_DAO();
-            boolean deleted = dao.xoaProduct(p.getProductID());
-            if (deleted) {
-                JOptionPane.showMessageDialog(this, "Xóa thành công!");
-                loadProducts(txtSearch.getText().trim()); 
-            } else {
-                JOptionPane.showMessageDialog(this, "Xóa thất bại!");
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    Product_DAO dao = new Product_DAO();
+                    boolean deleted = dao.xoaProduct(p.getProductID());
+                    if (deleted) {
+                        JOptionPane.showMessageDialog(this, "Xóa thành công!");
+                        loadProducts(txtSearch.getText().trim());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Xóa thất bại!");
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xóa sản phẩm!");
+                }
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi xóa sản phẩm!");
-        }
-    }
-});
-        
-        
- btnUpdate.addActionListener(e -> {
-    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn cập nhật sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        JDialog dialog=new JDialog((Frame) SwingUtilities.getWindowAncestor(this),"Cập Nhật Sản Phẩm",true);
-        dialog.setContentPane(new CapNhatSanPham(p));
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-        loadProducts(txtSearch.getText().trim());
-    }
- });
+        });
+
+        btnUpdate.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn cập nhật sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Cập Nhật Sản Phẩm", true);
+                dialog.setContentPane(new CapNhatSanPham(p));
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+                loadProducts(txtSearch.getText().trim());
+            }
+        });
         card.add(lblImg);
         card.add(Box.createVerticalStrut(8));
         card.add(lblName);

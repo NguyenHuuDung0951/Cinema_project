@@ -2,18 +2,69 @@ package gui;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import component.AddForm2;
+import dao.Voucher_DAO;
 import entity.Voucher;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
+import raven.popup.DefaultOption;
+import raven.popup.GlassPanePopup;
+import raven.popup.component.SimplePopupBorder;
+import raven.toast.Notifications;
 
 public class UuDai_Form extends javax.swing.JPanel {
 
     public UuDai_Form() {
         initComponents();
+        jTable1.putClientProperty(FlatClientProperties.STYLE, ""
+                + "rowHeight:50;"
+                + "showHorizontalLines:true;"
+                + "intercellSpacing:0,1;"
+                + "cellFocusColor:$TableHeader.hoverBackground;"
+                + "selectionBackground:$TableHeader.hoverBackground;"
+                + "selectionForeground:$Table.foreground;");
+
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPromotionActionPerformed(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateVoucherActionPerformed(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletePromotionActionPerformed(evt);
+            }
+        });
+        jTextField1.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                searchLive();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                searchLive();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                // Thường không cần thiết cho JTextField
+            }
+
+            private void searchLive() {
+                String keyword = jTextField1.getText().trim();
+                loadVoucher(keyword);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -159,6 +210,120 @@ public class UuDai_Form extends javax.swing.JPanel {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
 
+    
+    
+    
+   private void btnAddPromotionActionPerformed(java.awt.event.ActionEvent evt) {
+        AddForm2 form = new AddForm2();
+        DefaultOption option = new DefaultOption() {
+            @Override
+            public boolean closeWhenClickOutside() {
+                return true;
+            }
+        };
+
+        String[] actions = {"Lưu", "Hủy"};
+        GlassPanePopup.showPopup(new SimplePopupBorder(form, "Thêm Ưu Đãi", actions, (popupController, selectedIndex) -> {
+            if (selectedIndex == 0) {
+                try {
+                    if (form.validateInput()) {
+                        Voucher_DAO dao = new Voucher_DAO();
+                        Voucher voucher = form.getUuDai();
+
+                        if (dao.insertVoucher(voucher)) {
+
+                            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Thêm ưu đãi thành công!");
+
+                            ArrayList<Voucher> dsVoucher = dao.getalltbVoucher();
+                            loadDataToTable(dsVoucher);
+                            popupController.closePopup();
+                        } else {
+                            Notifications.getInstance().show(Notifications.Type.ERROR, "Lỗi khi lưu ưu đãi!");
+                        }
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.WARNING, "Thông tin chưa hợp lệ!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi thêm ưu đãi!");
+                }
+            } else {
+                popupController.closePopup();
+            }
+        }), option);
+    }
+
+    private void btnDeletePromotionActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Vui lòng chọn khuyến mãi để xóa!");
+            return;
+        }
+        String voucherID = jTable1.getValueAt(selectedRow, 0).toString();
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khuyến mãi này?", "Xác nhận xóa", javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            Voucher_DAO dao = new Voucher_DAO();
+            if (dao.deleteVoucher(voucherID)) {
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, "Xóa ưu đãi thành công!");
+                ArrayList<Voucher> dsVoucher = dao.getalltbVoucher();
+                loadDataToTable(dsVoucher);
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, "Lỗi khi xóa ưu đãi!");
+            }
+        }
+    }
+
+    private void btnUpdateVoucherActionPerformed(java.awt.event.ActionEvent evt) {
+        List<Voucher> list = getSelectedVouchers();
+
+        if (list.size() == 1) {
+            Voucher data = list.get(0);
+            AddForm2 form = new AddForm2();
+            form.setUuDai(data);
+            showVoucherPopup(form, "Sửa Ưu Đãi [" + data.getVoucherName() + "]", data);
+        } else {
+            Notifications.getInstance().show(Notifications.Type.WARNING, list.isEmpty()
+                    ? "Vui lòng chọn ưu đãi để chỉnh sửa" : "Vui lòng chỉ chọn một ưu đãi để chỉnh sửa");
+        }
+    }
+
+    private void showVoucherPopup(AddForm2 form, String title, Voucher data) {
+        String[] actions = {"Sửa", "Hủy"};
+
+        DefaultOption option = new DefaultOption() {
+            @Override
+            public boolean closeWhenClickOutside() {
+                return true;
+            }
+        };
+
+        GlassPanePopup.showPopup(new SimplePopupBorder(form, title, actions, (popupController, selectedIndex) -> {
+            if (selectedIndex == 0 && form.validateInput()) {
+                try {
+                    Voucher_DAO dao = new Voucher_DAO();
+                    Voucher editedVoucher = form.getUuDai();
+                    editedVoucher.setVoucherID(data.getVoucherID());
+                    if (new Voucher_DAO().updateVoucher(editedVoucher)) {
+                        Notifications.getInstance().show(Notifications.Type.SUCCESS, "Cập nhật ưu đãi thành công");
+                        ArrayList<Voucher> dsVoucher = dao.getalltbVoucher();
+                        loadDataToTable(dsVoucher);;
+                    } else {
+                        Notifications.getInstance().show(Notifications.Type.ERROR, "Cập nhật ưu đãi thất bại");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Notifications.getInstance().show(Notifications.Type.ERROR, "Đã xảy ra lỗi khi cập nhật ưu đãi!");
+                } finally {
+                    popupController.closePopup();
+                }
+            } else {
+                popupController.closePopup();
+            }
+        }), option);
+    }
+
+
     public void loadDataToTable(ArrayList<Voucher> dsVoucher) {
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -173,6 +338,43 @@ public class UuDai_Form extends javax.swing.JPanel {
                 vc.getMinimumPrice(),
                 vc.getValueVoucher()
             });
+        }
+    }
+
+    private List<Voucher> getSelectedVouchers() {
+        int[] selectedRows = jTable1.getSelectedRows();
+        List<Voucher> selectedVouchers = new ArrayList<>();
+
+        for (int row : selectedRows) {
+            String voucherID = jTable1.getValueAt(row, 0).toString();
+
+            Voucher voucher = new Voucher_DAO().getVoucherByID(voucherID);
+            selectedVouchers.add(voucher);
+        }
+
+        return selectedVouchers;
+    }
+
+    private void loadVoucher(String keyword) {
+        Voucher_DAO dao = new Voucher_DAO();
+        ArrayList<Voucher> list = dao.getalltbVoucher();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        keyword = keyword.toLowerCase();
+
+        for (Voucher v : list) {
+            if (v.getVoucherID().toLowerCase().contains(keyword)
+                    || v.getVoucherName().toLowerCase().contains(keyword)) {
+                model.addRow(new Object[]{
+                    v.getVoucherID(),
+                    v.getVoucherName(),
+                    v.getStartDate(),
+                    v.getEndDate(),
+                    v.getMinimumPrice(),
+                    v.getValueVoucher()
+                });
+            }
         }
     }
 }

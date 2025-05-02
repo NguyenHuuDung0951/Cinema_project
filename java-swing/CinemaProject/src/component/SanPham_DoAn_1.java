@@ -28,6 +28,27 @@ public class SanPham_DoAn_1 extends JPanel {
             ex.printStackTrace();
         }
         loadProducts("");
+                    txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+                @Override
+                public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                    searchLive();
+                }
+
+                @Override
+                public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                    searchLive();
+                }
+
+                @Override
+                public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                   
+                }
+
+                private void searchLive() {
+                    String keyword = txtSearch.getText().trim();
+                    loadProducts(keyword);  
+                }
+            });
     }
 
     private void initComponents() {
@@ -81,7 +102,7 @@ public class SanPham_DoAn_1 extends JPanel {
 
     private JPanel createProductCard(Product p, NumberFormat nf) {
         JPanel card = new JPanel();
-        card.setPreferredSize(new Dimension(400, 300));
+        card.setPreferredSize(new Dimension(350, 300));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
