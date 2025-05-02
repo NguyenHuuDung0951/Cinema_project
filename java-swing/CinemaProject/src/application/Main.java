@@ -1,6 +1,5 @@
 package application;
 
-
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont; 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
@@ -74,8 +73,19 @@ public class Main extends javax.swing.JFrame {
                             
                 } 
                 else if (index == 7) {
-                    System.out.println("Logout");
-                    // Thực hiện logout ở đây nếu cần
+                    int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                    Main.this,
+                    "Bạn có chắc chắn muốn đăng xuất?",
+                    "Xác nhận đăng xuất",
+                    javax.swing.JOptionPane.YES_NO_OPTION
+                );
+
+                    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                    dispose(); 
+                    LoginForm loginForm = new LoginForm();
+                    loginForm.setVisible(true);
+    }
+                   
                 } else {
                     showForm(new Form(index));
                 }
@@ -135,7 +145,7 @@ public class Main extends javax.swing.JFrame {
     } catch (Exception ex) {
         ex.printStackTrace();
     }
-//new Main().setVisible(true);
+
     java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
             // 1. Mở màn hình Loading trước
@@ -158,7 +168,7 @@ public class Main extends javax.swing.JFrame {
                 LoginForm login = new LoginForm();
                 login.setVisible(true);
 
-                // 4. Chờ login xong
+             
                 while (login.isDisplayable()) {
                     try {
                         Thread.sleep(100);

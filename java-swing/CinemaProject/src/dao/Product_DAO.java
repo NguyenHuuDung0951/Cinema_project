@@ -37,7 +37,15 @@ public class Product_DAO {
         }
         return dsProduct;
     }
-
+    public boolean xoaProduct(String productID) throws SQLException
+    {
+        ConnectDB.getInstance();
+        Connection con=ConnectDB.getConnection();
+        String sql="DELETE FROM Product WHERE productID=?";
+        PreparedStatement stmt=con.prepareStatement(sql);
+        stmt.setString(1, productID);
+        return stmt.executeUpdate()>0;
+    }
     public boolean addProduct(Product p) {
         String sql = "INSERT INTO Product (productID, productName, quantity, productType, price , posterPath) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = ConnectDB.getInstance().getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -48,6 +56,22 @@ public class Product_DAO {
             stmt.setDouble(5, p.getPrice());
             stmt.setString(6, p.getPosterPath());
             
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateProduct(Product p)
+    {
+         String sql = "UPDATE Product SET productName=?,quantity=?,productType=?,price=?,posterPath=? WHERE productID=?";
+        try (Connection con = ConnectDB.getInstance().getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, p.getProductName());
+            stmt.setInt(2, p.getQuantity());
+            stmt.setString(3, p.getProductType());
+            stmt.setDouble(4, p.getPrice());
+            stmt.setString(5, p.getPosterPath());
+             stmt.setString(6, p.getProductID());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

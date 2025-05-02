@@ -33,11 +33,11 @@ public final class AddForm extends javax.swing.JPanel {
                 LocalDateTime end = LocalDateTime.of(date, time).plusMinutes(dur);
                 jTextField4.setText(end.toLocalTime().format(tf));
             } catch (DateTimeParseException | NumberFormatException ex) {
-                // nếu chưa đầy đủ hoặc sai định dạng, để trống
+
                 jTextField4.setText("");
             }
         };
-        // lắng nghe thay đổi
+
         jTextField2.getDocument().addDocumentListener((SimpleDocumentListener) e
                 -> recompute.accept(jTextField2.getText(), jTextField3.getText()));
         jTextField3.getDocument().addDocumentListener((SimpleDocumentListener) e

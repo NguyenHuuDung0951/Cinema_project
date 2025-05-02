@@ -9,15 +9,18 @@ import dao.MovieSchedule_DAO;
 import dao.Movie_DAO;
 import entity.Movie;
 import entity.MovieSchedule;
+import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -37,6 +40,7 @@ public class Phim extends javax.swing.JPanel {
         initComponents();
         init();
         loadTableMovieNoImage();
+
     }
 
     private void init() {
@@ -56,7 +60,7 @@ public class Phim extends javax.swing.JPanel {
             }
 
             table.putClientProperty(FlatClientProperties.STYLE, ""
-                    + "rowHeight:50;"
+                    + "rowHeight:200;"
                     + "showHorizontalLines:true;"
                     + "intercellSpacing:0,1;"
                     + "cellFocusColor:$TableHeader.hoverBackground;"
@@ -79,6 +83,25 @@ public class Phim extends javax.swing.JPanel {
                     + "background:$Panel.background");
 
         });
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+            table.setModel(new DefaultTableModel(
+            model.getDataVector(),
+            new Vector<>(List.of("Mã Phim", "Tên Phim", "Trạng Thái", "Thời Lượng(Phút)", "Hình Ảnh"))
+) {
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if (columnIndex == 4) {
+            return ImageIcon.class;
+        }
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+});
+      
         txtSearch.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
     @Override
     public void insertUpdate(javax.swing.event.DocumentEvent e) {
@@ -108,55 +131,92 @@ public class Phim extends javax.swing.JPanel {
 });
     }
 
-    private void loadTableMovieNoImage() {
-        Movie_DAO dao = new Movie_DAO();
-        listMovies = dao.getalltbMovie();
+private void loadTableMovieNoImage() {
+    Movie_DAO dao = new Movie_DAO();
+    listMovies = dao.getalltbMovie();
 
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setRowCount(0);
-        for (Movie m : listMovies) {
-            model.addRow(new Object[]{
-                m.getMovieID(),
-                m.getMovieName(),
-                m.getStatus(),
-                m.getDuration()
-            });
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    model.setRowCount(0);
+    for (Movie m : listMovies) {
+        ImageIcon icon = null;
+        ImageIcon iconDefault = new ImageIcon(getClass().getResource("/image/johnwick4.jpg"));
+        
+        String path = m.getPosterPath(); 
+//        URL url = getClass().getResource(path);
+     
+
+        try {
+            if (path != null && !path.trim().isEmpty()) {
+                
+//                if (path.startsWith("/")) {
+//                    path = path.substring(1);
+//                }
+
+                URL imageUrl = getClass().getResource(path);
+                
+                if (imageUrl != null) {
+                    ImageIcon rawIcon = new ImageIcon(imageUrl);
+                    if (rawIcon.getIconWidth() != -1) {
+                        Image scaledImg = rawIcon.getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH);
+                        icon = new ImageIcon(scaledImg);
+                    }
+                } else {
+                    System.out.println("Không tìm thấy hình ảnh tại: " + path);
+                    icon = iconDefault;
+                }
+            } else {
+                icon = iconDefault;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            icon = iconDefault;
         }
+
+        model.addRow(new Object[]{
+            m.getMovieID(),
+            m.getMovieName(),
+            m.getStatus(),
+            m.getDuration(),
+            icon
+        });
     }
+
+}
+
+
 
     private void loadTableMovie(List<Movie> list) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        for (Movie movie : list) {
-            Object[] row = {
-                movie.getMovieID(),
-                movie.getMovieName(),
-                movie.getStatus(),
-                movie.getDuration()
-            };
-            model.addRow(row);
+      for (Movie m : list) {
+        ImageIcon icon = null;
+
+        try {
+            String path = m.getPosterPath();
+            if (path != null && !path.trim().isEmpty()) {
+                ImageIcon rawIcon = new ImageIcon(path);
+                Image scaledImg = rawIcon.getImage().getScaledInstance(60, 90, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(scaledImg);
+            }
+        } catch (Exception e) {
+            icon = null;
         }
+
+        model.addRow(new Object[]{
+            m.getMovieID(),
+            m.getMovieName(),
+            m.getStatus(),
+            m.getDuration(),
+            icon
+        });
+    }
     }
 
-//    private List<Movie> getSelectedMovies() {
-//        List<Movie> selectedMovies = new ArrayList<>();
-//        int[] selectedRows = table.getSelectedRows();
-//        for (int row : selectedRows) {
-//            String movieID = table.getValueAt(row, 0).toString().trim();
-//            String movieName = table.getValueAt(row, 1).toString().trim();
-//            String status = table.getValueAt(row, 2).toString().trim();
-//            int duration = Integer.parseInt(table.getValueAt(row, 3).toString().trim());
-//            String posterPath = table.getValueAt(row, 4).toString().trim();
-//            selectedMovies.add(new Movie(movieID, movieName, status, duration, posterPath));
-//        }
-//        return selectedMovies;
-//    }
     private List<Movie> getSelectedMovies() {
         List<Movie> selected = new ArrayList<>();
         int[] rows = table.getSelectedRows();
         for (int r : rows) {
-            // Lấy nguyên object Movie đã load, bao gồm posterPath
             selected.add(listMovies.get(r));
         }
         return selected;
@@ -257,26 +317,26 @@ public class Phim extends javax.swing.JPanel {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã Phim", "Tên Phim", "Trạng Thái", "Thời Lượng(Phút)"
+                "Mã Phim", "Tên Phim", "Trạng Thái", "Thời Lượng(Phút)", "Hình Ảnh"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, false
+                true, true, true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -304,21 +364,7 @@ public class Phim extends javax.swing.JPanel {
 
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-//        String keyword = txtSearch.getText().trim();
-//
-//        if (!keyword.isEmpty()) {
-//            Movie_DAO dao = new Movie_DAO();
-//            ArrayList<Movie> searchResults = dao.searchMovieByName(keyword);
-//
-//            if (!searchResults.isEmpty()) {
-//                loadTableMovie(searchResults);
-//            } else {
-//                Notifications.getInstance().show(Notifications.Type.WARNING, "Không tìm thấy phim nào!");
-//                loadTableMovie(new ArrayList<>());
-//            }
-//        } else {
-//            loadTableMovieNoImage();
-//        }
+
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void btnDel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDel1ActionPerformed
@@ -487,6 +533,7 @@ public class Phim extends javax.swing.JPanel {
                         if (isSchedSaved) {
                             Notifications.getInstance().show(Notifications.Type.SUCCESS,
                                     "Lịch chiếu đã được thêm thành công!");
+                            loadTableMovieNoImage();
                         } else {
                             Notifications.getInstance().show(Notifications.Type.ERROR,
                                     "Phim lưu thành công nhưng lỗi lưu lịch chiếu!");

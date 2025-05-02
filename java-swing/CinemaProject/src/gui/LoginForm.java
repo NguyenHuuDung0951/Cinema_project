@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 
 public class LoginForm extends javax.swing.JFrame {
     private boolean loginSuccess = false;
@@ -85,6 +86,17 @@ public boolean isLoginSuccessful() {
                 btnLoginActionPerformed(evt);
             }
         });
+        btnLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnLoginKeyPressed(evt);
+            }
+        });
+
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPassKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout header1Layout = new javax.swing.GroupLayout(header1);
         header1.setLayout(header1Layout);
@@ -157,8 +169,20 @@ public boolean isLoginSuccessful() {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserKeyPressed
-
+        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+           btnLoginActionPerformed(null);
+       }
     }//GEN-LAST:event_txtUserKeyPressed
+
+    private void btnLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnLoginKeyPressed
+     
+    }//GEN-LAST:event_btnLoginKeyPressed
+
+    private void txtPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyPressed
+          if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+           btnLoginActionPerformed(null);
+       }
+    }//GEN-LAST:event_txtPassKeyPressed
 
     public static void main(String args[]) {
 
