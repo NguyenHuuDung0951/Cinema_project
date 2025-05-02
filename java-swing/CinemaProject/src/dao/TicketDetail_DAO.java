@@ -43,7 +43,7 @@ public class TicketDetail_DAO {
                     String sid = rs.getString("seatID");
                     String loc = rs.getString("location");
                     Seat seat = new Seat(sid);
-                    seat.setLocation(loc);   // cần thêm setter trong Seat nếu chưa có
+                    seat.setLocation(loc);   
 
                     Room room = new Room(rs.getString("room"));
 

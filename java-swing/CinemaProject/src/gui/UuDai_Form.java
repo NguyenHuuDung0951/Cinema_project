@@ -17,7 +17,7 @@ public class UuDai_Form extends javax.swing.JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+
     private void initComponents() {
         setLayout(new BorderLayout());
         setBackground(new java.awt.Color(255, 255, 255));
@@ -31,7 +31,7 @@ public class UuDai_Form extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
 
-        jLabel1.setFont(new java.awt.Font("Arial", Font.BOLD, 30)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", Font.BOLD, 30));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("THÔNG TIN KHUYẾN MÃI");
 
@@ -144,12 +144,11 @@ public class UuDai_Form extends javax.swing.JPanel {
                                         .addComponent(jButton3))
                                 .addGap(20, 20, 20))
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -159,12 +158,11 @@ public class UuDai_Form extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
-    // End of variables declaration//GEN-END:variables
 
     public void loadDataToTable(ArrayList<Voucher> dsVoucher) {
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ
+        model.setRowCount(0);
 
         for (Voucher vc : dsVoucher) {
             model.addRow(new Object[]{

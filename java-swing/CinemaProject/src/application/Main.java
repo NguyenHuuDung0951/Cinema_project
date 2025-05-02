@@ -5,17 +5,19 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import component.Menu;
 import component.Form;
-import component.Header;
 import component.InforOrders;
 import component.LoadingScreen;
 import component.SanPham_DoAn_1;
 import component.SanPham_DoUong;
 import gui.UuDai_Form;
 import connectDB.ConnectDB;
+import dao.Employee_DAO;
 import dao.OrderDetail_DAO;
 import dao.Orders_DAO;
 import dao.TicketDetail_DAO;
 import dao.Voucher_DAO;
+import entity.Account;
+import entity.Employee;
 import entity.OrderDetail;
 import entity.Orders;
 import entity.TicketDetail;
@@ -23,6 +25,7 @@ import entity.Voucher;
 import even.EventMenu;
 import gui.LoginForm;
 import gui.Phim;
+import gui.ProfileForm;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
@@ -30,30 +33,41 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.UIManager;
 import raven.popup.GlassPanePopup;
-import raven.toast.Notifications;
 import gui.ShowScheduleForm;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import raven.toast.Notifications;
 
 public class Main extends javax.swing.JFrame {
 
+    private static Main instance;
+    private JComboBox<String> cboOrderIDs;
     private Menu menu;
     private Voucher_DAO vc_dao;
     private UuDai_Form uudai;
     private JPanel searchHeader;
     private JTextField txtInvoiceSearch;
+    private Account currentAccount;
+    private Employee currentEmployee;
 
-    public Main() {
+    public Main(Account account) throws SQLException {
+        this.currentAccount = account;
+        this.currentEmployee = new Employee_DAO()
+                .getEmployeeByAccountID(account.getAccountID());
+        instance = this;
         initComponents();
-        // thay vì head = new Header();
         searchHeader = createSearchHeader();
 
         setExtendedState(MAXIMIZED_BOTH);
@@ -66,6 +80,7 @@ public class Main extends javax.swing.JFrame {
 
         menu = new Menu();
         main.add(menu, java.awt.BorderLayout.WEST);
+        showForm(new ProfileForm(currentEmployee));
         EventMenu event = new EventMenu() {
             @Override
             public void selected(int index) {
@@ -86,9 +101,11 @@ public class Main extends javax.swing.JFrame {
                 } else if (index == 41) {
                     SanPham_DoUong spDoUong = new SanPham_DoUong(index);
                     showForm(spDoUong);
+                } else if (index == 6) {
+                    ProfileForm profile = new ProfileForm(currentEmployee);
+                    showForm(profile);
                 } else if (index == 7) {
-                    System.out.println("Logout");
-                    // Thực hiện logout ở đây nếu cần
+                    //Log out
                 } else {
                     showForm(new Form(index));
                 }
@@ -97,16 +114,20 @@ public class Main extends javax.swing.JFrame {
         menu.initMenu(event);
     }
 
+    public static Main getInstance() {
+        return instance;
+    }
+
     private void showForm(Component com) {
         body.removeAll();
         body.setLayout(new BorderLayout());
-        body.add(searchHeader, BorderLayout.NORTH);    // dùng searchHeader
+        body.add(searchHeader, BorderLayout.NORTH);
         body.add(com, BorderLayout.CENTER);
         body.repaint();
         body.revalidate();
     }
 
-    private JPanel createSearchHeader() {
+    private JPanel createSearchHeader() throws SQLException {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         p.setBackground(Color.WHITE);
 
@@ -114,94 +135,37 @@ public class Main extends javax.swing.JFrame {
         lbl.setFont(lbl.getFont().deriveFont(Font.BOLD, 14f));
         p.add(lbl);
 
-        txtInvoiceSearch = new JTextField(15);
-        txtInvoiceSearch.setFont(txtInvoiceSearch.getFont().deriveFont(14f));
-        txtInvoiceSearch.addActionListener(e -> {
-            String orderID = txtInvoiceSearch.getText().trim();
-            InforOrders info = new InforOrders();
+        List<String> allOrderIDs = new Orders_DAO().getAllOrderIDs();
 
-            try {
-                Orders ord = new Orders_DAO().getOrderByID(orderID);
-                info.getTxtOrderID().setText(ord.getOrderID());
-                info.getTxtDate().setText(ord.getOrderDate().toString());
-                info.getTxtTotal().setText(String.valueOf(ord.getTotalPrice()));
-                info.getTxtEmployee().setText(ord.getEmployee().getFullName());
-            } catch (SQLException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            List<TicketDetail> tickets;
-            try {
-                tickets = new TicketDetail_DAO().getByOrderID(orderID);
-            } catch (SQLException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        cboOrderIDs = new JComboBox<>(
+                new DefaultComboBoxModel<>(new Vector<>(allOrderIDs))
+        );
+        cboOrderIDs.setEditable(true);
+        AutoCompleteDecorator.decorate(cboOrderIDs);
+
+        JTextField comboEditor
+                = (JTextField) cboOrderIDs.getEditor().getEditorComponent();
+        comboEditor.addActionListener(e -> {
+            String orderID = comboEditor.getText().trim();
+            if (orderID.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Bạn chưa nhập mã hóa đơn", "Lỗi", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            String movieName = "";
-            if (!tickets.isEmpty()) {
-                movieName = tickets.get(0).getMovie().getMovieName();
-            }
-            if (movieName == null || movieName.isEmpty()) {
-                JOptionPane.showMessageDialog(Main.this,
-                        "Phim đã bị xóa! Hóa đơn không hợp lệ",
-                        "Lỗi",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            info.getTxtMovieName().setText(movieName);
-
-            try {
-                List<OrderDetail> products = new OrderDetail_DAO().getByOrderID(orderID);
-                StringBuilder sbPro = new StringBuilder();
-                double sumPro = 0;
-
-                for (OrderDetail od : products) {
-                    int qty = od.getQuantity();
-                    double unitPrice = od.getProduct().getPrice();
-                    double lineTotal = qty * unitPrice;
-
-                    sbPro
-                            .append(od.getProduct().getProductName())
-                            .append(" (").append(qty).append("): ")
-                            .append(lineTotal) // thành tiền dòng
-                            .append("\n");
-
-                    sumPro += lineTotal;
-                }
-
-                sbPro.append("Tổng sản phẩm: ").append(sumPro);
-                info.getProductsTextArea().setText(sbPro.toString());
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Main.class.getName())
-                        .log(Level.SEVERE, null, ex);
-            }
-
-            try {
-                tickets = new TicketDetail_DAO().getByOrderID(orderID);
-                StringBuilder sbTick = new StringBuilder();
-                double sumTick = 0;
-                for (TicketDetail td : tickets) {
-                    sbTick.append(td.getSeat().getLocation())
-                            .append(": ").append(td.getTicketPrice())
-                            .append("\n");
-                    sumTick += td.getTicketPrice();
-                }
-                sbTick.append("Tổng vé: ").append(sumTick);
-                info.getTicketsTextArea().setText(sbTick.toString());
-            } catch (SQLException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            JDialog dialog = new JDialog(this, "Thông tin Hóa Đơn " + orderID, true);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.getContentPane().add(info);
-            dialog.pack();
-            dialog.setLocationRelativeTo(this);
-            dialog.setVisible(true);
+            cboOrderIDs.setSelectedItem(orderID);
+            showOrderInfo(orderID);
         });
-        p.add(txtInvoiceSearch);
 
+        p.add(cboOrderIDs);
         return p;
+    }
+
+    public void addOrderIDToCombo(String orderID) {
+        for (int i = 0; i < cboOrderIDs.getItemCount(); i++) {
+            if (orderID.equals(cboOrderIDs.getItemAt(i))) {
+                return;
+            }
+        }
+        cboOrderIDs.addItem(orderID);
     }
 
     @SuppressWarnings("unchecked")
@@ -239,7 +203,7 @@ public class Main extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         try {
             FlatRobotoFont.install();
             UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
@@ -248,17 +212,17 @@ public class Main extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                // 1. Mở màn hình Loading trước
+
                 LoadingScreen loadingScreen = new LoadingScreen();
                 loadingScreen.setVisible(true);
 
-                // 2. Tạo 1 Thread để chạy loading
                 new Thread(() -> {
                     try {
                         for (int i = 0; i <= 100; i++) {
-                            Thread.sleep(5); // 30ms tăng 1% (nhanh/chậm chỉnh tại đây)
+                            Thread.sleep(5);
                             loadingScreen.updateProgress(i);
                         }
                     } catch (InterruptedException e) {
@@ -270,7 +234,6 @@ public class Main extends javax.swing.JFrame {
                     LoginForm login = new LoginForm();
                     login.setVisible(true);
 
-                    // 4. Chờ login xong
                     while (login.isDisplayable()) {
                         try {
                             Thread.sleep(100);
@@ -280,10 +243,15 @@ public class Main extends javax.swing.JFrame {
                     }
 
                     if (login.isLoginSuccessful()) {
-                        Main mainFrame = new Main();
-                        GlassPanePopup.install(mainFrame);
-                        Notifications.getInstance().setJFrame(mainFrame);
-                        mainFrame.setVisible(true);
+                        try {
+                            Account acc = login.getLoggedInAccount();
+                            Main mainFrame = new Main(acc);
+                            GlassPanePopup.install(mainFrame);
+                            Notifications.getInstance().setJFrame(mainFrame);
+                            mainFrame.setVisible(true);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } else {
                         System.exit(0);
                     }
@@ -298,4 +266,88 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel main;
     // End of variables declaration//GEN-END:variables
+
+    private void showOrderInfo(String orderID) {
+        InforOrders info = new InforOrders();
+        try {
+            Orders ord = new Orders_DAO().getOrderByID(orderID);
+            if (ord == null) {
+                JOptionPane.showMessageDialog(this, "Hóa đơn không tồn tại", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            info.getTxtOrderID().setText(ord.getOrderID());
+            info.getTxtDate().setText(ord.getOrderDate().toString());
+            info.getTxtTotal().setText(String.valueOf(ord.getTotalPrice()));
+            info.getTxtEmployee().setText(ord.getEmployee().getFullName());
+
+            List<TicketDetail> tickets;
+            try {
+                tickets = new TicketDetail_DAO().getByOrderID(orderID);
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+            String movieName = "";
+            if (!tickets.isEmpty()) {
+                movieName = tickets.get(0).getMovie().getMovieName();
+            }
+            info.getTxtMovieName().setText(movieName);
+
+            try {
+                List<OrderDetail> products = new OrderDetail_DAO().getByOrderID(orderID);
+                StringBuilder sbPro = new StringBuilder();
+                double sumPro = 0;
+
+                for (OrderDetail od : products) {
+                    int qty = od.getQuantity();
+                    double unitPrice = od.getProduct().getPrice();
+                    double lineTotal = qty * unitPrice;
+
+                    sbPro
+                            .append(od.getProduct().getProductName())
+                            .append(" (").append(qty).append("): ")
+                            .append(lineTotal)
+                            .append("\n");
+
+                    sumPro += lineTotal;
+                }
+
+                sbPro.append("Tổng sản phẩm: ").append(sumPro);
+                info.getProductsTextArea().setText(sbPro.toString());
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName())
+                        .log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                tickets = new TicketDetail_DAO().getByOrderID(orderID);
+                StringBuilder sbTick = new StringBuilder();
+                double sumTick = 0;
+                for (TicketDetail td : tickets) {
+                    sbTick.append(td.getSeat().getLocation())
+                            .append(": ").append(td.getTicketPrice())
+                            .append("\n");
+                    sumTick += td.getTicketPrice();
+                }
+                sbTick.append("Tổng vé: ").append(sumTick);
+                info.getTicketsTextArea().setText(sbTick.toString());
+            } catch (SQLException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            JDialog dlg = new JDialog(this, "Thông tin Hóa Đơn " + orderID, true);
+            dlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dlg.getContentPane().add(info);
+            dlg.pack();
+            dlg.setLocationRelativeTo(this);
+            dlg.setVisible(true);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

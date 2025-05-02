@@ -28,6 +28,7 @@ public class BookingData {
     public double getDiscountAmount() {
         return discountAmount;
     }
+
     public String getMovieID() {
         return movieID;
     }
@@ -125,7 +126,6 @@ public class BookingData {
         lastTickets.clear();
     }
 
-    // Getters & Setters
     public String getMovieName() {
         return movieName;
     }

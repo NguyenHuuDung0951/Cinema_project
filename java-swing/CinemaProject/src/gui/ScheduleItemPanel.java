@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package gui;
 
 import dao.MovieScheduleSeat_DAO;
@@ -32,17 +29,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.BookingData;
 
-/**
- *
- * @author khang
- */
+
 public class ScheduleItemPanel extends JPanel {
 
     public ScheduleItemPanel(Movie movie, ArrayList<MovieSchedule> schedules) {
         setLayout(new BorderLayout(5, 5));
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        // Tên phim
+        
         JLabel lblTitle = new JLabel(movie.getMovieName(), JLabel.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 16));
         add(lblTitle, BorderLayout.NORTH);
@@ -63,7 +57,7 @@ public class ScheduleItemPanel extends JPanel {
                 : new JLabel("Không tìm thấy ảnh", JLabel.CENTER));
         add(lblPoster, BorderLayout.CENTER);
 
-        // Nút trailer + chi tiết
+        
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton btnTrailer = new JButton("Trailer");
         JButton btnDetail = new JButton("Thông tin chi tiết");
@@ -71,7 +65,7 @@ public class ScheduleItemPanel extends JPanel {
         actionPanel.add(btnTrailer);
         actionPanel.add(btnDetail);
 
-        // Khung giờ chiếu
+        
         JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         for (MovieSchedule schedule : schedules) {
             try {
@@ -94,7 +88,7 @@ public class ScheduleItemPanel extends JPanel {
                     bd.setShowDate(schedule.getStartTime().toLocalDate().toString());
                     bd.setShowTime(schedule.getStartTime().toLocalTime().toString());
                     bd.setPosterPath(movie.getPosterPath());
-                    // Khởi tạo ghế trong DB nếu cần
+                    
                     try {
                         new MovieScheduleSeat_DAO().initSeatsForSchedule(schedule.getScheduleID());
                     } catch (SQLException ex) {
@@ -104,7 +98,7 @@ public class ScheduleItemPanel extends JPanel {
                                 "Lỗi", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    // Mở form chọn ghế
+                    
                     new SeatSelectionForm().setVisible(true);
                 });
                 timePanel.add(btnTime);
@@ -113,7 +107,7 @@ public class ScheduleItemPanel extends JPanel {
             }
         }
 
-        // Gộp 2 phần lại
+        
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(actionPanel, BorderLayout.NORTH);
         bottomPanel.add(timePanel, BorderLayout.CENTER);

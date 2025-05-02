@@ -1,26 +1,27 @@
 package gui;
 
+import application.Main;
 import entity.CartItem;
+import entity.TicketDetail;
 import entity.Voucher;
 import model.BookingData;
 import service.PaymentService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.text.NumberFormat;
 import java.util.Locale;
 import util.PromotionUtil;
 
-/**
- * InvoiceForm: hiển thị chi tiết hóa đơn và xử lý thanh toán
- */
+
 public class InvoiceForm extends JFrame {
 
     private final BookingData bookingData;
     private JLabel lblTotalTicket, lblTotalFood, lblDiscount, lblVat, lblTotalFinal;
 
     public InvoiceForm() {
-        // Dùng singleton BookingData để lấy thông tin
+        
         this.bookingData = BookingData.getInstance();
         initComponents();
     }
@@ -59,7 +60,7 @@ public class InvoiceForm extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         int row = 0;
 
-        // Poster
+        
         JLabel lblPoster = new JLabel();
         String posterPath = bookingData.getPosterPath();
         if (posterPath != null) {
@@ -73,7 +74,7 @@ public class InvoiceForm extends JFrame {
         center.add(lblPoster, gbc);
         gbc.gridwidth = 1;
 
-        // Thông tin phim
+        
         gbc.gridx = 0;
         gbc.gridy = row;
         center.add(new JLabel("Tiêu đề: " + bookingData.getMovieName()), gbc);
@@ -111,7 +112,7 @@ public class InvoiceForm extends JFrame {
         int row = 0;
         for (CartItem item : bookingData.getCartItems()) {
             JLabel imgLbl = new JLabel(new ImageIcon(
-                    new ImageIcon(getClass().getResource("/image/" + item.getProduct().getProductID().toLowerCase() + ".jpg"))
+                    new ImageIcon(getClass().getResource(item.getProduct().getPosterPath()))
                             .getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
             gbc.gridx = 0;
             gbc.gridy = row;
@@ -171,6 +172,12 @@ public class InvoiceForm extends JFrame {
         btnPay.addActionListener(e -> {
             boolean success = PaymentService.processPayment();
             if (success) {
+                List<TicketDetail> last = BookingData.getInstance().getLastTickets();
+                if (!last.isEmpty()) {
+                    String newOrderID = last.get(0).getOrders().getOrderID();
+                    Main.getInstance().addOrderIDToCombo(newOrderID);
+                }
+                bookingData.getInstance().reset();
                 this.dispose();
             }
         });

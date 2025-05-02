@@ -1,5 +1,6 @@
 package service;
 
+import application.Main;
 import dao.*;
 import entity.*;
 import java.awt.Desktop;
@@ -30,7 +31,7 @@ public class PaymentService {
             double after = before * (1 - discountPct);
             double vat = after * 0.1;
             double total = after + vat;
-            // 1. Tạo Order
+
             Orders order = new Orders(null, LocalDate.now(),
                     total,
                     new Employee("EM001"),
@@ -38,24 +39,23 @@ public class PaymentService {
                     ? new Voucher(bd.getVoucherID())
                     : null);
             new Orders_DAO().addOrder(order);
-            // 2. Ghi TicketDetail cho mỗi ghế
+
             TicketDetail_DAO ticketDao = new TicketDetail_DAO();
             Seat_DAO seatDao = new Seat_DAO();
 
-            // parse ngày + giờ
             LocalDate date = LocalDate.parse(bd.getShowDate());
             LocalTime time = LocalTime.parse(bd.getShowTime());
             LocalDateTime dateTime = LocalDateTime.of(date, time);
             List<TicketDetail> tickets = new ArrayList<>();
             MovieScheduleSeat_DAO mssDao = new MovieScheduleSeat_DAO();
             for (String seatLoc : bd.getSelectedSeats().split("\\s*,\\s*")) {
-                // lấy Seat
+
                 Seat seat = seatDao.getSeatByLocation(seatLoc);
                 if (seat == null) {
                     throw new SQLException("Không tìm thấy ghế " + seatLoc);
                 }
                 String seatID = seat.getSeatID();
-                // tính giá theo loại
+
                 String typeID = seat.getSeatType().getSeatTypeID();
                 double pricePerSeat = SeatPriceUtil.getPriceByType(typeID);
 
@@ -73,13 +73,13 @@ public class PaymentService {
                 mssDao.updateAvailability(
                         bd.getScheduleID(),
                         seat.getSeatID(),
-                        false // đã bán
+                        false
                 );
             }
             bd.setLastTickets(tickets);
             String qrContent = order.getOrderID();
             bd.generateQrCode(qrContent, 150);
-            // 3. Ghi OrderDetail cho sản phẩm
+
             OrderDetail_DAO odDao = new OrderDetail_DAO();
             MovieSchedule sched = new MovieSchedule(bd.getScheduleID());
             for (CartItem ci : bd.getCartItems()) {
@@ -116,7 +116,6 @@ public class PaymentService {
                     ioe.printStackTrace();
                 }
             }
-            bd.reset();
 
             return true;
 

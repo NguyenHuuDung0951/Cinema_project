@@ -79,7 +79,7 @@ public class Menu extends javax.swing.JPanel {
     
     
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -95,7 +95,7 @@ public class Menu extends javax.swing.JPanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 100));
 
         jLabel1.setBackground(new java.awt.Color(102, 102, 102));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 36)); 
         jLabel1.setForeground(new java.awt.Color(255, 102, 102));
         jLabel1.setText("  CGV Cinema");
 
@@ -126,7 +126,7 @@ public class Menu extends javax.swing.JPanel {
         );
 
         add(pnlMenu, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }
     public void addMenuWithSub(Icon icon, String text, int index, Object[][] subItems) {
     ButtonMenu mainMenu = new ButtonMenu();
     mainMenu.setIcon(icon);
@@ -176,11 +176,11 @@ public class Menu extends javax.swing.JPanel {
 
 
  
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel pnlMenu;
-    // End of variables declaration//GEN-END:variables
+    
 
 
 

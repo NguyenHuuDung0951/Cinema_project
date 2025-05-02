@@ -29,14 +29,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-/**
- *
- * @author khang
- */
 public class ShowScheduleForm extends JPanel {
+
     private JPanel panelGrid;
     private JPanel bottomPanel;
-    
+
     public ShowScheduleForm() {
         setLayout(new BorderLayout(0, 0));
         setBackground(new java.awt.Color(255, 255, 255));
@@ -46,7 +43,7 @@ public class ShowScheduleForm extends JPanel {
         title.setBorder(BorderFactory.createEmptyBorder(20, 10, 5, 10));
         add(title, BorderLayout.NORTH);
 
-        panelGrid = new JPanel(new GridLayout(0, 3, 20, 20)); // 3 cột
+        panelGrid = new JPanel(new GridLayout(0, 3, 20, 20));
         panelGrid.setBackground(new java.awt.Color(255, 255, 255));
         JScrollPane scrollPane = new JScrollPane(panelGrid);
         scrollPane.setBorder(null);
@@ -62,13 +59,13 @@ public class ShowScheduleForm extends JPanel {
                 filterScheduleByDate(date);
             }
         });
-        
+
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         datePanel.setBackground(new java.awt.Color(255, 255, 255));
         datePanel.add(dateChooser);
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.setBackground(new java.awt.Color(255, 255, 255));
-        bottomPanel.add(datePanel); // thay vì add(dateChooser) + add(btnSearch)
+        bottomPanel.add(datePanel);
         add(bottomPanel, BorderLayout.SOUTH);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
@@ -78,7 +75,7 @@ public class ShowScheduleForm extends JPanel {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        loadData(); (hiển thị tất cả lịch chiếu)
+
     }
 
     private void loadData() {
@@ -96,6 +93,7 @@ public class ShowScheduleForm extends JPanel {
         revalidate();
         repaint();
     }
+
     private void filterScheduleByDate(LocalDate date) {
         panelGrid.removeAll();
         panelGrid.setBorder(null);
@@ -104,8 +102,8 @@ public class ShowScheduleForm extends JPanel {
 
         for (Map.Entry<Movie, ArrayList<MovieSchedule>> entry : allData.entrySet()) {
             List<MovieSchedule> filtered = entry.getValue().stream()
-                .filter(s -> s.getStartTime().toLocalDate().equals(date))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getStartTime().toLocalDate().equals(date))
+                    .collect(Collectors.toList());
 
             if (!filtered.isEmpty()) {
                 ScheduleItemPanel item = new ScheduleItemPanel(entry.getKey(), (ArrayList<MovieSchedule>) filtered);
@@ -117,6 +115,4 @@ public class ShowScheduleForm extends JPanel {
         panelGrid.repaint();
     }
 
-
 }
-

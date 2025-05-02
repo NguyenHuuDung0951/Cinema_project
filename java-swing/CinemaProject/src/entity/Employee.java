@@ -8,23 +8,31 @@ public class Employee {
     private String fullName;
     private boolean gender;
     private LocalDate dateOfBirth;
+    private LocalDate dateJoin;
+
+    public LocalDate getDateJoin() {
+        return dateJoin;
+    }
+
+    public void setDateJoin(LocalDate dateJoin) {
+        this.dateJoin = dateJoin;
+    }
     private String phoneNumber;
     private String email;
-    private Account account;    // FK object
+    private Account account;    
 
     public Employee(String employeeID) {
         this.employeeID = employeeID;
     }
-
-    
-    
+ 
     public Employee(String employeeID, String fullName, boolean gender,
-                    LocalDate dateOfBirth, String phoneNumber,
+                    LocalDate dateOfBirth, LocalDate dateJoin, String phoneNumber,
                     String email, Account account) {
         this.employeeID = employeeID;
         this.fullName = fullName;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
+        this.dateJoin = dateJoin;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.account = account;

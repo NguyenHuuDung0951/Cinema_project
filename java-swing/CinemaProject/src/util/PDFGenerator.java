@@ -34,9 +34,6 @@ public class PDFGenerator {
     private static final String FONT = "resources/fonts/NotoSans-Regular.ttf";
     private static final String FONT_B = "resources/fonts/NotoSans-Bold.ttf";
 
-    /**
-     * In HÓA ĐƠN
-     */
     public static void generateInvoicePDF(String dest) throws Exception {
         BookingData bd = BookingData.getInstance();
         new File(dest).getParentFile().mkdirs();
@@ -47,7 +44,6 @@ public class PDFGenerator {
             PdfFont fb = PdfFontFactory.createFont(FONT_B, PdfEncodings.IDENTITY_H, true);
             doc.setFont(f).setFontSize(12).setMargins(10, 10, 10, 10);
 
-            // --- HEADER ---
             doc.add(new Paragraph("HÓA ĐƠN")
                     .setFont(fb).setFontSize(30)
                     .setTextAlignment(TextAlignment.CENTER));
@@ -58,7 +54,6 @@ public class PDFGenerator {
             doc.add(new Paragraph("=".repeat(47))
                     .setTextAlignment(TextAlignment.CENTER));
 
-            // --- Thông tin phim ---
             doc.add(new Paragraph("Thông tin phim")
                     .setFont(fb).setFontSize(16));
             doc.add(new Paragraph("Phim: " + bd.getMovieName()));
@@ -67,7 +62,6 @@ public class PDFGenerator {
             doc.add(new Paragraph("=".repeat(47))
                     .setTextAlignment(TextAlignment.CENTER));
 
-            // --- Ghế ---
             Table seatTable = new Table(UnitValue.createPercentArray(new float[]{3, 1}))
                     .useAllAvailableWidth()
                     .setBorder(Border.NO_BORDER);
@@ -89,7 +83,6 @@ public class PDFGenerator {
             doc.add(new Paragraph("=".repeat(47))
                     .setTextAlignment(TextAlignment.CENTER));
 
-            // --- Đồ ăn & uống ---
             Table foodTable = new Table(UnitValue.createPercentArray(new float[]{5, 1, 2}))
                     .useAllAvailableWidth()
                     .setBorder(Border.NO_BORDER);
@@ -116,7 +109,6 @@ public class PDFGenerator {
             doc.add(new Paragraph("=".repeat(47))
                     .setTextAlignment(TextAlignment.CENTER));
 
-            // --- Tổng cộng ---
             doc.add(new Paragraph("Chi tiết thanh toán")
                     .setFont(fb).setFontSize(16));
 
@@ -167,9 +159,6 @@ public class PDFGenerator {
         }
     }
 
-    /**
-     * In từng VÉ riêng
-     */
     public static void generateTicketPDFs(String folder) throws Exception {
         BookingData bd = BookingData.getInstance();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -183,7 +172,6 @@ public class PDFGenerator {
                 PdfFont fb = PdfFontFactory.createFont(FONT_B, PdfEncodings.IDENTITY_H, true);
                 doc.setFont(f).setFontSize(12).setMargins(20, 20, 20, 20);
 
-                // --- HEADER ---
                 doc.add(new Paragraph("Vé")
                         .setFont(fb).setFontSize(18)
                         .setTextAlignment(TextAlignment.CENTER));
@@ -194,12 +182,10 @@ public class PDFGenerator {
                 doc.add(new Paragraph("=".repeat(50))
                         .setTextAlignment(TextAlignment.CENTER));
 
-                // --- MÃ GHẾ TO ---
                 doc.add(new Paragraph(t.getSeat().getLocation())
                         .setFont(fb).setFontSize(32)
                         .setTextAlignment(TextAlignment.CENTER));
 
-                // --- THÔNG TIN VÉ ---
                 doc.add(new Paragraph("Thông tin vé")
                         .setFont(fb).setFontSize(16));
                 doc.add(new Paragraph("Phim: " + bd.getMovieName()));
@@ -235,7 +221,6 @@ public class PDFGenerator {
         }
     }
 
-    // helper cells
     private static Cell header(String txt) {
         return new Cell()
                 .add(new Paragraph(txt))

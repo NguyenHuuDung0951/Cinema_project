@@ -29,7 +29,7 @@ public class ProductOrderForm extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Top filter buttons
+        
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnTatCa = new JButton("Tất cả");
         btnDoAn = new JButton("Đồ ăn");
@@ -45,23 +45,23 @@ public class ProductOrderForm extends JFrame {
 
         add(filterPanel, BorderLayout.NORTH);
 
-        // Center product panel (scrollable)
+        
         productPanel = new JPanel();
         productPanel.setLayout(new WrapLayout(FlowLayout.LEFT, 15, 15));
         JScrollPane scrollPane = new JScrollPane(productPanel);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Right cart panel
+        
         BookingData bd = BookingData.getInstance();
         cartPanel = new CartPanel();
         cartPanel.setPreferredSize(new Dimension(280, 0));
         add(cartPanel, BorderLayout.EAST);
         
-        // Load all products initially
+        
         loadProducts("Tất cả");
 
-        // Filter actions
+        
         btnTatCa.addActionListener(e -> loadProducts("Tất cả"));
         btnDoAn.addActionListener(e -> loadProducts("Đồ ăn"));
         btnThucUong.addActionListener(e -> loadProducts("Thức uống"));
@@ -137,7 +137,7 @@ public class ProductOrderForm extends JFrame {
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
-        SwingUtilities.invokeLater(() -> { // Dummy
+        SwingUtilities.invokeLater(() -> { 
             new ProductOrderForm().setVisible(true);
         });
     }

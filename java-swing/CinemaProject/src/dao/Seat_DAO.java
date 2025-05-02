@@ -17,7 +17,7 @@ public class Seat_DAO {
     }
 
     public ArrayList<Seat> getalltbSeat() throws SQLException {
-        // 1) Load tất cả Room và SeatType trước
+        
         Map<String, Room> roomMap = new Room_DAO()
                 .getalltbRoom()
                 .stream()

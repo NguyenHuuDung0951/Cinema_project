@@ -16,6 +16,7 @@ CREATE TABLE Employee (
     fullName NVARCHAR(100),
     gender BIT,
     dateOfBirth DATE,
+	dateJoin DATE,
     phoneNumber VARCHAR(20),
     email VARCHAR(100),
     accountID VARCHAR(50),
@@ -40,6 +41,8 @@ CREATE TABLE Orders (
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID),
 	FOREIGN KEY (voucherID) REFERENCES Voucher(voucherID)
 );
+
+
 
 CREATE TABLE Product (
     productID VARCHAR(50) PRIMARY KEY,
@@ -128,16 +131,16 @@ CREATE TABLE OrderDetail (
 -- ACCOUNT
 INSERT INTO Account (accountID, username, password)
 VALUES 
-    ('AC001', 'nhanvien1', '123'),
-    ('AC002', 'nhanvien2', '123');
-
+    ('AC001', 'admin1', '123'),
+    ('AC002', 'admin2', '123');
 -- EMPLOYEE
+
 INSERT INTO Employee (
-    employeeID, fullName, gender, dateOfBirth, phoneNumber, email, accountID
+    employeeID, fullName, gender, dateOfBirth, dateJoin, phoneNumber, email, accountID
 )
 VALUES 
-    ('EM001', N'Lê Hoàng Khang', 0, '2005-02-26', '0917774020', 'khanglehoang2602@gmail.com', 'AC001'),
-    ('EM002', N'Nguyễn Văn Sỹ',  0, '2005-09-06', '0938078300', 'vansy05@gmail.com',         'AC002');
+    ('EM001', N'Lê Hoàng Khang', 0, '2005-02-26', '2024-08-24', '0917774020', 'khanglehoang2602@gmail.com', 'AC001'),
+    ('EM002', N'Nguyễn Văn Sỹ',  0, '2005-09-06', '2024-10-26', '0938078300', 'vansy05@gmail.com',         'AC002');
 
 -- PRODUCT
 INSERT INTO Product (productID, productName, quantity, productType, price, posterPath)
@@ -155,6 +158,8 @@ VALUES
 	 ('P011', N'Nước FanTa Cam', 50, N'Thức uống', 20000, '/image/p011.jpg'),
     ('P012', N'Nước FanTa Dâu', 40, N'Thức uống', 20000, '/image/p012.jpg');
 
+DELETE FROM Product
+WHERE productID = 'P111'
 -- MOVIE 
 INSERT INTO Movie (movieID, movieName, status, duration, posterPath)
 VALUES 
@@ -401,4 +406,97 @@ BEGIN
         movieID, room, startTime, endTime
     FROM inserted;
 END;
+
+ALTER TABLE OrderDetail
+DROP CONSTRAINT FK__OrderDeta__produ__5BE2A6F2;
+
+ALTER TABLE OrderDetail
+ADD CONSTRAINT FK_OrderDetail_Product
+  FOREIGN KEY (productID)
+  REFERENCES Product(productID)
+  ON DELETE CASCADE;
+
+ALTER TABLE MovieSchedule
+ADD CONSTRAINT FK_MovieSchedule_Movie
+  FOREIGN KEY(movieID)
+  REFERENCES Movie(movieID)
+  ON DELETE CASCADE;
+GO
+
+ALTER TABLE MovieScheduleSeat
+ADD CONSTRAINT FK_MovieScheduleSeat_Schedule
+  FOREIGN KEY(scheduleID)
+  REFERENCES MovieSchedule(scheduleID)
+  ON DELETE CASCADE;
+GO
+
+ALTER TABLE TicketDetail
+ADD CONSTRAINT FK_TicketDetail_Movie
+  FOREIGN KEY(movieID)
+  REFERENCES Movie(movieID)
+  ON DELETE CASCADE;
+GO
+
+ALTER TABLE OrderDetail
+ADD CONSTRAINT FK_OrderDetail_Schedule
+  FOREIGN KEY(scheduleID)
+  REFERENCES MovieSchedule(scheduleID)
+  ON DELETE CASCADE;
+GO
+
+ALTER TABLE OrderDetail
+ADD CONSTRAINT FK_OrderDetail_Order
+  FOREIGN KEY(orderID)
+  REFERENCES Orders(orderID)
+  ON DELETE CASCADE;
+GO
+
+ALTER TABLE TicketDetail
+ADD CONSTRAINT FK_TicketDetail_Order
+  FOREIGN KEY(orderID)
+  REFERENCES Orders(orderID)
+  ON DELETE CASCADE;
+GO
+
+CREATE TRIGGER trg_DeleteMovie_CascadeOrders
+ON Movie
+AFTER DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DELETE td
+    FROM TicketDetail td
+    JOIN deleted d ON td.movieID = d.movieID;
+
+    DELETE od
+    FROM OrderDetail od
+    JOIN deleted d 
+      ON od.orderID IN (
+            SELECT orderID 
+            FROM TicketDetail 
+            WHERE movieID = d.movieID
+         );
+
+    DELETE o
+    FROM Orders o
+    JOIN deleted d 
+      ON o.orderID IN (
+            SELECT DISTINCT orderID 
+            FROM OrderDetail 
+            WHERE movieID = d.movieID
+         );
+END;
+GO
+
+CREATE OR ALTER TRIGGER trg_CleanupOrphanOrders
+ON OrderDetail
+AFTER DELETE
+AS
+BEGIN
+  DELETE o
+  FROM Orders o
+  WHERE NOT EXISTS (SELECT 1 FROM OrderDetail od WHERE od.orderID = o.orderID)
+    AND NOT EXISTS (SELECT 1 FROM TicketDetail td WHERE td.orderID = o.orderID);
+END;
+GO
 

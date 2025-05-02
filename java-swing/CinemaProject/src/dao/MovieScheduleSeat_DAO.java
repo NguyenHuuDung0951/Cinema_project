@@ -19,7 +19,7 @@ public class MovieScheduleSeat_DAO {
     }
 
     public ArrayList<MovieScheduleSeat> getalltbMovieScheduleSeat() throws SQLException {
-        // 1) Load toàn bộ Seat và MovieSchedule trước
+        
         Map<String, Seat> seatMap = new Seat_DAO()
                 .getalltbSeat()
                 .stream()

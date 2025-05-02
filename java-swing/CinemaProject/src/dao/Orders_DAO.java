@@ -11,12 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Orders_DAO {
 
     public String addOrder(Orders order) throws SQLException {
         try (Connection con = ConnectDB.getConnection()) {
-            // 1) Insert
+            
             String ins = "INSERT INTO Orders(orderDate, totalPrice, employeeID, voucherID) VALUES (?, ?, ?, ?)";
             try (PreparedStatement ps = con.prepareStatement(ins)) {
                 ps.setDate(1, java.sql.Date.valueOf(order.getOrderDate()));
@@ -30,7 +32,7 @@ public class Orders_DAO {
                 ps.executeUpdate();
             }
 
-            // 2) Lấy ID vừa sinh
+            
             String sel = "SELECT TOP 1 orderID FROM Orders ORDER BY orderID DESC";
             try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sel)) {
                 if (rs.next()) {
@@ -78,6 +80,42 @@ public class Orders_DAO {
                 return null;
             }
         }
+    }
+
+    public ArrayList<Orders> getalltbOrders() {
+        ArrayList<Orders> listOrders = new ArrayList<>();
+        try {
+            ConnectDB.getInstance();
+            Connection con = ConnectDB.getConnection();
+            String sql = "Select * from Orders";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String orderID = rs.getString(1);
+                LocalDate orderDate = rs.getDate(2).toLocalDate();
+                double totalPrice = rs.getDouble(3);
+                String employeeID = rs.getString(4);
+                Employee em = new Employee(employeeID);
+                String voucherID = rs.getString(5);
+                Voucher vc = new Voucher(voucherID);
+                Orders obj = new Orders(orderID, orderDate, totalPrice, em, vc);
+                listOrders.add(obj);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listOrders;
+    }
+    
+    public List<String> getAllOrderIDs() throws SQLException {
+        String sql = "SELECT orderID FROM Orders";
+        List<String> list = new ArrayList<>();
+        try (Connection con = ConnectDB.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(rs.getString("orderID"));
+            }
+        }
+        return list;
     }
 
 }

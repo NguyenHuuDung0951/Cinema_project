@@ -21,7 +21,7 @@ public class ButtonMenu extends JButton {
     private float alpha;
     private Color effectColor = new Color(173, 173, 173);
 
-    // Submenu support
+    
     private boolean isSubMenu = false;
     private boolean showingSubMenu = false;
     private List<ButtonMenu> subMenus = new ArrayList<>();
@@ -99,11 +99,11 @@ public class ButtonMenu extends JButton {
         super.paint(grphcs);
     }
 
-    // Submenu methods (đây là phần bạn cần để tránh lỗi)
+    
     public void setAsSubMenu(boolean isSubMenu) {
         this.isSubMenu = isSubMenu;
         if (isSubMenu) {
-          setFont(new Font("Segoe UI", Font.BOLD, 16)); // 👉 tăng size chữ & BOLD
+          setFont(new Font("Segoe UI", Font.BOLD, 16)); 
         setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 10));
         }
     }

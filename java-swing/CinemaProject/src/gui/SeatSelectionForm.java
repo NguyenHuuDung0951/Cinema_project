@@ -30,13 +30,12 @@ public class SeatSelectionForm extends JFrame {
     private JLabel lblTitle, lblDate, lblTime, lblRoom, lblPrice, lblSeats, lblTotal;
     private JButton btnContinue;
 
-    private static final Color SELECTED_COLOR = new Color(0xFF8800);   // #ff8800 – cam
+    private static final Color SELECTED_COLOR = new Color(0xFF8800);
 
-    // Bản đồ location -> Seat
     private Map<String, Seat> mapLoc = new HashMap<>();
     private String scheduleID;
-    // Kích thước tối đa bạn muốn hiển thị trên panel info
-    private static final int POSTER_MAX_W = 150;   // px
+
+    private static final int POSTER_MAX_W = 150;
     private static final Color ORANGE_BAR = new Color(0xFFA000);
     private JLabel lblSeatsVal;
     private JLabel lblTotalVal;
@@ -45,16 +44,14 @@ public class SeatSelectionForm extends JFrame {
 
     private ImageIcon loadScaledIcon(String path, int maxW) {
         URL url = getClass().getResource(path);
-        if (url == null) // ảnh không tồn tại
-        {
+        if (url == null) {
             return new ImageIcon();
         }
 
-        ImageIcon raw = new ImageIcon(url);              // ảnh gốc
+        ImageIcon raw = new ImageIcon(url);
         int origW = raw.getIconWidth();
         int origH = raw.getIconHeight();
 
-        // giữ nguyên tỉ lệ (aspect ratio)
         int newW = Math.min(origW, maxW);
         int newH = origH * newW / origW;
 
@@ -69,16 +66,14 @@ public class SeatSelectionForm extends JFrame {
         scheduleID = bd.getScheduleID();
         initComponents();
 
-        // Thiết lập thông tin phim từ BookingData
         lblTitle.setText(bd.getMovieName());
         lblDate.setText(LocalDate.parse(bd.getShowDate())
                 .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblTime.setText(bd.getShowTime());
         lblRoom.setText(bd.getRoomName());
 
-        // Poster
-        String posterPath = bd.getPosterPath();                   // ví dụ "/image/avenger.jpg" hoặc đường dẫn tuyệt đối
-        ImageIcon icon = loadScaledIcon(posterPath, POSTER_MAX_W); // loadScaledIcon đã xử lý getResource bên trong
+        String posterPath = bd.getPosterPath();
+        ImageIcon icon = loadScaledIcon(posterPath, POSTER_MAX_W);
         lblPoster.setIcon(icon);
     }
 
@@ -87,33 +82,27 @@ public class SeatSelectionForm extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Màn hình
-        // 1. Panel chứa cả thanh + chữ (xếp dọc)
         JPanel pnlTop = new JPanel();
         pnlTop.setLayout(new BoxLayout(pnlTop, BoxLayout.Y_AXIS));
 
-        // 1a. Thanh cam mỏng 2 px, kéo dài toàn khung
         JPanel bar = new JPanel();
         bar.setBackground(ORANGE_BAR);
-        bar.setPreferredSize(new Dimension(0, 2));                // height = 2 px
-        bar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 2));   // cho giãn ngang
+        bar.setPreferredSize(new Dimension(0, 2));
+        bar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 2));
 
-        // 1b. Dòng chữ “Màn hình”
         JLabel lblScreen = new JLabel("Màn hình", SwingConstants.CENTER);
         lblScreen.setFont(lblScreen.getFont().deriveFont(Font.BOLD, 25f));
         lblScreen.setForeground(new Color(0x9E9E9E));
         lblScreen.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
 
-        JPanel pnlScreen = new JPanel(new BorderLayout());         // chỉ để canh giữa
+        JPanel pnlScreen = new JPanel(new BorderLayout());
         pnlScreen.add(lblScreen, BorderLayout.CENTER);
 
-        // Thêm vào pnlTop (thanh trước, chữ sau)
         pnlTop.add(bar);
         pnlTop.add(pnlScreen);
 
-        // Đặt toàn bộ lên NORTH
         add(pnlTop, BorderLayout.NORTH);
-        // Bảng ghế
+
         pnlSeats = new JPanel(new GridBagLayout());
         pnlSeats.putClientProperty("FlatLaf.style", "background:#00000000;");
 
@@ -122,7 +111,6 @@ public class SeatSelectionForm extends JFrame {
         scroll.setBorder(BorderFactory.createEmptyBorder());
         add(scroll, BorderLayout.CENTER);
 
-        // Thông tin bên phải
         pnlInfo = new JPanel();
         pnlInfo.setLayout(new BoxLayout(pnlInfo, BoxLayout.Y_AXIS));
         pnlInfo.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
@@ -156,7 +144,7 @@ public class SeatSelectionForm extends JFrame {
         row = addRow(pnlMeta, gc, row, "Phòng:", lblRoom);
 
         row = addRow(pnlMeta, gc, row, "Giá vé:", formatVND(60000));
-        row = addRow(pnlMeta, gc, row, "Ghế:", "");          // ghế sẽ cập nhật
+        row = addRow(pnlMeta, gc, row, "Ghế:", "");
         lblSeatsVal = (JLabel) pnlMeta.getComponent(pnlMeta.getComponentCount() - 1);
         row = addRow(pnlMeta, gc, row, "Tổng:", formatVND(0));
         lblTotalVal = (JLabel) pnlMeta.getComponent(pnlMeta.getComponentCount() - 1);
@@ -165,7 +153,7 @@ public class SeatSelectionForm extends JFrame {
 
         btnContinue = new JButton("Tiếp tục");
         btnContinue.putClientProperty("FlatLaf.style",
-                "arc:999;" // bo tròn pill
+                "arc:999;"
                 + "background:#FFA000;"
                 + "foreground:#ffffff;"
                 + "hoverBackground:#FFB733;");
@@ -177,7 +165,6 @@ public class SeatSelectionForm extends JFrame {
 
         add(pnlInfo, BorderLayout.EAST);
 
-        // Chú giải màu
         pnlLegend = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
         pnlLegend.putClientProperty("FlatLaf.style", "background:#00000000;");
         pnlLegend.add(createLegend("Ghế thường", Color.WHITE));
@@ -193,10 +180,8 @@ public class SeatSelectionForm extends JFrame {
             String selectedSeats = lblSeatsVal.getText().replaceAll("<[^>]*>", "");
             bd.setSelectedSeats(selectedSeats);
 
-            // Gán tổng tiền vé
             bd.setTicketTotal(parseVND(lblTotalVal.getText()));
 
-            // Mở ProductOrderForm và truyền BookingData
             new ProductOrderForm().setVisible(true);
             dispose();
         });
@@ -221,17 +206,17 @@ public class SeatSelectionForm extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(3, 3, 3, 3);
         try {
-            // Đọc danh sách ghế
+
             ArrayList<Seat> seats = new Seat_DAO().getalltbSeat();
             mapLoc = seats.stream().collect(Collectors.toMap(Seat::getLocation, s -> s));
-            // Danh sách ghế đã bán
+
             Set<String> sold = new HashSet<>();
             for (MovieScheduleSeat mss : new MovieScheduleSeat_DAO().getalltbMovieScheduleSeat()) {
                 if (scheduleID.equals(mss.getSchedule().getScheduleID()) && !mss.isAvailable()) {
                     sold.add(mss.getSeat().getSeatID());
                 }
             }
-            // Hàng A-L
+
             int rowIndex = 0;
             for (char r = 'A'; r <= 'L'; r++, rowIndex++) {
                 for (int c = 1; c <= 16; c++) {
@@ -240,7 +225,7 @@ public class SeatSelectionForm extends JFrame {
                     addSeatButton(String.format("%c%d", r, c), sold, gbc, 1);
                 }
             }
-            // Hàng ghế đôi M
+
             gbc.gridy = rowIndex;
             for (int i = 0; i < 8; i++) {
                 gbc.gridx = i * 2;
@@ -259,11 +244,11 @@ public class SeatSelectionForm extends JFrame {
         btn.setMinimumSize(new Dimension(56, 32));
         btn.setMaximumSize(new Dimension(56, 32));
         btn.putClientProperty("FlatLaf.style",
-                "arc:8;" // bo nút
-                + "focusWidth:0;" // ẩn viền focus xanh
-                + "selectedBackground:#ff8800;" // màu chọn
-                + "selectedForeground:#ffffff;" // chữ trắng khi chọn
-                + "hoverBackground:#FFE2AD;" // (tuỳ chọn) hover
+                "arc:8;"
+                + "focusWidth:0;"
+                + "selectedBackground:#ff8800;"
+                + "selectedForeground:#ffffff;"
+                + "hoverBackground:#FFE2AD;"
         );
 
         btn.setOpaque(true);
@@ -286,32 +271,30 @@ public class SeatSelectionForm extends JFrame {
         }
         btn.addActionListener(e -> updateSelection());
         gbc.gridwidth = span;
-        gbc.fill = GridBagConstraints.HORIZONTAL;      // đừng HORIZONTAL nữa
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         pnlSeats.add(btn, gbc);
     }
 
     private JPanel createLegend(String name, Color col) {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        // 1) Ô vuông đại diện màu
+
         JButton legend = new JButton();
         legend.setPreferredSize(new Dimension(16, 16));
         legend.setFocusable(false);
         legend.setBorderPainted(false);
 
-        /* ---- FlatLaf style ---- */
         String colorHex = String.format("#%02X%02X%02X",
                 col.getRed(), col.getGreen(), col.getBlue());
         legend.putClientProperty("FlatLaf.style",
-                "arc:4;" // bo nhẹ 4px
-                + "borderWidth:0;" // ẩn viền
-                + "focusWidth:0;" // ẩn vòng focus
+                "arc:4;"
+                + "borderWidth:0;"
+                + "focusWidth:0;"
                 + "background:" + colorHex + ";");
 
-        // 2) Nhãn mô tả
         JLabel lbl = new JLabel(name);
 
-        p.setOpaque(false);             // panel trong suốt (k plan background)
+        p.setOpaque(false);
         p.add(legend);
         p.add(lbl);
         return p;
@@ -327,7 +310,6 @@ public class SeatSelectionForm extends JFrame {
             }
             JToggleButton b = (JToggleButton) c;
 
-            // Bỏ qua ghế đã bán (disabled)
             if (!b.isEnabled()) {
                 continue;
             }
@@ -335,30 +317,28 @@ public class SeatSelectionForm extends JFrame {
             Seat seat = mapLoc.get(b.getText());
             String type = seat != null ? seat.getSeatType().getSeatTypeID() : "ST01";
 
-            // Nếu đang được chọn
             if (b.isSelected()) {
                 b.setBackground(SELECTED_COLOR);
-                b.setForeground(Color.WHITE);     // chữ trắng
+                b.setForeground(Color.WHITE);
                 sel.add(b.getText());
                 double price = SeatPriceUtil.getPriceByType(type);
                 total += price;
-            } else {                   // ghế chưa chọn – trả lại màu gốc
+            } else {
                 b.setForeground(Color.BLACK);
                 switch (type) {
                     case "ST02":
                         b.setBackground(Color.YELLOW);
-                        break; // VIP
+                        break;
                     case "ST03":
                         b.setBackground(new Color(255, 200, 200));
-                        break; // SweetBox
+                        break;
                     default:
                         b.setBackground(Color.WHITE);
-                        break; // thường
+                        break;
                 }
             }
         }
 
-        // Cập nhật label thông tin
         lblSeatsVal.setText("<html><body style='width:90px'>"
                 + String.join(", ", sel) + "</body></html>");
         lblTotalVal.setText(String.format(formatVND(total)));
@@ -369,7 +349,7 @@ public class SeatSelectionForm extends JFrame {
         SwingUtilities.invokeLater(() -> {
             try {
                 ConnectDB.getInstance().connect();
-                // Lấy schedule đầu tiên làm ví dụ
+
                 ArrayList<MovieSchedule> list = new MovieSchedule_DAO().getalltbMovieSchedule();
                 if (list.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Chưa có lịch chiếu.");
@@ -384,7 +364,7 @@ public class SeatSelectionForm extends JFrame {
                 bd.setRoomName(s.getRoom().getRoomName());
                 bd.setShowDate(s.getStartTime().toLocalDate().toString());
                 bd.setShowTime(s.getStartTime().toLocalTime().toString());
-                // Poster set thông qua map, không cần bd.setPosterPath
+
                 new SeatSelectionForm().setVisible(true);
 
             } catch (SQLException e) {

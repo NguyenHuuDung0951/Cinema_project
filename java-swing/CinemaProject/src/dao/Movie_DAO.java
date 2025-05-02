@@ -99,66 +99,12 @@ public class Movie_DAO {
     }
 
     public boolean deleteMovie(String movieID) {
-        String delTickets
-                = "DELETE FROM TicketDetail WHERE movieID = ?";
-        String delOrderDetails
-                = "DELETE od "
-                + "FROM OrderDetail od "
-                + "WHERE od.orderID IN ("
-                + "    SELECT orderID FROM TicketDetail WHERE movieID = ?"
-                + ")";
-        String delOrders
-                = "DELETE o "
-                + "FROM Orders o "
-                + "WHERE o.orderID IN ("
-                + "    SELECT orderID FROM TicketDetail WHERE movieID = ?"
-                + ")";
-        String delSeats
-                = "DELETE FROM MovieScheduleSeat "
-                + "WHERE scheduleID IN (SELECT scheduleID FROM MovieSchedule WHERE movieID = ?)";
-        String delSchedules
-                = "DELETE FROM MovieSchedule WHERE movieID = ?";
-        String delMovie
-                = "DELETE FROM Movie WHERE movieID = ?";
-
-        try (Connection conn = ConnectDB.getConnection()) {
-            conn.setAutoCommit(false);
-            try (PreparedStatement t1 = conn.prepareStatement(delTickets); PreparedStatement t2 = conn.prepareStatement(delOrderDetails); PreparedStatement t3 = conn.prepareStatement(delOrders); PreparedStatement t4 = conn.prepareStatement(delSeats); PreparedStatement t5 = conn.prepareStatement(delSchedules); PreparedStatement t6 = conn.prepareStatement(delMovie)) {
-
-                // 1) Xóa vé của phim
-                t1.setString(1, movieID);
-                t1.executeUpdate();
-
-                // 2) Xóa chi tiết sản phẩm (OrderDetail) cho các order đó
-                t2.setString(1, movieID);
-                t2.executeUpdate();
-
-                // 3) Xóa luôn cả hóa đơn (Orders) cho phim đó
-                t3.setString(1, movieID);
-                t3.executeUpdate();
-
-                // 4) Xóa MovieScheduleSeat
-                t4.setString(1, movieID);
-                t4.executeUpdate();
-
-                // 5) Xóa MovieSchedule
-                t5.setString(1, movieID);
-                t5.executeUpdate();
-
-                // 6) xóa Movie
-                t6.setString(1, movieID);
-                int rows = t6.executeUpdate();
-
-                conn.commit();
-                return rows > 0;
-            } catch (SQLException ex) {
-                conn.rollback();
-                throw ex;
-            } finally {
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = "DELETE FROM Movie WHERE movieID = ?";
+        try (Connection conn = ConnectDB.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, movieID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
     }

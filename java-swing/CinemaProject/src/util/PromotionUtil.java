@@ -8,14 +8,13 @@ import entity.Voucher;
 
 public class PromotionUtil {
 
-    // Inner class đại diện 1 khuyến mãi
     static class Promotion {
 
         private String promoID;
         private LocalDate startDate;
         private LocalDate endDate;
-        private double minimumTotal; // Tổng tiền tối thiểu để áp dụng
-        private double discountPercent; // Phần trăm khuyến mãi (VD: 0.3 = 30%)
+        private double minimumTotal;
+        private double discountPercent;
 
         public Promotion(String promoID, LocalDate startDate, LocalDate endDate, double minimumTotal, double discountPercent) {
             this.promoID = promoID;

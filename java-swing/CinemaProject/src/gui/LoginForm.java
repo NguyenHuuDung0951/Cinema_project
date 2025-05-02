@@ -1,35 +1,53 @@
 package gui;
 
+import connectDB.ConnectDB;
+import dao.Account_DAO;
+import entity.Account;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 public class LoginForm extends javax.swing.JFrame {
+
     private boolean loginSuccess = false;
+    private List<Account> accounts = new ArrayList<>();
+    private Account loggedInAccount;
+
+    public Account getLoggedInAccount() {
+        return loggedInAccount;
+    }
+
     public LoginForm() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-        getRootPane().setDefaultButton(btnLogin); 
-    }
-    
-    
-    
-    private final String[][] acc = {
-    {"admin", "123456"},
-    {"admin1", "123456"},
-   
-};
-
-private boolean validateLogin() {
-    String user = txtUser.getText();
-    String pass = new String(txtPass.getPassword());
-
-    for (String[] account : acc) {
-        if (account[0].equals(user) && account[1].equals(pass)) {
-            return true;
+        getRootPane().setDefaultButton(btnLogin);
+        try {
+            ConnectDB.getInstance().connect();
+            accounts = new Account_DAO().getalltbAccount();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi kết nối database!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    return false;
-}
-public boolean isLoginSuccessful() {
-    return loginSuccess;
-}
+
+    private boolean validateLogin() {
+        String user = txtUser.getText();
+        String pass = new String(txtPass.getPassword());
+
+        for (Account account : accounts) {
+            if (account.getUsername().equals(user) && account.getPassword().equals(pass)) {
+                loggedInAccount = account;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isLoginSuccessful() {
+        return loginSuccess;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,12 +157,12 @@ public boolean isLoginSuccessful() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-       if (validateLogin()) {
-        loginSuccess = true; 
-        dispose(); 
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
-    }
+        if (validateLogin()) {
+            loginSuccess = true;
+            dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu!");
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserKeyPressed
