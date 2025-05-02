@@ -408,9 +408,6 @@ BEGIN
 END;
 
 ALTER TABLE OrderDetail
-DROP CONSTRAINT FK__OrderDeta__produ__5BE2A6F2;
-
-ALTER TABLE OrderDetail
 ADD CONSTRAINT FK_OrderDetail_Product
   FOREIGN KEY (productID)
   REFERENCES Product(productID)
