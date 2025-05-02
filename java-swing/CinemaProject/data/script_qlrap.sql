@@ -497,3 +497,9 @@ BEGIN
 END;
 GO
 
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Voucher
+  FOREIGN KEY(voucherID)
+  REFERENCES Voucher(voucherID)
+  ON DELETE CASCADE;
+GO
